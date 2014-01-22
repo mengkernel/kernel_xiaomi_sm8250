@@ -207,7 +207,6 @@ config DEVFREQ_SIMPLE_DEV
 	select DEVFREQ_GOV_PERFORMANCE
 	select DEVFREQ_GOV_POWERSAVE
 	select DEVFREQ_GOV_USERSPACE
-	select DEVFREQ_GOV_CPUFREQ
 	help
 	  Device driver for simple devices that control their frequency using
 	  clock APIs and don't have any form of status reporting.
