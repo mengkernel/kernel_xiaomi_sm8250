@@ -142,6 +142,14 @@ int __weak arch_asym_cpu_priority(int cpu)
 {
 	return -cpu;
 }
+
+/*
+ * The margin used when comparing utilization with CPU capacity:
+ * util * margin < capacity * 1024
+ *
+ * (default: ~20%)
+ */
+static unsigned int capacity_margin			= 1280;
 #endif
 
 #ifdef CONFIG_CFS_BANDWIDTH
@@ -158,13 +166,6 @@ int __weak arch_asym_cpu_priority(int cpu)
 unsigned int sysctl_sched_cfs_bandwidth_slice		= 5000UL;
 #endif
 
-/*
- * The margin used when comparing utilization with CPU capacity:
- * util * margin < capacity * 1024
- *
- * (default: ~20%)
- */
-static unsigned int capacity_margin			= 1280;
 unsigned int sched_capacity_margin_up[NR_CPUS] = {
 			[0 ... NR_CPUS-1] = 1078}; /* ~5% margin */
 unsigned int sched_capacity_margin_down[NR_CPUS] = {
