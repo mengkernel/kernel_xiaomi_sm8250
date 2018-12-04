@@ -113,6 +113,11 @@ config CRYPTO_POLY1305_NEON
 	select CRYPTO_HASH
 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
 
+config CRYPTO_NHPOLY1305_NEON
+	tristate "NHPoly1305 hash function using NEON instructions (for Adiantum)"
+	depends on KERNEL_MODE_NEON
+	select CRYPTO_NHPOLY1305
+
 config CRYPTO_AES_ARM64_BS
 	tristate "AES in ECB/CBC/CTR/XTS modes using bit-sliced NEON algorithm"
 	depends on KERNEL_MODE_NEON
