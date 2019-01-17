@@ -15,17 +15,12 @@
  * @mem_count:			Number of memory accesses made.
  * @freq:			Effective frequency of the device in the
  *				last interval.
- * @wb_pct:			The ratio of writebacks to accesses. Used as an
- *				indirect way to identify memory latency due to
- *				snoop activity.
  */
 struct dev_stats {
-	int id;
-	unsigned long inst_count;
-	unsigned long mem_count;
-	unsigned long freq;
-	unsigned long stall_pct;
-	unsigned long wb_pct;
+	int		id;
+	unsigned long	inst_count;
+	unsigned long	mem_count;
+	unsigned long	freq;
 };
 
 struct core_dev_map {
@@ -55,35 +50,25 @@ struct core_dev_map {
  *
  */
 struct memlat_hwmon {
-	int (*start_hwmon)(struct memlat_hwmon *hw);
-	void (*stop_hwmon)(struct memlat_hwmon *hw);
-	unsigned long (*get_cnt)(struct memlat_hwmon *hw);
-	struct device_node *(*get_child_of_node)(struct device *dev);
-	void (*request_update_ms)(struct memlat_hwmon *hw,
-				  unsigned int update_ms);
-	struct device *dev;
-	struct device_node *of_node;
+	int			(*start_hwmon)(struct memlat_hwmon *hw);
+	void			(*stop_hwmon)(struct memlat_hwmon *hw);
+	unsigned long		(*get_cnt)(struct memlat_hwmon *hw);
+	struct device		*dev;
+	struct device_node	*of_node;
 
-	unsigned int num_cores;
-	struct dev_stats *core_stats;
+	unsigned int		num_cores;
+	struct dev_stats	*core_stats;
 
-	struct devfreq *df;
-	struct core_dev_map *freq_map;
-	bool should_ignore_df_monitor;
+	struct devfreq		*df;
+	struct core_dev_map	*freq_map;
 };
 
 #ifdef CONFIG_DEVFREQ_GOV_MEMLAT
 int register_memlat(struct device *dev, struct memlat_hwmon *hw);
-int register_compute(struct device *dev, struct memlat_hwmon *hw);
 int update_memlat(struct memlat_hwmon *hw);
 #else
 static inline int register_memlat(struct device *dev,
-				  struct memlat_hwmon *hw)
-{
-	return 0;
-}
-static inline int register_compute(struct device *dev,
-				   struct memlat_hwmon *hw)
+					struct memlat_hwmon *hw)
 {
 	return 0;
 }
