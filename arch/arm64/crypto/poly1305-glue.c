@@ -110,7 +110,7 @@ static void neon_poly1305_do_update(struct poly1305_desc_ctx *dctx,
 static int neon_poly1305_update(struct shash_desc *desc,
 				const u8 *src, unsigned int srclen)
 {
-	bool do_neon = may_use_simd() && srclen > 128;
+	bool do_neon = crypto_simd_usable() && srclen > 128;
 	struct poly1305_desc_ctx *dctx = shash_desc_ctx(desc);
 
 	if (static_branch_likely(&have_neon) && do_neon)
@@ -141,7 +141,7 @@ void poly1305_update_arch(struct poly1305_desc_ctx *dctx, const u8 *src,
 	if (likely(nbytes >= POLY1305_BLOCK_SIZE)) {
 		unsigned int len = round_down(nbytes, POLY1305_BLOCK_SIZE);
 
-		if (static_branch_likely(&have_neon) && may_use_simd()) {
+		if (static_branch_likely(&have_neon) && crypto_simd_usable()) {
 			do {
 				unsigned int todo = min_t(unsigned int, len, SZ_4K);
 
