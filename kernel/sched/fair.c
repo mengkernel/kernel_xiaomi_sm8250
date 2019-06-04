@@ -144,12 +144,13 @@ int __weak arch_asym_cpu_priority(int cpu)
 }
 
 /*
- * The margin used when comparing utilization with CPU capacity:
- * util * margin < capacity * 1024
+ * The margin used when comparing utilization with CPU capacity.
  *
  * (default: ~20%)
  */
-static unsigned int capacity_margin			= 1280;
+#define fits_capacity(cap, max)	((cap) * 1280 < (max) * 1024)
+#define fits_capacity_margin(cap, max, margin)	((cap) * (margin) < (max) * 1024)
+
 #endif
 
 #ifdef CONFIG_CFS_BANDWIDTH
@@ -3948,7 +3949,7 @@ static inline bool task_fits_capacity(struct task_struct *p,
 	else
 		margin = sched_capacity_margin_up[task_cpu(p)];
 
-	return capacity * 1024 > uclamp_task_util(p) * margin;
+	return fits_capacity_margin(uclamp_task_util(p), capacity, margin);
 }
 
 static inline bool task_fits_max(struct task_struct *p, int cpu)
@@ -5488,8 +5489,7 @@ static inline void hrtick_update(struct rq *rq)
 #ifdef CONFIG_SMP
 bool __cpu_overutilized(int cpu, int delta)
 {
-	return (capacity_orig_of(cpu) * 1024) <
-		((cpu_util(cpu) + delta) * sched_capacity_margin_up[cpu]);
+	return !fits_capacity_margin((cpu_util(cpu) + delta), capacity_orig_of(cpu), sched_capacity_margin_up[cpu]);
 }
 
 bool cpu_overutilized(int cpu)
@@ -7493,8 +7493,7 @@ static void select_cpu_candidates(struct sched_domain *sd, cpumask_t *cpus,
 			 */
 			util = uclamp_rq_util_with(cpu_rq(cpu), util, p);
 
-			if (cpu_cap * 1024 <
-					util * sched_capacity_margin_up[cpu])
+			if (!fits_capacity_margin(util, cpu_cap, sched_capacity_margin_up[cpu]))
 				continue;
 
 			/*
@@ -9465,9 +9464,7 @@ group_is_overloaded(struct lb_env *env, struct sg_lb_stats *sgs)
 static inline bool
 group_smaller_min_cpu_capacity(struct sched_group *sg, struct sched_group *ref)
 {
-	return sg->sgc->min_capacity *
-				sched_capacity_margin_up[group_first_cpu(sg)] <
-						ref->sgc->min_capacity * 1024;
+	return fits_capacity_margin(sg->sgc->min_capacity, ref->sgc->min_capacity, sched_capacity_margin_up[group_first_cpu(sg)]);
 }
 
 /*
@@ -9477,9 +9474,7 @@ group_smaller_min_cpu_capacity(struct sched_group *sg, struct sched_group *ref)
 static inline bool
 group_smaller_max_cpu_capacity(struct sched_group *sg, struct sched_group *ref)
 {
-	return sg->sgc->max_capacity *
-				sched_capacity_margin_up[group_first_cpu(sg)] <
-						ref->sgc->max_capacity * 1024;
+	return fits_capacity_margin(sg->sgc->max_capacity, ref->sgc->max_capacity, sched_capacity_margin_up[group_first_cpu(sg)]);
 }
 
 /*
@@ -9894,9 +9889,8 @@ next_group:
 	 * If the domain util is greater that domain capacity, load balancing
 	 * needs to be done at the next sched domain level as well.
 	 */
-	if (env->sd->parent &&
-	    sds->total_capacity * 1024 < sds->total_util *
-			 sched_capacity_margin_up[group_first_cpu(sds->local)])
+	if (env->sd->parent && !fits_capacity_margin(sds->total_util, sds->total_capacity,
+	    sched_capacity_margin_up[group_first_cpu(sds->local)]))
 		set_sd_overutilized(env->sd->parent);
 
 }
