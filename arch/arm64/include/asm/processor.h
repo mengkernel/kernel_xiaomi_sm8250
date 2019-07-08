@@ -32,8 +32,6 @@
  */
 #define current_text_addr() ({ __label__ _l; _l: &&_l;})
 
-#ifdef __KERNEL__
-
 #include <linux/build_bug.h>
 #include <linux/cache.h>
 #include <linux/init.h>
@@ -267,8 +265,6 @@ static inline void spin_lock_prefetch(const void *ptr)
 }
 
 #define HAVE_ARCH_PICK_MMAP_LAYOUT
-
-#endif
 
 extern unsigned long __ro_after_init signal_minsigstksz; /* sigframe size */
 extern void __init minsigstksz_setup(void);

@@ -16,8 +16,6 @@
 #ifndef __ASM_IRQFLAGS_H
 #define __ASM_IRQFLAGS_H
 
-#ifdef __KERNEL__
-
 #include <asm/ptrace.h>
 
 /*
@@ -96,5 +94,4 @@ static inline int arch_irqs_disabled_flags(unsigned long flags)
 {
 	return flags & PSR_I_BIT;
 }
-#endif
-#endif
+#endif /* __ASM_IRQFLAGS_H */

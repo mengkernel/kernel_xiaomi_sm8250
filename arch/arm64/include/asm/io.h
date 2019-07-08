@@ -19,8 +19,6 @@
 #ifndef __ASM_IO_H
 #define __ASM_IO_H
 
-#ifdef __KERNEL__
-
 #include <linux/types.h>
 
 #include <asm/byteorder.h>
@@ -294,5 +292,4 @@ extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
 	(__BIOVEC_PHYS_MERGEABLE(vec1, vec2) &&				\
 	 (!xen_domain() || xen_biovec_phys_mergeable(vec1, vec2)))
 
-#endif	/* __KERNEL__ */
 #endif	/* __ASM_IO_H */

@@ -26,8 +26,6 @@
 #include <asm/barrier.h>
 #include <asm/lse.h>
 
-#ifdef __KERNEL__
-
 #define __ARM64_IN_ATOMIC_IMPL
 
 #if defined(CONFIG_ARM64_LSE_ATOMICS) && defined(CONFIG_AS_LSE)
@@ -161,5 +159,4 @@
 
 #define atomic64_dec_if_positive	atomic64_dec_if_positive
 
-#endif
-#endif
+#endif /* __ASM_ATOMIC_H */
