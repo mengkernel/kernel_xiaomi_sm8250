@@ -33,3 +33,6 @@ endif
 
 obj-$(CONFIG_CRYPTO_LIB_AES) += libaes.o
 libaes-y := aes.o
+
+obj-$(CONFIG_CRYPTO_LIB_SHA256) += libsha256.o
+libsha256-y := sha256.o

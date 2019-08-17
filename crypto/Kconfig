@@ -982,6 +982,9 @@ config CRYPTO_SHA512_MB
           lanes remain unfilled, a flush operation will be initiated to
           process the crypto jobs, adding a slight latency.
 
+config CRYPTO_LIB_SHA256
+	tristate
+
 config CRYPTO_SHA256
 	tristate "SHA224 and SHA256 digest algorithm"
 	select CRYPTO_HASH

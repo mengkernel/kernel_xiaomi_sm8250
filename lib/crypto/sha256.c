@@ -16,6 +16,7 @@
  */
 
 #include <linux/bitops.h>
+#include <linux/export.h>
 #include <linux/string.h>
 #include <crypto/sha256.h>
 #include <asm/unaligned.h>
@@ -222,6 +223,7 @@ int sha256_init(struct sha256_state *sctx)
 
 	return 0;
 }
+EXPORT_SYMBOL(sha256_init);
 
 int sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len)
 {
@@ -252,6 +254,7 @@ int sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len)
 
 	return 0;
 }
+EXPORT_SYMBOL(sha256_update);
 
 int sha256_final(struct sha256_state *sctx, u8 *out)
 {
@@ -281,3 +284,4 @@ int sha256_final(struct sha256_state *sctx, u8 *out)
 
 	return 0;
 }
+EXPORT_SYMBOL(sha256_final);
