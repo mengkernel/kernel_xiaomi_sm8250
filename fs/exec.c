@@ -1032,6 +1032,7 @@ static int exec_mmap(struct mm_struct *mm)
 
 	local_irq_disable();
 	active_mm = tsk->active_mm;
+	membarrier_exec_mmap(mm);
 	tsk->active_mm = mm;
 	tsk->mm = mm;
 	lru_gen_add_mm(mm);
@@ -1862,7 +1863,6 @@ static int __do_execve_file(int fd, struct filename *filename,
 	/* execve succeeded */
 	current->fs->in_exec = 0;
 	current->in_execve = 0;
-	membarrier_execve(current);
 	rseq_execve(current);
 	acct_update_integrals(current);
 	task_numa_free(current, false);
