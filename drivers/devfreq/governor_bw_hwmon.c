@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (c) 2013-2018, 2019-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2013-2020, The Linux Foundation. All rights reserved.
  */
 
 #define pr_fmt(fmt) "bw-hwmon: " fmt
@@ -290,6 +290,7 @@ int bw_hwmon_sample_end(struct bw_hwmon *hwmon)
 
 	return wake;
 }
+EXPORT_SYMBOL(bw_hwmon_sample_end);
 
 unsigned long to_mbps_zone(struct hwmon_node *node, unsigned long mbps)
 {
@@ -531,6 +532,7 @@ int update_bw_hwmon(struct bw_hwmon *hwmon)
 
 	return 0;
 }
+EXPORT_SYMBOL(update_bw_hwmon);
 
 static int start_monitor(struct devfreq *df, bool init)
 {
@@ -1023,6 +1025,7 @@ int register_bw_hwmon(struct device *dev, struct bw_hwmon *hwmon)
 
 	return ret;
 }
+EXPORT_SYMBOL(register_bw_hwmon);
 
 MODULE_DESCRIPTION("HW monitor based dev DDR bandwidth voting driver");
 MODULE_LICENSE("GPL v2");
