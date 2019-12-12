@@ -20,3 +20,10 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(cpu_frequency);
 EXPORT_TRACEPOINT_SYMBOL_GPL(powernv_throttle);
 
 EXPORT_TRACEPOINT_SYMBOL_GPL(clock_set_rate);
+
+EXPORT_TRACEPOINT_SYMBOL(memlat_dev_update);
+EXPORT_TRACEPOINT_SYMBOL(memlat_dev_meas);
+EXPORT_TRACEPOINT_SYMBOL(cache_hwmon_update);
+EXPORT_TRACEPOINT_SYMBOL(cache_hwmon_meas);
+EXPORT_TRACEPOINT_SYMBOL(bw_hwmon_update);
+EXPORT_TRACEPOINT_SYMBOL(bw_hwmon_meas);
