@@ -396,6 +396,10 @@
 	mi,mdss-dsi-panel-gamma-update-c8-index = <2>;
 	mi,mdss-dsi-panel-gamma-update-c9-index = <3>;
 	mi,mdss-dsi-panel-gamma-update-b3-index = <5>;
+
+	qcom,disp-doze-lpm-backlight = <20>;
+	qcom,disp-doze-hbm-backlight = <266>;
+
 	/* White Color Coordinate */
 	mi,mdss-dsi-white-point-read-enabled;
 	mi,mdss-dsi-white-point-register-read-length = <19>;

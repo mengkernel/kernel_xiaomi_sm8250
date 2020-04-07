@@ -399,6 +399,9 @@
 	mi,mdss-dsi-panel-hbm-off-51-index = <4>;
 	mi,mdss-dsi-panel-fod-off-51-index = <5>;
 
+	qcom,disp-doze-lpm-backlight = <20>;
+	qcom,disp-doze-hbm-backlight = <266>;
+
 	/* White Color Coordinate */
 	mi,mdss-dsi-white-point-read-enabled;
 	mi,mdss-dsi-white-point-register-read-length = <19>;

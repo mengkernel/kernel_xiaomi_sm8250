@@ -349,6 +349,9 @@
 	mi,mdss-dsi-white-point-info-index = <0>;
 	mi,mdss-dsi-white-point-info-length = <8>;
 
+	qcom,disp-doze-lpm-backlight = <20>;
+	qcom,disp-doze-hbm-backlight = <266>;
+
 	mi,mdss-dsi-panel-dc-type = <0>;
 	mi,mdss-dsi-panel-dc-update-flag;
 	mi,mdss-dsi-panel-dc-update-d2-index = <6>;
