@@ -1580,7 +1580,7 @@ static ssize_t fuse_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
 	struct file *file = iocb->ki_filp;
 	struct fuse_file *ff = file->private_data;
 
-	if (is_bad_inode(file_inode(file)))
+	if (fuse_is_bad(file_inode(file)))
 		return -EIO;
 
 	if (!(ff->open_flags & FOPEN_DIRECT_IO))
@@ -1594,7 +1594,7 @@ static ssize_t fuse_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
 	struct file *file = iocb->ki_filp;
 	struct fuse_file *ff = file->private_data;
 
-	if (is_bad_inode(file_inode(file)))
+	if (fuse_is_bad(file_inode(file)))
 		return -EIO;
 
 	if (!(ff->open_flags & FOPEN_DIRECT_IO))
