@@ -1351,6 +1351,9 @@ config CAT_OPTIMIZE
 	default y
 	depends on ARCH_KONA
 
+config LTO_GCC
+	bool "Enable Link Time Optimization for GCC"
+
 config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
 	bool
 	help
