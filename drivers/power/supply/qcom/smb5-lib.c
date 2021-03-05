@@ -11947,7 +11947,7 @@ static void apsd_timer_cb(struct timer_list *tm)
 	struct smb_charger *chg = container_of(tm, struct smb_charger,
 							apsd_timer);
 
-	smblib_dbg(chg, PR_MISC, "APSD Extented timer timeout at %lld\n",
+	smblib_dbg(chg, PR_MISC, "APSD Extented timer timeout at %u\n",
 			jiffies_to_msecs(jiffies));
 
 	chg->apsd_ext_timeout = true;
