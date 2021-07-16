@@ -6,8 +6,6 @@
 
 #define AW8697_CONT_PLAYBACK_MODE       AW8697_BIT_CONT_CTRL_CLOSE_PLAYBACK
 
-/*#define CONFIG_DEBUG_FS*/
-
 /*#ifdef INPUT_DEV*/
 #if 1
 /* haptics module register definitions */
