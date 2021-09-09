@@ -210,12 +210,13 @@
 				39 00 00 00 00 00 02 B3 13
 				39 00 00 00 00 00 03 F0 A5 A5
 				/* HBM ON 600nit */
-				39 00 00 00 00 00 03 51 03 FF
+				//39 00 00 00 00 00 03 51 03 FF
 				39 01 00 00 00 00 02 53 E0];
 			mi,mdss-dsi-hbm-fod-on-command-state = "dsi_lp_mode";
 			mi,mdss-dsi-hbm-fod-off-command = [
 				15 00 00 00 00 00 02 53 20
-				39 01 00 00 00 00 03 51 03 FF];
+				//39 01 00 00 00 00 03 51 03 FF
+			];
 			mi,mdss-dsi-hbm-fod-off-command-state = "dsi_hs_mode";
 
 			mi,mdss-dsi-hbm-off-command = [

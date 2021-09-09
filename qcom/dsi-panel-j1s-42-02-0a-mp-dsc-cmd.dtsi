@@ -438,7 +438,7 @@
 				/* Dimming Off */
 				15 00 00 00 00 00 02 53 20
 				/* HBM Mode 800 nit */
-				39 00 00 00 00 00 05 51 0F 8F 00 00
+				//39 00 00 00 00 00 05 51 0F 8F 00 00
 				39 00 00 00 00 00 06 F0 55 AA 52 08 00 /* Set page 0 */
 				/* Aod to Normal */
 				15 00 00 00 00 00 02 B2 58
@@ -452,7 +452,8 @@
 				15 01 00 00 00 00 02 53 20
 				/* Normal Mode */
 				/* parameter will be updated base on last brightness */
-				39 01 00 00 00 00 05 51 07 FF 00 00];
+				//39 01 00 00 00 00 05 51 07 FF 00 00
+			];
 			mi,mdss-dsi-hbm-fod-on-command-state = "dsi_lp_mode";
 			mi,mdss-dsi-hbm-fod-off-command-state = "dsi_lp_mode";
 			mi,mdss-dsi-normal-fod-on-command-state = "dsi_lp_mode";
@@ -600,7 +601,7 @@
 				/* Dimming Off */
 				15 00 00 00 00 00 02 53 20
 				/* HBM Mode 700 nit */
-				39 00 00 00 00 00 05 51 0F 8F 00 00
+				//39 00 00 00 00 00 05 51 0F 8F 00 00
 				39 00 00 00 00 00 06 F0 55 AA 52 08 00 /* Set page 0 */
 				/* Aod to Normal */
 				15 00 00 00 00 00 02 B2 58
@@ -620,7 +621,8 @@
 				15 01 00 00 00 00 02 53 20
 				/* Normal Mode */
 				/* parameter will be updated base on last brightness */
-				39 01 00 00 00 00 05 51 07 FF 00 00];
+				//39 01 00 00 00 00 05 51 07 FF 00 00
+			];
 			mi,mdss-dsi-hbm-fod-on-command-state = "dsi_lp_mode";
 			mi,mdss-dsi-hbm-fod-off-command-state = "dsi_lp_mode";
 			mi,mdss-dsi-normal-fod-on-command-state = "dsi_lp_mode";
