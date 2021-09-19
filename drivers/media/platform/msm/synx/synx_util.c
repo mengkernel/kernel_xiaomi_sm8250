@@ -73,7 +73,7 @@ int synx_init_object(struct synx_table_row *table,
 	mutex_unlock(&synx_dev->row_locks[idx]);
 
 	pr_debug("synx obj init: id:0x%x state:%u fence: 0x%pK\n",
-		synx_status(row), fence);
+		id, synx_status(row), fence);
 
 	return 0;
 }
