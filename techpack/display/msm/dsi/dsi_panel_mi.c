@@ -431,14 +431,7 @@ int dsi_panel_parse_mi_config(struct dsi_panel *panel,
 			pr_info("delay after fod hbm off.\n");
 		}
 
-		rc = utils->read_u32(of_node,
-			"mi,mdss-dsi-dimlayer-brightness-alpha-lut-item-count",
-			&mi_cfg->brightnes_alpha_lut_item_count);
-		if (rc || mi_cfg->brightnes_alpha_lut_item_count <= 0) {
-			pr_err("can't get brightnes_alpha_lut_item_count\n");
-			mi_cfg->fod_dimlayer_enabled = false;
-			goto skip_dimlayer_parse;
-		}
+		mi_cfg->brightnes_alpha_lut_item_count = 21;
 
 		arr = utils->get_property(utils->data,
 				"mi,mdss-dsi-dimlayer-brightness-alpha-lut", &length);
