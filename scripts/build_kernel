@@ -54,6 +54,7 @@ function miui_fix_dfps()
 function miui_fix_fod()
 {
 	sed -i 's/\/\/ mi,mdss-dsi-panel-fod-dimlayer-enabled/mi,mdss-dsi-panel-fod-dimlayer-enabled/g' arch/arm64/boot/dts/vendor/qcom/dsi-panel*
+	sed -i 's/qcom,disp-fod-dim-lut/mi,mdss-dsi-dimlayer-brightness-alpha-lut/g' arch/arm64/boot/dts/vendor/qcom/dsi-panel*
 }
 
 make ARCH=arm64 \
