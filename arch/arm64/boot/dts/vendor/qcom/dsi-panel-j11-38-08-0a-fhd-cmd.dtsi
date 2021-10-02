@@ -126,7 +126,7 @@
 	mi,mdss-dsi-panel-dc-threshold = <470>;
 	mi,mdss-dsi-panel-dc-type = <2>; /* differ to cmi */
 
-	mi,mdss-dsi-panel-fod-dimlayer-enabled;
+	// mi,mdss-dsi-panel-fod-dimlayer-enabled;
 
 	qcom,disp-doze-lpm-backlight = <20>;
 	qcom,disp-doze-hbm-backlight = <266>;
@@ -149,8 +149,7 @@
 	mi,mdss-dsi-update-gamma-6th-index = <14>;
 
 
-	mi,mdss-dsi-dimlayer-brightness-alpha-lut-item-count = <21>;
-	mi,mdss-dsi-dimlayer-brightness-alpha-lut =
+	qcom,disp-fod-dim-lut =
 	/* brightness  alpha */
 		<0          0xFF
 		 4          0xEB
