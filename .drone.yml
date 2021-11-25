@@ -4,7 +4,7 @@ clone:
   depth: 1
 steps:
  - name: compile
-   image: diazaji/python:kernel
+   image: diazaji/python:focal
    environment:
      TELEGRAM_TOKEN:
        from_secret: TELEGRAM_TOKEN
