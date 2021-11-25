@@ -10,5 +10,5 @@ steps:
        from_secret: TELEGRAM_TOKEN
    commands:
       - cd /drone/src
-      - wget https://raw.githubusercontent.com/Diaz1401/build_script/alioth/build-gcc.sh
-      - bash build-gcc.sh latest
+      - wget -q https://raw.githubusercontent.com/Diaz1401/build_script/alioth/build-gcc.sh
+      - bash build-gcc.sh 10
