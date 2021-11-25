@@ -1,0 +1,13 @@
+name: Kernel Compile
+on:
+  push:
+jobs:
+  Compile:
+    runs-on: ubuntu-latest
+    container: diazaji/python:kernel
+    steps:
+      - uses: actions/checkout@v2
+      - name: Start Compiling
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: bash clang-build.sh
