@@ -4691,9 +4691,6 @@ exit_skip:
 	mi_cfg->sysfs_fod_unlock_success = false;
 	fm_stat.idle_status = false;
 
-	rc = dsi_panel_set_doze_status(panel, false);
-	if (rc)
-		pr_err("unable to set doze on\n");
 exit:
 	mutex_unlock(&panel->panel_lock);
 	display_utc_time_marker("DSI_CMD_SET_NOLP");
