@@ -396,6 +396,10 @@
 	mi,mdss-dsi-panel-gamma-update-c8-index = <2>;
 	mi,mdss-dsi-panel-gamma-update-c9-index = <3>;
 	mi,mdss-dsi-panel-gamma-update-b3-index = <5>;
+
+	qcom,disp-doze-lpm-backlight = <20>;
+	qcom,disp-doze-hbm-backlight = <266>;
+
 	/* White Color Coordinate */
 	mi,mdss-dsi-white-point-read-enabled;
 	mi,mdss-dsi-white-point-register-read-length = <19>;
@@ -406,13 +410,12 @@
 
 	mi,mdss-panel-on-dimming-delay = <120>;
 
-	mi,mdss-dsi-panel-fod-dimlayer-enabled;
+	// mi,mdss-dsi-panel-fod-dimlayer-enabled;
 	mi,mdss-panel-delay-before-fod-hbm-on;
 	mi,mdss-panel-delay-before-fod-hbm-off;
 	mi,mdss-panel-before-fod-hbm-on-60Hz-delay = <8000>;
 
-	mi,mdss-dsi-dimlayer-brightness-alpha-lut-item-count = <21>;
-	mi,mdss-dsi-dimlayer-brightness-alpha-lut =
+	qcom,disp-fod-dim-lut =
 	/* brightness  alpha */
 		<0          0xFF
 		 4          0xEB

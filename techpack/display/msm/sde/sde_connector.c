@@ -90,15 +90,19 @@ static int sde_backlight_device_update_status(struct backlight_device *bd)
 
 	c_conn = bl_get_data(bd);
 	display = (struct dsi_display *) c_conn->display;
-	if (brightness > display->panel->bl_config.bl_max_level)
-		brightness = display->panel->bl_config.bl_max_level;
+	if (brightness > display->panel->bl_config.brightness_max_level)
+		brightness = display->panel->bl_config.brightness_max_level;
 
-	/* map UI brightness into driver backlight level with rounding */
-	bl_lvl = mult_frac(brightness, display->panel->bl_config.bl_max_level,
-			display->panel->bl_config.brightness_max_level);
+	if (brightness) {
+		int bl_min = display->panel->bl_config.bl_min_level ? : 1;
+		int bl_range = display->panel->bl_config.bl_max_level - bl_min;
 
-	if (!bl_lvl && brightness)
-		bl_lvl = 1;
+		/* map UI brightness into driver backlight level rounding it */
+		bl_lvl = bl_min + DIV_ROUND_CLOSEST((brightness - 1) * bl_range,
+			display->panel->bl_config.brightness_max_level - 1);
+	} else {
+		bl_lvl = 0;
+	}
 
 	if (!c_conn->allow_bl_update) {
 		c_conn->unset_bl_level = bl_lvl;
@@ -3350,6 +3354,9 @@ static uint32_t brightness_to_alpha(struct dsi_panel_mi_cfg *mi_cfg, uint32_t br
 	int i;
 	int level = mi_cfg->brightnes_alpha_lut_item_count;
 
+	if (!mi_cfg->brightness_alpha_lut)
+		return 0;
+
 	if (brightness == 0x0)
 		return mi_cfg->brightness_alpha_lut[0].alpha;
 
@@ -3357,6 +3364,9 @@ static uint32_t brightness_to_alpha(struct dsi_panel_mi_cfg *mi_cfg, uint32_t br
 		if (mi_cfg->brightness_alpha_lut[i].brightness >= brightness)
 			break;
 	}
+
+	if (i == 0)
+		return mi_cfg->brightness_alpha_lut[i].alpha;
 
 	if (i == level)
 		return mi_cfg->brightness_alpha_lut[i - 1].alpha;

@@ -2502,7 +2502,7 @@ static ssize_t fts_edge_grip_value_show(struct device *dev,
 	char buff[CMD_STR_LEN] = { 0 };
 	all_strbuff = (char *)kmalloc(PAGE_SIZE * sizeof(char), GFP_KERNEL);
 	memset(all_strbuff, 0, PAGE_SIZE);
-	snprintf(all_strbuff, sizeof(all_strbuff), "grip_log_value\n");
+	snprintf(all_strbuff, sizeof(*all_strbuff), "grip_log_value\n");
 	for (i = 0; i < GRIP_TYPE; i++) {
 		type = i;
 		for (j = 0; j < GRIP_POS; j++) {
@@ -3738,8 +3738,7 @@ static void fts_enter_pointer_event_handler(struct fts_ts_info *info,
 				info->fod_coordinate_update = true;
 				__set_bit(touchId, &info->fod_id);
 				input_report_abs(info->input_dev, ABS_MT_WIDTH_MINOR, info->fod_overlap);
-				if (!info->board->support_fod)
-					input_report_key(info->input_dev, BTN_INFO, 1);
+				input_report_key(info->input_dev, BTN_INFO, 1);
 			}
 		} else if (__test_and_clear_bit(touchId, &info->fod_id)) {
 			input_report_abs(info->input_dev, ABS_MT_WIDTH_MINOR, 0);

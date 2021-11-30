@@ -106,7 +106,8 @@ static int _block2mtd_erase(struct block2mtd_dev *dev, loff_t to, size_t len)
 				lock_page(page);
 				memset(page_address(page), 0xff, PAGE_SIZE);
 				set_page_dirty(page);
-				write_one_page(page);
+				if (write_one_page(page))
+					pr_err("%s: write_one_page() failed\n", __func__);
 				/* write_one_page will unlock page on return */
 				//unlock_page(page);
 				balance_dirty_pages_ratelimited(mapping);
@@ -194,7 +195,8 @@ static int _block2mtd_write(struct block2mtd_dev *dev, const u_char *buf,
 			lock_page(page);
 			memcpy(page_address(page) + offset, buf, cpylen);
 			set_page_dirty(page);
-			write_one_page(page);
+			if (write_one_page(page))
+				pr_err("%s: write_one_page() failed\n", __func__);
 			/* write_one_page will unlock page on return */
 			//unlock_page(page);
 			balance_dirty_pages_ratelimited(mapping);
@@ -407,7 +409,8 @@ static int _block2mtd_panic_write(struct block2mtd_dev *dev, const u_char *buf,
 	sdev = get_scsi_device(bdev);
 	lba = sectors_to_logical(sdev, dev->blkdev->bd_part->start_sect);
 
-	pr_info("block2mtd_panic_write start sect:%d,lba is: 0x%x\n", dev->blkdev->bd_part->start_sect, lba);
+	pr_info("block2mtd_panic_write start sect:%lx, lba is: 0x%lx\n",
+		dev->blkdev->bd_part->start_sect, lba);
 
 	offset += (lba + index); //(bd_part->start_sect+ index);if oops address in lun0 is 32M, lba = 32*1024/4
 	ret = do_io(DISK_WRITE, dev->blkdev, buf, len, offset, 1);
