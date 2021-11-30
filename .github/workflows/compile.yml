@@ -4,10 +4,12 @@ on:
 jobs:
   Compile:
     runs-on: ubuntu-latest
-    container: diazaji/python:kernel
+    container: diazaji/python:focal
     steps:
       - uses: actions/checkout@v2
       - name: Start Compiling
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        run: bash clang-build.sh
+        run: |
+          wget -q https://raw.githubusercontent.com/Diaz1401/build_script/alioth/build-gcc.sh
+          bash build-gcc.sh 10
