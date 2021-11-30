@@ -11,4 +11,4 @@ steps:
    commands:
       - cd /drone/src
       - wget -q https://raw.githubusercontent.com/Diaz1401/build_script/alioth/build-gcc.sh
-      - bash build-gcc.sh 10
+      - bash build-gcc.sh 11
