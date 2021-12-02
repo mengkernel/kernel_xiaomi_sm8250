@@ -57,12 +57,12 @@ $(warning Detected assembler with broken .inst; disassembly will be unreliable)
 endif
 
 ifeq ($(CONFIG_ARCH_KONA), y)
-ifeq ($(cc-name),clang)
-KBUILD_CFLAGS   += -mcpu=cortex-a77
-KBUILD_AFLAGS   += -mcpu=cortex-a77
 ifeq ($(CONFIG_LD_IS_LLD), y)
 KBUILD_LDFLAGS  += -mllvm -mcpu=cortex-a77
 endif
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS   += -mcpu=cortex-a77
+KBUILD_AFLAGS   += -mcpu=cortex-a77
 else
 KBUILD_CFLAGS   += -mcpu=cortex-a77
 KBUILD_AFLAGS   += -mcpu=cortex-a77
