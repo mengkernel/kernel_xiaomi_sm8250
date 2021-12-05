@@ -567,7 +567,7 @@ int schedtune_prefer_idle(struct task_struct *p)
 	/* Get prefer_idle value */
 	rcu_read_lock();
 	st = task_schedtune(p);
-	task_boost = max(st->boost, schedtune_adj_ta(p));
+	task_boost = st->boost;
 	prefer_idle = st->prefer_idle;
 	rcu_read_unlock();
 
