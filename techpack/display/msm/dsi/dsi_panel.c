@@ -19,6 +19,10 @@
 #include "sde_dbg.h"
 #include "dsi_mi_feature.h"
 
+#ifdef CONFIG_EXPOSURE_ADJUSTMENT
+#include "exposure_adjustment.h"
+#endif
+
 /**
  * topology is currently defined by a set of following 3 values:
  * 1. num of layer mixers
@@ -803,7 +807,6 @@ bool dc_skip_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
 	}
 }
 
-#ifdef CONFIG_OSSFOD
 static u32 dsi_panel_get_backlight(struct dsi_panel *panel)
 {
 	u32 bl_level;
@@ -910,11 +913,11 @@ int dsi_panel_set_fod_hbm(struct dsi_panel *panel, bool status)
 
 	return rc;
 }
-#endif
 
 int dsi_panel_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
 {
 	int rc = 0;
+	int bl_dc_min = panel->bl_config.bl_min_level * 2;
 	struct dsi_backlight_config *bl = &panel->bl_config;
 	struct dsi_panel_mi_cfg *mi_cfg = &panel->mi_cfg;
 
@@ -922,6 +925,11 @@ int dsi_panel_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
 		return 0;
 
 	DSI_DEBUG("backlight type:%d lvl:%d\n", bl->type, bl_lvl);
+
+#ifdef CONFIG_EXPOSURE_ADJUSTMENT
+	if (bl_lvl > 0)
+		bl_lvl = ea_panel_calc_backlight(bl_lvl < bl_dc_min ? bl_dc_min : bl_lvl);
+#endif
 
 	/* lmi panel must restore to last_bl_level to avoid flash high
 	 * brightness white exiting app lock with DC on (MIUI-1755728),
@@ -2141,6 +2149,8 @@ const char *cmd_set_prop_map[DSI_CMD_SET_MAX] = {
 	"qcom,mdss-dsi-dispparam-pen-60hz-command",
 	"qcom,mdss-dsi-dispparam-pen-30hz-command",
 	/* xiaomi add end */
+	"qcom,mdss-dsi-dispparam-hbm-fod-on-command",
+	"qcom,mdss-dsi-dispparam-hbm-fod-off-command",
 };
 
 const char *cmd_set_state_map[DSI_CMD_SET_MAX] = {
@@ -2239,6 +2249,8 @@ const char *cmd_set_state_map[DSI_CMD_SET_MAX] = {
 	"qcom,mdss-dsi-dispparam-pen-60hz-command-state",
 	"qcom,mdss-dsi-dispparam-pen-30hz-command-state",
 	/* xiaomi add end */
+	"qcom,mdss-dsi-dispparam-hbm-fod-on-command-state",
+	"qcom,mdss-dsi-dispparam-hbm-fod-off-command-state",
 };
 
 int dsi_panel_get_cmd_pkt_count(const char *data, u32 length, u32 *cnt)
@@ -2716,7 +2728,6 @@ error:
 	return rc;
 }
 
-#ifdef CONFIG_OSSFOD
 static int dsi_panel_parse_fod_dim_lut(struct dsi_panel *panel,
 		struct dsi_parser_utils *utils)
 {
@@ -2778,7 +2789,6 @@ count_fail:
 	}
 	return rc;
 }
-#endif
 
 static int dsi_panel_parse_bl_config(struct dsi_panel *panel)
 {
@@ -2879,29 +2889,9 @@ static int dsi_panel_parse_bl_config(struct dsi_panel *panel)
 	panel->bl_config.bl_inverted_dbv = utils->read_bool(utils->data,
 		"qcom,mdss-dsi-bl-inverted-dbv");
 
-#ifdef CONFIG_OSSFOD
 	rc = dsi_panel_parse_fod_dim_lut(panel, utils);
 	if (rc)
 		pr_err("[%s failed to parse fod dim lut\n", panel->name);
-
-	rc = utils->read_u32(utils->data,
-			"qcom,disp-doze-lpm-backlight", &val);
-	if (rc) {
-		panel->bl_config.bl_doze_lpm = 0;
-		pr_debug("set doze lpm backlight to 0\n");
-	} else {
-		panel->bl_config.bl_doze_lpm = val;
-	}
-
-	rc = utils->read_u32(utils->data,
-			"qcom,disp-doze-hbm-backlight", &val);
-	if (rc) {
-		panel->bl_config.bl_doze_hbm = 0;
-		pr_debug("set doze hbm backlight to 0\n");
-	} else {
-		panel->bl_config.bl_doze_hbm = val;
-	}
-#endif
 
 	if (panel->bl_config.type == DSI_BACKLIGHT_PWM) {
 		rc = dsi_panel_parse_bl_pwm_config(panel);
@@ -3999,6 +3989,47 @@ void dsi_panel_put(struct dsi_panel *panel)
 	kfree(panel);
 }
 
+#ifdef CONFIG_EXPOSURE_ADJUSTMENT
+static struct dsi_panel * set_panel;
+static ssize_t mdss_fb_set_ea_enable(struct device *dev,
+	struct device_attribute *attr, const char *buf, size_t len)
+{
+	u32 ea_enable;
+
+	if (sscanf(buf, "%d", &ea_enable) != 1) {
+		pr_err("sccanf buf error!\n");
+		return len;
+	}
+
+	ea_panel_mode_ctrl(set_panel, ea_enable != 0);
+
+	return len;
+}
+
+static ssize_t mdss_fb_get_ea_enable(struct device *dev,
+		struct device_attribute *attr, char *buf)
+{
+	int ret;
+	bool ea_enable = ea_panel_is_enabled();
+
+	ret = scnprintf(buf, PAGE_SIZE, "%d\n", ea_enable ? 1 : 0);
+
+	return ret;
+}
+
+static DEVICE_ATTR(msm_fb_ea_enable, S_IRUGO | S_IWUSR,
+	mdss_fb_get_ea_enable, mdss_fb_set_ea_enable);
+
+static struct attribute *mdss_fb_attrs[] = {
+	&dev_attr_msm_fb_ea_enable.attr,
+	NULL,
+};
+
+static struct attribute_group mdss_fb_attr_group = {
+	.attrs = mdss_fb_attrs,
+};
+#endif
+
 int dsi_panel_drv_init(struct dsi_panel *panel,
 		       struct mipi_dsi_host *host)
 {
@@ -4052,6 +4083,13 @@ int dsi_panel_drv_init(struct dsi_panel *panel,
 			       panel->name, rc);
 		goto error_gpio_release;
 	}
+
+#ifdef CONFIG_EXPOSURE_ADJUSTMENT
+	rc = sysfs_create_group(&(panel->parent->kobj), &mdss_fb_attr_group);
+	if (rc)
+		pr_err("sysfs group creation failed, rc=%d\n", rc);
+	set_panel = panel;
+#endif
 
 	goto exit;
 
