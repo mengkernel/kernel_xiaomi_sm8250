@@ -1,6 +1,9 @@
 Linux kernel
 ============
 
+[![Build Status](https://cloud.drone.io/api/badges/Diaz1401/android_kernel_xiaomi_sm8250/status.svg)](https://cloud.drone.io/Diaz1401/android_kernel_xiaomi_sm8250)
+============
+
 There are several guides for kernel developers and users. These guides can
 be rendered in a number of formats, like HTML and PDF. Please read
 Documentation/admin-guide/README.rst first.
