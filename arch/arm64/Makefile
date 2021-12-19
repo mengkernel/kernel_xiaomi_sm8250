@@ -58,10 +58,15 @@ endif
 
 ifeq ($(CONFIG_ARCH_KONA), y)
 ifeq ($(CONFIG_LD_IS_LLD), y)
-KBUILD_LDFLAGS  += -mllvm
+KBUILD_LDFLAGS  += -mllvm -mcpu=cortex-a77
 endif
+ifeq ($(cc-name),clang)
 KBUILD_CFLAGS   += -mcpu=cortex-a77
 KBUILD_AFLAGS   += -mcpu=cortex-a77
+else
+KBUILD_CFLAGS   += -mcpu=cortex-a77
+KBUILD_AFLAGS   += -mcpu=cortex-a77
+endif
 endif
 
 KBUILD_CFLAGS	+= -mgeneral-regs-only $(lseinstr) $(brokengasinst) $(compat_vdso)
