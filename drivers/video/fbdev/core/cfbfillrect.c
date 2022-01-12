@@ -32,13 +32,8 @@
 #include <asm/types.h>
 #include "fb_draw.h"
 
-#if BITS_PER_LONG == 32
-#  define FB_WRITEL fb_writel
-#  define FB_READL  fb_readl
-#else
 #  define FB_WRITEL fb_writeq
 #  define FB_READL  fb_readq
-#endif
 
     /*
      *  Aligned pattern fill using 32/64-bit memory accesses
@@ -300,19 +295,6 @@ fast_fill16(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 		dst_idx &= (BITS_PER_LONG - 1);
 		n = width_in_bits;
 		dstp = dst;
-#if BITS_PER_LONG == 32
-		if (dst_idx) {
-			fb_writew(pat, (u16 *)dstp + 1);
-			dstp++;
-			n -= 16;
-			if (n == 0)
-				continue;
-		}
-		else if (n == 16) {
-			fb_writew(pat, (u16 *)dstp);
-			continue;
-		}	
-#else /* BITS_PER_LONG == 64 */
 		if (dst_idx) {
 			if (dst_idx == 16) {
 				fb_writew(pat, (u16 *)dstp + 1);
@@ -331,12 +313,12 @@ fast_fill16(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 			}
 			else if (dst_idx == 48) {
 				fb_writew(pat, (u16 *)dstp + 3);
+			}
 			dstp++;
-			n -= 64 - dist_idx;
+			n -= 64 - dst_idx;
 			if (n == 0)
 				continue;
 		}
-#endif
 		n /= BITS_PER_LONG;
 		while (n >= 8) {
 			FB_WRITEL(pat, dstp++);
@@ -352,10 +334,6 @@ fast_fill16(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 		while (n--)
 			FB_WRITEL(pat, dstp++);
 		last_bits = (dst_idx + width_in_bits) % BITS_PER_LONG;
-#if BITS_PER_LONG == 32
-		if (last_bits)
-			fb_writew(pat, dstp);
-#else /* BITS_PER_LONG == 64 */
 		if (last_bits & 32) {
 			fb_writel(pat, dstp);
 			if (last_bits & 16)
@@ -363,7 +341,6 @@ fast_fill16(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 		}
 		else if (last_bits & 16)
 			fb_writew(pat, dstp);
-#endif
 	}
 }
 
@@ -378,7 +355,6 @@ fast_fill32(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 		dst_idx &= (BITS_PER_LONG - 1);
 		n = width_in_bits;
 		dstp = dst;
-#if BITS_PER_LONG == 64
 		if (dst_idx) {
 			fb_writel(pat, (u32 *)dstp + 1);
 			dstp++;
@@ -389,8 +365,7 @@ fast_fill32(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 		else if (n == 32) {
 			fb_writel(pat, dstp);
 			continue;
-		}	
-#endif
+		}
 		n /= BITS_PER_LONG;
 		while (n >= 8) {
 			FB_WRITEL(pat, dstp++);
@@ -405,10 +380,8 @@ fast_fill32(struct fb_info *p, unsigned long __iomem *dst, int dst_idx,
 		}
 		while (n--)
 			FB_WRITEL(pat, dstp++);
-#if BITS_PER_LONG == 64
 		if ((dst_idx + width_in_bits) % 64)
 			fb_writel(pat, dstp);
-#endif
 	}
 }
 
