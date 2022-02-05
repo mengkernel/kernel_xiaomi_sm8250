@@ -42,6 +42,12 @@
 
 /* detects whether we are being compiled under dfsan */
 
+/* Mark the internal assembly functions as hidden  */
+#ifdef __ELF__
+# define ZSTD_HIDE_ASM_FUNCTION(func) .hidden func
+#else
+# define ZSTD_HIDE_ASM_FUNCTION(func)
+#endif
 
 /* Enable runtime BMI2 dispatch based on the CPU.
  * Enabled for clang & gcc >=4.8 on x86 when BMI2 isn't enabled by default.
