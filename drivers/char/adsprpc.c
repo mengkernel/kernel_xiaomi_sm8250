@@ -2789,40 +2789,6 @@ bail:
 	return err;
 }
 
-static int fastrpc_send_cpuinfo_to_dsp(struct fastrpc_file *fl)
-{
-	int err = 0;
-	uint64_t cpuinfo = 0;
-	struct fastrpc_apps *me = &gfa;
-	struct fastrpc_ioctl_invoke_crc ioctl;
-	remote_arg_t ra[2];
-
-	VERIFY(err, fl && fl->cid >= ADSP_DOMAIN_ID && fl->cid < NUM_CHANNELS);
-	if (err)
-		goto bail;
-
-	cpuinfo = me->channel[fl->cid].cpuinfo_todsp;
-	/* return success if already updated to remote processor */
-	if (me->channel[fl->cid].cpuinfo_status)
-		return 0;
-
-	ra[0].buf.pv = (void *)&cpuinfo;
-	ra[0].buf.len = sizeof(cpuinfo);
-	ioctl.inv.handle = FASTRPC_STATIC_HANDLE_DSP_UTILITIES;
-	ioctl.inv.sc = REMOTE_SCALARS_MAKE(1, 1, 0);
-	ioctl.inv.pra = ra;
-	ioctl.fds = NULL;
-	ioctl.attrs = NULL;
-	ioctl.crc = NULL;
-	fl->pd = 1;
-
-	err = fastrpc_internal_invoke(fl, FASTRPC_MODE_PARALLEL, 1, &ioctl);
-	if (!err)
-		me->channel[fl->cid].cpuinfo_status = true;
-bail:
-	return err;
-}
-
 static int fastrpc_get_info_from_dsp(struct fastrpc_file *fl,
 				uint32_t *dsp_attr_buf,
 				uint32_t dsp_attr_buf_len,
