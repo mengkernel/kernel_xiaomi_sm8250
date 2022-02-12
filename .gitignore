@@ -140,3 +140,8 @@ kernel/configs/android-*.cfg
 #Ignoring Android.bp link file
 #
 Android.bp
+
+# Scripts
+scripts/build_dtbo
+scripts/build_kernel
+scripts/update_defconfig
