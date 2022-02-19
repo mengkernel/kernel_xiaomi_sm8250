@@ -1,0 +1,14 @@
+kind: pipeline
+name: Kernel Compile
+clone:
+  depth: 1
+steps:
+ - name: compile
+   image: diazaji/python:kernel
+   environment:
+     TELEGRAM_TOKEN:
+       from_secret: TELEGRAM_TOKEN
+   commands:
+      - cd /drone/src
+      - wget -q https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-clang.sh
+      - bash build-clang.sh
