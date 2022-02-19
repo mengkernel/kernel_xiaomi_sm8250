@@ -67,6 +67,7 @@
 #include "wlan_scan_utils_api.h"
 #include "wlan_p2p_cfg_api.h"
 #include "cfg_nan_api.h"
+#include "nan_ucfg_api.h"
 
 #include <ol_defines.h>
 
@@ -1547,11 +1548,12 @@ QDF_STATUS csr_update_channel_list(struct mac_context *mac)
 				}
 			}
 
+			if (!ucfg_is_nan_allowed_on_freq(mac->pdev,
+				pChanList->chanParam[num_channel].freq))
+				pChanList->chanParam[num_channel].nan_disabled =
+					true;
 
-			if (CHANNEL_STATE_ENABLE == channel_state)
-				pChanList->chanParam[num_channel].dfsSet =
-					false;
-			else
+			if (CHANNEL_STATE_ENABLE != channel_state)
 				pChanList->chanParam[num_channel].dfsSet =
 					true;
 
@@ -5381,11 +5383,6 @@ QDF_STATUS csr_roam_set_bss_config_cfg(struct mac_context *mac, uint32_t session
 	/* short slot time */
 	mac->mlme_cfg->feature_flags.enable_short_slot_time_11g =
 						pBssConfig->uShortSlotTime;
-	/* 11d */
-	if (pBssConfig->f11hSupport)
-		mac->mlme_cfg->gen.enabled_11d = pBssConfig->f11hSupport;
-	else
-		mac->mlme_cfg->gen.enabled_11d = pProfile->ieee80211d;
 
 	mac->mlme_cfg->power.local_power_constraint = pBssConfig->uPowerLimit;
 	/* CB */
@@ -18794,6 +18791,9 @@ csr_create_roam_scan_offload_request(struct mac_context *mac_ctx,
 			mac_ctx->mlme_cfg->trig_min_rssi[DEAUTH_MIN_RSSI];
 	req_buf->min_rssi_params[BMISS_MIN_RSSI] =
 			mac_ctx->mlme_cfg->trig_min_rssi[BMISS_MIN_RSSI];
+	req_buf->min_rssi_params[MIN_RSSI_2G_TO_5G_ROAM] =
+			mac_ctx->mlme_cfg->trig_min_rssi[MIN_RSSI_2G_TO_5G_ROAM];
+
 	req_buf->score_delta_param[IDLE_ROAM_TRIGGER] =
 			mac_ctx->mlme_cfg->trig_score_delta[IDLE_ROAM_TRIGGER];
 	req_buf->score_delta_param[BTM_ROAM_TRIGGER] =
@@ -20001,6 +20001,7 @@ csr_roam_switch_to_deinit(struct mac_context *mac, uint8_t vdev_id,
 		return status;
 
 	mlme_set_roam_state(mac->psoc, vdev_id, ROAM_DEINIT);
+	mlme_clear_operations_bitmap(mac->psoc, vdev_id);
 
 	if (reason != REASON_SUPPLICANT_INIT_ROAMING)
 		csr_enable_roaming_on_connected_sta(mac, vdev_id);
@@ -21192,6 +21193,7 @@ void csr_process_ho_fail_ind(struct mac_context *mac_ctx, void *msg_buf)
 	struct handoff_failure_ind *pSmeHOFailInd = msg_buf;
 	struct mlme_roam_after_data_stall *vdev_roam_params;
 	struct wlan_objmgr_vdev *vdev;
+	struct reject_ap_info ap_info;
 	uint32_t sessionId;
 
 	if (!pSmeHOFailInd) {
@@ -21200,6 +21202,12 @@ void csr_process_ho_fail_ind(struct mac_context *mac_ctx, void *msg_buf)
 	}
 
 	sessionId = pSmeHOFailInd->vdev_id;
+	ap_info.bssid = pSmeHOFailInd->bssid;
+	ap_info.reject_ap_type = DRIVER_AVOID_TYPE;
+	ap_info.reject_reason = REASON_ROAM_HO_FAILURE;
+	ap_info.source = ADDED_BY_DRIVER;
+	wlan_blm_add_bssid_to_reject_list(mac_ctx->pdev, &ap_info);
+
 
 	/* Roaming is supported only on Infra STA Mode. */
 	if (!csr_roam_is_sta_mode(mac_ctx, sessionId)) {
