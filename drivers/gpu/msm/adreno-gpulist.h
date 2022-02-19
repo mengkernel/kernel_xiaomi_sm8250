@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
- * Copyright (c) 2002,2007-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2002,2007-2021, The Linux Foundation. All rights reserved.
  */
 
 #define ANY_ID (~0)
@@ -328,7 +328,7 @@ static const struct adreno_a6xx_core adreno_gpu_core_a619 = {
 	},
 	.prim_fifo_threshold = 0x0018000,
 	.gmu_major = 1,
-	.gmu_minor = 10,
+	.gmu_minor = 11,
 	.sqefw_name = "a630_sqe.fw",
 	.gmufw_name = "a619_gmu.bin",
 	.zap_name = "a615_zap",
