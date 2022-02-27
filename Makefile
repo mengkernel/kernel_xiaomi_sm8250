@@ -714,14 +714,8 @@ KBUILD_AFLAGS   += -O3
 endif
 
 ifeq ($(CONFIG_ARCH_KONA),y)
-KBUILD_CFLAGS   += -mcpu=cortex-a77 \
-		    -mllvm -polly \
-		    -mllvm -polly-scheduling=dynamic \
-		    -mllvm -polly-vectorizer=polly
-KBUILD_AFLAGS   += -mcpu=cortex-a77 \
-		    -mllvm -polly \
-		    -mllvm -polly-scheduling=dynamic \
-		    -mllvm -polly-vectorizer=polly
+KBUILD_CFLAGS   += -mcpu=cortex-a77
+KBUILD_AFLAGS   += -mcpu=cortex-a77
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
