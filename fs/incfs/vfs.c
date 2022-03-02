@@ -1240,10 +1240,6 @@ static int file_open(struct inode *inode, struct file *file)
 	backing_file = dentry_open(&backing_path, flags, current_cred());
 	revert_creds(old_cred);
 
-	if (!backing_path.dentry) {
-		err = -EBADF;
-		goto path_err;
-
 	path_put(&backing_path);
 
 	if (IS_ERR(backing_file)) {
