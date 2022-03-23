@@ -219,7 +219,9 @@ static unsigned int dev_num = 1;
 static struct cdev wlan_hdd_state_cdev;
 static struct class *class;
 static dev_t device;
-#ifndef MODULE
+static bool hdd_loaded = false;
+
+#if 0
 static struct gwlan_loader *wlan_loader;
 static ssize_t wlan_boot_cb(struct kobject *kobj,
 			    struct kobj_attribute *attr,
@@ -8412,32 +8414,6 @@ out:
 }
 
 /**
- * hdd_rx_wake_lock_destroy() - Destroy RX wakelock
- * @hdd_ctx:	HDD context.
- *
- * Destroy RX wakelock.
- *
- * Return: None.
- */
-static void hdd_rx_wake_lock_destroy(struct hdd_context *hdd_ctx)
-{
-	qdf_wake_lock_destroy(&hdd_ctx->rx_wake_lock);
-}
-
-/**
- * hdd_rx_wake_lock_create() - Create RX wakelock
- * @hdd_ctx:	HDD context.
- *
- * Create RX wakelock.
- *
- * Return: None.
- */
-static void hdd_rx_wake_lock_create(struct hdd_context *hdd_ctx)
-{
-	qdf_wake_lock_create(&hdd_ctx->rx_wake_lock, "qcom_rx_wakelock");
-}
-
-/**
  * hdd_context_deinit() - Deinitialize HDD context
  * @hdd_ctx:    HDD context.
  *
@@ -8454,8 +8430,6 @@ static int hdd_context_deinit(struct hdd_context *hdd_ctx)
 	wlan_hdd_cfg80211_deinit(hdd_ctx->wiphy);
 
 	hdd_sap_context_destroy(hdd_ctx);
-
-	hdd_rx_wake_lock_destroy(hdd_ctx);
 
 	hdd_scan_context_destroy(hdd_ctx);
 
@@ -10872,8 +10846,6 @@ static int hdd_context_init(struct hdd_context *hdd_ctx)
 	if (ret)
 		goto list_destroy;
 
-	hdd_rx_wake_lock_create(hdd_ctx);
-
 	ret = hdd_sap_context_init(hdd_ctx);
 	if (ret)
 		goto scan_destroy;
@@ -10897,7 +10869,6 @@ sap_destroy:
 
 scan_destroy:
 	hdd_scan_context_destroy(hdd_ctx);
-	hdd_rx_wake_lock_destroy(hdd_ctx);
 list_destroy:
 	qdf_list_destroy(&hdd_ctx->hdd_adapters);
 
@@ -11363,6 +11334,10 @@ struct hdd_context *hdd_context_create(struct device *dev)
 	}
 
 	status = cfg_parse(WLAN_INI_FILE);
+	if (!QDF_IS_STATUS_ERROR(status))
+		goto cfg_exit;
+
+	status = cfg_parse(WLAN_INI_FILE_DEFAULT);
 	if (QDF_IS_STATUS_ERROR(status)) {
 		hdd_err("Failed to parse cfg %s; status:%d\n",
 			WLAN_INI_FILE, status);
@@ -11370,6 +11345,7 @@ struct hdd_context *hdd_context_create(struct device *dev)
 		goto err_free_config;
 	}
 
+cfg_exit:
 	ret = hdd_objmgr_create_and_store_psoc(hdd_ctx, DEFAULT_PSOC_ID);
 	if (ret) {
 		QDF_DEBUG_PANIC("Psoc creation fails!");
@@ -14996,6 +14972,7 @@ void hdd_init_start_completion(void)
 	INIT_COMPLETION(wlan_start_comp);
 }
 
+static int hdd_driver_load(void);
 static ssize_t wlan_hdd_state_ctrl_param_write(struct file *filp,
 						const char __user *user_buf,
 						size_t count,
@@ -15025,6 +15002,13 @@ static ssize_t wlan_hdd_state_ctrl_param_write(struct file *filp,
 	if (strncmp(buf, wlan_on_str, strlen(wlan_on_str)) != 0) {
 		pr_err("Invalid value received from framework");
 		goto exit;
+	}
+
+	if (!hdd_loaded) {
+		if (hdd_driver_load()) {
+			pr_err("%s: Failed to init hdd module\n", __func__);
+			goto exit;
+		}
 	}
 
 	if (!cds_is_driver_loaded() || cds_is_driver_recovering()) {
@@ -15884,16 +15868,10 @@ static int hdd_driver_load(void)
 
 	hdd_set_conparam(con_mode);
 
-	errno = wlan_hdd_state_ctrl_param_create();
-	if (errno) {
-		hdd_err("Failed to create ctrl param; errno:%d", errno);
-		goto wakelock_destroy;
-	}
-
 	errno = pld_init();
 	if (errno) {
 		hdd_err("Failed to init PLD; errno:%d", errno);
-		goto param_destroy;
+		goto wakelock_destroy;
 	}
 
 	hdd_driver_mode_change_register();
@@ -15908,6 +15886,7 @@ static int hdd_driver_load(void)
 		goto pld_deinit;
 	}
 
+	hdd_loaded = true;
 	hdd_debug("%s: driver loaded", WLAN_MODULE_NAME);
 
 	return 0;
@@ -15926,8 +15905,6 @@ pld_deinit:
 	/* Wait for any ref taken on /dev/wlan to be released */
 	while (qdf_atomic_read(&wlan_hdd_state_fops_ref))
 		;
-param_destroy:
-	wlan_hdd_state_ctrl_param_destroy();
 wakelock_destroy:
 	qdf_wake_lock_destroy(&wlan_wake_lock);
 comp_deinit:
@@ -16033,7 +16010,7 @@ static void hdd_driver_unload(void)
 	hdd_qdf_deinit();
 }
 
-#ifndef MODULE
+#if 0
 /**
  * wlan_boot_cb() - Wlan boot callback
  * @kobj:      object whose directory we're creating the link in.
@@ -16159,7 +16136,6 @@ static int wlan_deinit_sysfs(void)
 
 #endif /* MODULE */
 
-#ifdef MODULE
 /**
  * hdd_module_init() - Module init helper
  *
@@ -16169,26 +16145,15 @@ static int wlan_deinit_sysfs(void)
  */
 static int hdd_module_init(void)
 {
-	if (hdd_driver_load())
-		return -EINVAL;
+	int ret;
 
-	return 0;
-}
-#else
-static int __init hdd_module_init(void)
-{
-	int ret = -EINVAL;
-
-	ret = wlan_init_sysfs();
+	ret = wlan_hdd_state_ctrl_param_create();
 	if (ret)
-		hdd_err("Failed to create sysfs entry");
+		pr_err("wlan_hdd_state_create:%x\n", ret);
 
 	return ret;
 }
-#endif
 
-
-#ifdef MODULE
 /**
  * hdd_module_exit() - Exit function
  *
@@ -16200,13 +16165,6 @@ static void __exit hdd_module_exit(void)
 {
 	hdd_driver_unload();
 }
-#else
-static void __exit hdd_module_exit(void)
-{
-	hdd_driver_unload();
-	wlan_deinit_sysfs();
-}
-#endif
 
 static int fwpath_changed_handler(const char *kmessage,
 				  const struct kernel_param *kp)
