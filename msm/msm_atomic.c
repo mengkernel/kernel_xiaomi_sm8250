@@ -16,11 +16,13 @@
  * this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include <drm/drm_panel.h>
+#include <linux/pm_qos.h>
 
 #include "msm_drv.h"
 #include "msm_gem.h"
 #include "msm_kms.h"
 #include "sde_trace.h"
+#include "xiaomi_frame_stat.h"
 
 #define MULTIPLE_CONN_DETECTED(x) (x > 1)
 
@@ -489,6 +491,12 @@ int msm_atomic_prepare_fb(struct drm_plane *plane,
 	return msm_framebuffer_prepare(new_state->fb, kms->aspace);
 }
 
+extern struct device *connector_kdev;
+void complete_time_generate_event(struct drm_device *dev)
+{
+	sysfs_notify(&connector_kdev->kobj, NULL, "complete_commit_time");
+}
+
 /* The (potentially) asynchronous part of the commit.  At this point
  * nothing can fail short of armageddon.
  */
@@ -531,12 +539,23 @@ static void complete_commit(struct msm_commit *c)
 
 	drm_atomic_state_put(state);
 
+	priv->complete_commit_time = ktime_get()/1000;
+
+	complete_time_generate_event(dev);
+
 	commit_destroy(c);
 }
 
 static void _msm_drm_commit_work_cb(struct kthread_work *work)
 {
 	struct msm_commit *commit = NULL;
+	struct pm_qos_request req = {
+		.type = PM_QOS_REQ_AFFINE_CORES,
+		.cpus_affine = ATOMIC_INIT(BIT(raw_smp_processor_id()))
+	};
+
+	ktime_t start, end;
+	s64 duration;
 
 	if (!work) {
 		DRM_ERROR("%s: Invalid commit work data!\n", __func__);
@@ -545,9 +564,23 @@ static void _msm_drm_commit_work_cb(struct kthread_work *work)
 
 	commit = container_of(work, struct msm_commit, commit_work);
 
+	start = ktime_get();
+	frame_stat_collector(0, COMMIT_START_TS);
+
+	/*
+	 * Optimistically assume the current task won't migrate to another CPU
+	 * and restrict the current CPU to shallow idle states so that it won't
+	 * take too long to resume after waiting for the prior commit to finish.
+	 */
+	pm_qos_add_request(&req, PM_QOS_CPU_DMA_LATENCY, 100);
 	SDE_ATRACE_BEGIN("complete_commit");
 	complete_commit(commit);
 	SDE_ATRACE_END("complete_commit");
+	pm_qos_remove_request(&req);
+
+	end = ktime_get();
+	duration = ktime_to_ns(ktime_sub(end, start));
+	frame_stat_collector(duration, COMMIT_END_TS);
 }
 
 static struct msm_commit *commit_init(struct drm_atomic_state *state,
@@ -711,6 +744,10 @@ retry:
 	 * Wait for pending updates on any of the same crtc's and then
 	 * mark our set of crtc's as busy:
 	 */
+
+	if (!atomic_cmpxchg_acquire(&priv->pm_req_set, 1, 0))
+		pm_qos_update_request(&priv->pm_irq_req, 100);
+	mod_delayed_work(system_unbound_wq, &priv->pm_unreq_dwork, HZ / 10);
 
 	/* Start Atomic */
 	spin_lock(&priv->pending_crtcs_event.lock);

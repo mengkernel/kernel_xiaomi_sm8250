@@ -50,6 +50,8 @@
 #define MDP_WD_TIMER_4_CTL2               0x444
 #define MDP_WD_TIMER_4_LOAD_VALUE         0x448
 
+#define LTM_SW_FUSE_OFFSET 0x10
+
 #define MDP_TICK_COUNT                    16
 #define XO_CLK_RATE                       19200
 #define MS_TICKS_IN_SEC                   1000
@@ -177,6 +179,7 @@ static void sde_hw_setup_cdm_output(struct sde_hw_mdp *mdp,
 static bool sde_hw_setup_clk_force_ctrl(struct sde_hw_mdp *mdp,
 		enum sde_clk_ctrl_type clk_ctrl, bool enable)
 {
+	struct sde_clk_ctrl_reg *ctrl_reg;
 	struct sde_hw_blk_reg_map *c;
 	u32 reg_off, bit_off;
 	u32 reg_val, new_val;
@@ -190,8 +193,12 @@ static bool sde_hw_setup_clk_force_ctrl(struct sde_hw_mdp *mdp,
 	if (clk_ctrl <= SDE_CLK_CTRL_NONE || clk_ctrl >= SDE_CLK_CTRL_MAX)
 		return false;
 
-	reg_off = mdp->caps->clk_ctrls[clk_ctrl].reg_off;
-	bit_off = mdp->caps->clk_ctrls[clk_ctrl].bit_off;
+	ctrl_reg = (struct sde_clk_ctrl_reg *)&mdp->caps->clk_ctrls[clk_ctrl];
+	if (cmpxchg(&ctrl_reg->val, !enable, enable) == enable)
+		return enable;
+
+	reg_off = ctrl_reg->reg_off;
+	bit_off = ctrl_reg->bit_off;
 
 	reg_val = SDE_REG_READ(c, reg_off);
 
@@ -649,3 +656,33 @@ void sde_hw_mdp_destroy(struct sde_hw_mdp *mdp)
 	kfree(mdp);
 }
 
+struct sde_hw_sw_fuse *sde_hw_sw_fuse_init(void __iomem *addr,
+	u32 sw_fuse_len, const struct sde_mdss_cfg *m)
+{
+	struct sde_hw_sw_fuse *c;
+
+	c = kzalloc(sizeof(*c), GFP_KERNEL);
+	if (!c)
+		return ERR_PTR(-ENOMEM);
+
+	c->hw.base_off = addr;
+	c->hw.blk_off = 0;
+	c->hw.length = sw_fuse_len;
+	c->hw.hwversion = m->hwversion;
+
+	return c;
+}
+
+void sde_hw_sw_fuse_destroy(struct sde_hw_sw_fuse *sw_fuse)
+{
+	kfree(sw_fuse);
+}
+
+u32 sde_hw_get_ltm_sw_fuse_value(struct sde_hw_sw_fuse *sw_fuse)
+{
+	u32 ltm_sw_fuse = 0;
+
+	if (sw_fuse)
+		ltm_sw_fuse = SDE_REG_READ(&sw_fuse->hw, LTM_SW_FUSE_OFFSET);
+	return ltm_sw_fuse;
+}
