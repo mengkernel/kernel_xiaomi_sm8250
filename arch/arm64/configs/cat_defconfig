@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 4.19.235 Kernel Configuration
+# Linux/arm64 4.19.236 Kernel Configuration
 #
 
 #
@@ -445,6 +445,7 @@ CONFIG_HARDEN_BRANCH_PREDICTOR=y
 CONFIG_ARM64_SSBD=y
 # CONFIG_PRINT_VMEMLAYOUT is not set
 CONFIG_ARM64_TAGGED_ADDR_ABI=y
+CONFIG_MITIGATE_SPECTRE_BRANCH_HISTORY=y
 # CONFIG_ARMV8_DEPRECATED is not set
 # CONFIG_ARM64_SW_TTBR0_PAN is not set
 
