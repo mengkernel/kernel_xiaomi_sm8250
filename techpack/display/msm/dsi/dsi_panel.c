@@ -670,22 +670,6 @@ static int dsi_panel_wled_register(struct dsi_panel *panel,
 	return 0;
 }
 
-static int dsi_panel_dcs_set_display_brightness_c2(struct mipi_dsi_device *dsi,
-			u32 bl_lvl)
-{
-	u16 brightness = (u16)bl_lvl;
-	u8 first_byte = brightness & 0xff;
-	u8 second_byte = brightness >> 8;
-	u8 payload[8] = {second_byte, first_byte,
-		second_byte, first_byte,
-		second_byte, first_byte,
-		second_byte, first_byte};
-
-	return mipi_dsi_dcs_write(dsi, 0xC2, payload, sizeof(payload));
-}
-
-
-
 int dsi_panel_update_backlight(struct dsi_panel *panel,
 	u32 bl_lvl)
 {
@@ -822,11 +806,11 @@ static uint32_t interpolate(uint32_t x, uint32_t xa, uint32_t xb, uint32_t ya, u
 
 uint32_t dsi_panel_get_fod_dim_alpha(struct dsi_panel *panel)
 {
-	if (panel->hbm_mode)
-		return 0;
-
 	u32 brightness = dsi_panel_get_backlight(panel);
 	int i, alpha;
+
+	if (panel->hbm_mode)
+		return 0;
 
 	if (!panel->fod_dim_lut)
 		alpha = 0;
