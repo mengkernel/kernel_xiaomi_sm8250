@@ -350,7 +350,7 @@
 	};
 
 	chosen {
-		bootargs = "rcupdate.rcu_expedited=1 rcu_nocbs=0-7 kpti=off noirqdebug nodebugmon cgroup_disable=pressure";
+		bootargs = "rcupdate.rcu_expedited=1 rcu_nocbs=0-7 kpti=off noirqdebug nodebugmon cgroup_disable=pressure,memory";
 	};
 
 	firmware: firmware {
