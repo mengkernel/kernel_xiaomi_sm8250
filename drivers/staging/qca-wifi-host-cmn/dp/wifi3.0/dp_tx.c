@@ -3682,8 +3682,9 @@ more_data:
 			count++;
 
 			QDF_TRACE(QDF_MODULE_ID_DP, QDF_TRACE_LEVEL_ERROR,
-					"%s tx_desc %px nbuf %px\n",
-					__func__, tx_desc, tx_desc->nbuf);
+					  "%s tx_desc %px nbuf %px\n",
+					  __func__, tx_desc,
+					  tx_desc->nbuf);
 			dp_tx_comp_free_buf(soc, tx_desc);
 			dp_tx_desc_release(tx_desc, tx_desc->pool_id);
 			continue;
@@ -3994,10 +3995,10 @@ void dp_tx_desc_flush(struct dp_pdev *pdev, struct dp_vdev *vdev,
 				if (force_free) {
 					dp_tx_comp_free_buf(soc, tx_desc);
 					QDF_TRACE(QDF_MODULE_ID_DP,
-						QDF_TRACE_LEVEL_ERROR,
-						"%s tx_desc %px nbuf %px\n",
-						__func__, tx_desc,
-						tx_desc->nbuf);
+						  QDF_TRACE_LEVEL_ERROR,
+						  "%s tx_desc %px nbuf %px\n",
+						  __func__, tx_desc,
+						  tx_desc->nbuf);
 					dp_tx_desc_release(tx_desc, i);
 				} else {
 					tx_desc->vdev = NULL;
@@ -4062,10 +4063,10 @@ void dp_tx_desc_flush(struct dp_pdev *pdev, struct dp_vdev *vdev,
 				if (force_free) {
 					dp_tx_comp_free_buf(soc, tx_desc);
 					QDF_TRACE(QDF_MODULE_ID_DP,
-						QDF_TRACE_LEVEL_ERROR,
-						"%s tx_desc %px nbuf %px\n",
-						__func__, tx_desc,
-						tx_desc->nbuf);
+						  QDF_TRACE_LEVEL_ERROR,
+						  "%s tx_desc %px nbuf %px\n",
+						  __func__, tx_desc,
+						  tx_desc->nbuf);
 					dp_tx_desc_release(tx_desc, i);
 				} else {
 					dp_tx_desc_reset_vdev(soc, tx_desc,
