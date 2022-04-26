@@ -721,10 +721,6 @@ static void fts_irq_read_report(void)
 	int ret = 0;
 	struct fts_ts_data *ts_data = fts_data;
 
-#if FTS_ESDCHECK_EN
-	fts_esdcheck_set_intr(1);
-#endif
-
 #if FTS_POINT_REPORT_CHECK_EN
 	fts_prc_queue_work(ts_data);
 #endif
@@ -739,10 +735,6 @@ static void fts_irq_read_report(void)
 #endif
 		mutex_unlock(&ts_data->report_mutex);
 	}
-
-#if FTS_ESDCHECK_EN
-	fts_esdcheck_set_intr(0);
-#endif
 }
 
 static irqreturn_t fts_irq_handler(int irq, void *data)
@@ -1677,13 +1669,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 	}
 #endif
 
-#if FTS_ESDCHECK_EN
-	ret = fts_esdcheck_init(ts_data);
-	if (ret) {
-		FTS_ERROR("init esd check fail");
-	}
-#endif
-
 	ret = fts_irq_registration(ts_data);
 	if (ret) {
 		FTS_ERROR("request irq failed");
@@ -1773,10 +1758,6 @@ static int fts_ts_remove_entry(struct fts_ts_data *ts_data)
 	fts_test_exit(ts_data);
 #endif
 
-#if FTS_ESDCHECK_EN
-	fts_esdcheck_exit(ts_data);
-#endif
-
 	fts_gesture_exit(ts_data);
 	fts_bus_exit(ts_data);
 
@@ -1841,10 +1822,6 @@ static int fts_ts_suspend(struct device *dev)
 	}
 #endif
 
-#if FTS_ESDCHECK_EN
-	fts_esdcheck_suspend();
-#endif
-
 	if (ts_data->gesture_mode && !ts_data->poweroff_on_sleep) {
 		fts_gesture_suspend(ts_data);
 	} else {
@@ -1892,10 +1869,6 @@ static int fts_ts_resume(struct device *dev)
 
 	fts_wait_tp_to_valid();
 	fts_ex_mode_recovery(ts_data);
-
-#if FTS_ESDCHECK_EN
-	fts_esdcheck_resume();
-#endif
 
 #ifdef CONFIG_TOUCHSCREEN_XIAOMI_TOUCHFEATURE
 	if (ts_data->palm_sensor_switch) {
