@@ -152,24 +152,10 @@ struct ts_ic_info {
 /*****************************************************************************
 * DEBUG function define here
 *****************************************************************************/
-#if FTS_DEBUG_EN
-#define FTS_DEBUG(fmt, args...) do { \
-	pr_info("[FTS_TS]%s:"fmt"\n", __func__, ##args); \
-} while (0)
-
-#define FTS_FUNC_ENTER() do { \
-	pr_info("[FTS_TS]%s: Enter\n", __func__); \
-} while (0)
-
-#define FTS_FUNC_EXIT() do { \
-	pr_info("[FTS_TS]%s: Exit(%d)\n", __func__, __LINE__); \
-} while (0)
-#else /* #if FTS_DEBUG_EN*/
 #define FTS_DEBUG(fmt, args...) ((void)0)
 #define FTS_INFO(fmt, args...) ((void)0)
 #define FTS_ERROR(fmt, args...) ((void)0)
 #define FTS_FUNC_ENTER()
 #define FTS_FUNC_EXIT()
-#endif
 
 #endif /* __LINUX_FOCALTECH_COMMON_H__ */
