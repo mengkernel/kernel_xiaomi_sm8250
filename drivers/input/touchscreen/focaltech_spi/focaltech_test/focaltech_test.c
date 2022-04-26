@@ -2043,10 +2043,6 @@ static ssize_t fts_test_store(
 	mutex_lock(&input_dev->mutex);
 	fts_irq_disable();
 
-#if defined(FTS_ESDCHECK_EN) && (FTS_ESDCHECK_EN)
-	fts_esdcheck_switch(DISABLE);
-#endif
-
 	ret = fts_enter_test_environment(1);
 	if (ret < 0) {
 		FTS_ERROR("enter test environment fail");
@@ -2057,10 +2053,6 @@ static ssize_t fts_test_store(
 	if (ret < 0) {
 		FTS_ERROR("enter normal environment fail");
 	}
-
-#if defined(FTS_ESDCHECK_EN) && (FTS_ESDCHECK_EN)
-	fts_esdcheck_switch(ENABLE);
-#endif
 
 	fts_irq_enable();
 	mutex_unlock(&input_dev->mutex);
