@@ -489,12 +489,6 @@ static int fts_input_report_b(struct fts_ts_data *data)
 		if (EVENT_DOWN(events[i].flag)) {
 			input_mt_report_slot_state(data->input_dev, MT_TOOL_FINGER, true);
 
-#if FTS_REPORT_PRESSURE_EN
-			if (events[i].p <= 0) {
-				events[i].p = 0x3f;
-			}
-			input_report_abs(data->input_dev, ABS_MT_PRESSURE, events[i].p);
-#endif
 			if (events[i].area <= 0) {
 				events[i].area = 0x09;
 			}
@@ -565,12 +559,7 @@ static int fts_input_report_a(struct fts_ts_data *data)
 		va_reported = true;
 		if (EVENT_DOWN(events[i].flag)) {
 			input_report_abs(data->input_dev, ABS_MT_TRACKING_ID, events[i].id);
-#if FTS_REPORT_PRESSURE_EN
-			if (events[i].p <= 0) {
-				events[i].p = 0x3f;
-			}
-			input_report_abs(data->input_dev, ABS_MT_PRESSURE, events[i].p);
-#endif
+
 			if (events[i].area <= 0) {
 				events[i].area = 0x09;
 			}
@@ -824,9 +813,6 @@ static int fts_input_init(struct fts_ts_data *ts_data)
 #endif
 	input_set_abs_params(input_dev, ABS_MT_POSITION_X, pdata->x_min, pdata->x_max - 1, 0, 0);
 	input_set_abs_params(input_dev, ABS_MT_POSITION_Y, pdata->y_min, pdata->y_max - 1, 0, 0);
-#if FTS_REPORT_PRESSURE_EN
-	input_set_abs_params(input_dev, ABS_MT_PRESSURE, 0, 0xFF, 0, 0);
-#endif
 
 	ret = input_register_device(input_dev);
 	if (ret) {
@@ -1662,13 +1648,6 @@ static int fts_ts_probe_entry(struct fts_ts_data *ts_data)
 		FTS_ERROR("init gesture fail");
 	}
 
-#if FTS_TEST_EN
-	ret = fts_test_init(ts_data);
-	if (ret) {
-		FTS_ERROR("init production test fail");
-	}
-#endif
-
 	ret = fts_irq_registration(ts_data);
 	if (ret) {
 		FTS_ERROR("request irq failed");
@@ -1753,10 +1732,6 @@ static int fts_ts_remove_entry(struct fts_ts_data *ts_data)
 	fts_ex_mode_exit(ts_data);
 
 	fts_fwupg_exit(ts_data);
-
-#if FTS_TEST_EN
-	fts_test_exit(ts_data);
-#endif
 
 	fts_gesture_exit(ts_data);
 	fts_bus_exit(ts_data);
