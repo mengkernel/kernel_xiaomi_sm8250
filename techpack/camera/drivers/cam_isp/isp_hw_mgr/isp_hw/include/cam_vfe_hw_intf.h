@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0-only */
 /*
- * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2017-2021, The Linux Foundation. All rights reserved.
  */
 
 #ifndef _CAM_VFE_HW_INTF_H_
@@ -139,6 +139,7 @@ struct cam_vfe_hw_vfe_bus_rd_acquire_args {
  *                           (Default is Master in case of Single VFE)
  * @dual_slave_core:         If Master and Slave exists, HW Index of Slave
  * @cdm_ops:                 CDM operations
+ * disable_ubwc_comp:        Disable UBWC compression
  */
 struct cam_vfe_hw_vfe_out_acquire_args {
 	struct cam_isp_resource_node         *rsrc_node;
@@ -149,6 +150,7 @@ struct cam_vfe_hw_vfe_out_acquire_args {
 	uint32_t                              is_master;
 	uint32_t                              dual_slave_core;
 	struct cam_cdm_utils_ops             *cdm_ops;
+	bool                                  disable_ubwc_comp;
 };
 
 /*
@@ -249,6 +251,19 @@ struct cam_vfe_bw_update_args {
 	struct cam_isp_resource_node      *node_res;
 	uint64_t                           camnoc_bw_bytes;
 	uint64_t                           external_bw_bytes;
+};
+
+/*
+ * struct cam_vfe_num_of_acquired_resources:
+ *
+ * @num_pix_rsrc:            Number of pix resources acquired in context
+ * @num_pd_rsrc:             Number of pd resources acquired in context
+ * @num_rdi_rsrc:            Number of rdi resources acquired in context
+ */
+struct cam_vfe_num_of_acquired_resources {
+	uint32_t      num_pix_rsrc;
+	uint32_t      num_pd_rsrc;
+	uint32_t      num_rdi_rsrc;
 };
 
 /*
