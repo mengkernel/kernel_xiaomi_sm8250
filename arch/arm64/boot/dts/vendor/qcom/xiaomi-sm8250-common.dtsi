@@ -35,46 +35,6 @@
 			<3187200>;
 };
 
-&CPU0 {
-	capacity-dmips-mhz = <448>;
-	dynamic-power-coefficient = <205>;
-};
-
-&CPU1 {
-	capacity-dmips-mhz = <448>;
-	dynamic-power-coefficient = <205>;
-};
-
-&CPU2 {
-	capacity-dmips-mhz = <448>;
-	dynamic-power-coefficient = <205>;
-};
-
-&CPU3 {
-	capacity-dmips-mhz = <448>;
-	dynamic-power-coefficient = <205>;
-};
-
-&CPU4 {
-	capacity-dmips-mhz = <1024>;
-	dynamic-power-coefficient = <379>;
-};
-
-&CPU5 {
-	capacity-dmips-mhz = <1024>;
-	dynamic-power-coefficient = <379>;
-};
-
-&CPU6 {
-	capacity-dmips-mhz = <1024>;
-	dynamic-power-coefficient = <379>;
-};
-
-&CPU7 {
-	capacity-dmips-mhz = <1024>;
-	dynamic-power-coefficient = <444>;
-};
-
 &qupv3_se12_2uart {
 	status = "ok";
 };
