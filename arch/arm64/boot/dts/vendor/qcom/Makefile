@@ -10,13 +10,13 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
         dtbo-$(CONFIG_MACH_XIAOMI_THYME) += thyme-sm8250-overlay.dtbo
         dtbo-$(CONFIG_MACH_XIAOMI_UMI) += umi-sm8250-overlay.dtbo
 
-alioth-sm8250-overlay.dtbo-base := kona-v2.1.dtb
-apollo-sm8250-overlay.dtbo-base := kona-v2.1.dtb
-cas-sm8250-overlay.dtbo-base := kona-v2.1.dtb
-cmi-sm8250-overlay.dtbo-base := kona-v2.1.dtb
-lmi-sm8250-overlay.dtbo-base := kona-v2.1.dtb
-thyme-sm8250-overlay.dtbo-base := kona-v2.1.dtb
-umi-sm8250-overlay.dtbo-base := kona-v2.1.dtb
+alioth-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+apollo-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+cas-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+cmi-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+lmi-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+thyme-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
+umi-sm8250-overlay.dtbo-base := kona.dtb kona-v2.dtb kona-v2.1.dtb
 endif # CONFIG_BUILD_ARM64_DT_OVERLAY
 endif # CONFIG_MACH_XIAOMI_SM8250
 
