@@ -599,7 +599,7 @@ And public attribution of xiaomi platforms(like alioth and so and)
 };
 
 &pm8150b_fg {
-	qcom,battery-data = <&alioth_batterydata>;
+	qcom,battery-data = <&umi_batterydata>;
 	qcom,rapid-soc-dec-en;
 	qcom,five-pin-battery;
 	qcom,soc-hi-res;
@@ -666,7 +666,7 @@ And public attribution of xiaomi platforms(like alioth and so and)
 		mi,therm-level-threshold = <12>;
 	};
 
-	alioth_batterydata: qcom,battery-data {
+	umi_batterydata: qcom,battery-data {
 		qcom,batt-id-range-pct = <15>;
 		#include "fg-gen4-batterydata-alioth-FMT-4520mah.dtsi"
 		#include "fg-gen4-batterydata-alioth-GY-4520mah.dtsi"
