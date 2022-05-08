@@ -5,36 +5,6 @@
 #include "kona-sde-display.dtsi"
 #include "kona-thermal-overlay.dtsi"
 
-&cpufreq_hw {
-	interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>,
-		   <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
-		   <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
-	interrupt-names = "dcvsh0_int", "dcvsh1_int", "dcvsh2_int";
-
-	qcom,cpufreq-table-0 =
-			< 691200>,
-			<1075200>,
-			<1516800>,
-			<1708800>,
-			<1804800>;
-
-	qcom,cpufreq-table-1 =
-			< 710400>,
-			<1382400>,
-			<1766400>,
-			<2150400>,
-			<2419200>;
-
-	qcom,cpufreq-table-2 =
-			< 844800>,
-			<1747200>,
-			<2073600>,
-			<2457600>,
-			<2553600>,
-			<2649600>,
-			<3187200>;
-};
-
 &qupv3_se12_2uart {
 	status = "ok";
 };
