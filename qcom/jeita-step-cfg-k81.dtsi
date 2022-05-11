@@ -33,7 +33,7 @@ qcom,k81 {
 				4200000  4450000  660000>;
 	qcom,jeita-too-hot = <580>;
 	qcom,jeita-too-cold = <(-100)>;
-	qcom,jeita-warm-th= <480>;
+	qcom,jeita-warm-th= <440>;
 	qcom,jeita-cool-th= <150>;
 	qcom,ocv-based-step-chg;
 	qcom,use-bq-pump;

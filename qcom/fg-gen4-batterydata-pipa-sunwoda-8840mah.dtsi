@@ -24,7 +24,7 @@ qcom,5119583_xiaomi_M82_p86120aa1_8840mah_averaged_masterslave_apr8th2021 {
 //	qcom,taper-fcc;
 	qcom,jeita-too-hot = <590>;
 	qcom,jeita-too-cold = <(-100)>;
-	qcom,jeita-warm-th= <480>;
+	qcom,jeita-warm-th= <440>;
 	qcom,jeita-cool-th= <150>;
 	qcom,use-bq-pump;
 	mi,six-pin-battery;

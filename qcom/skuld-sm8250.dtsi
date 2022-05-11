@@ -404,7 +404,7 @@ And public attribution of xiaomi platforms
 	pinctrl-2 = <&ncp3902_en_suspend &dc_en_suspend &rx_hw_en_suspend &ncp3902_pass_en_suspend>;
 	qcom,step-charging-enable;
 	qcom,sw-jeita-enable;
-	qcom,chg-warm-th= <480>;
+	qcom,chg-warm-th= <440>;
 	qcom,chg-cool-th= <150>;
 	//qcom,suspend-input-on-debug-batt;
 	qcom,usbpd-phandle = <&pm8150b_pdphy>;

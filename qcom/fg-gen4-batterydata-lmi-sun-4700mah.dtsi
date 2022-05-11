@@ -17,7 +17,7 @@ qcom,xiaomi_j11sun_4700mah_averaged_masterslave_oct8th2019 {
 				481 580  4100000>;
 	qcom,jeita-too-hot = <580>;
 	qcom,jeita-too-cold = <0>;
-	qcom,jeita-warm-th= <480>;
+	qcom,jeita-warm-th= <440>;
 	qcom,jeita-cool-th= <150>;
 	qcom,use-bq-pump;
 	mi,six-pin-battery;

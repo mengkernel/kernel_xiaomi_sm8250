@@ -3337,7 +3337,7 @@ And public attribution of xiaomi platforms(like pipa and so and)
 	qcom,chg-term-current-ma = <(-400)>;
 	qcom,step-charging-enable;
 	qcom,sw-jeita-enable;
-	qcom,chg-warm-th= <480>;
+	qcom,chg-warm-th= <440>;
 	qcom,chg-cool-th= <150>;
 	//qcom,suspend-input-on-debug-batt;
 	qcom,usbpd-phandle = <&pm8150b_pdphy>;
@@ -3469,7 +3469,7 @@ And public attribution of xiaomi platforms(like pipa and so and)
 		mi,qc3-bat-curr-max = <3600>;
 		mi,qc3-bus-volt-max = <12000>;
 		mi,qc3-bus-curr-max = <2100>;
-		mi,qc3-battery-warm-th = <480>;
+		mi,qc3-battery-warm-th = <440>;
 		mi,support-qc3p5-without-smb;
 		//mi,cp-sec-enable;
 		mi,chg-enable-k81;
@@ -3484,7 +3484,7 @@ And public attribution of xiaomi platforms(like pipa and so and)
 		mi,pd-bus-curr-max = <3000>;
 		mi,pd-bus-curr-compensate  = <50>;
 		mi,pd-non-ffc-bat-volt-max = <4440>;
-		mi,pd-battery-warm-th = <480>;
+		mi,pd-battery-warm-th = <440>;
 		//mi,cp-sec-enable;
 		mi,therm-level-threshold = <12>;
 		mi,step-charge-high-vol-curr-max = <7840>;
