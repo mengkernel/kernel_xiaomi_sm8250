@@ -508,7 +508,7 @@ And public attribution of xiaomi platforms(like alioth and so and)
 	qcom,chg-term-src = <1>;
 	qcom,chg-term-current-ma = <(-220)>;
 	qcom,sw-jeita-enable;
-	qcom,chg-warm-th= <450>;
+	qcom,chg-warm-th= <480>;
 	qcom,chg-cool-th= <150>;
 	qcom,usbpd-phandle = <&pm8150b_pdphy>;
 	qcom,battery-data = <&umi_batterydata>;
@@ -631,7 +631,7 @@ And public attribution of xiaomi platforms(like alioth and so and)
 		mi,qc3-bat-curr-max = <3600>;
 		mi,qc3-bus-volt-max = <12000>;
 		mi,qc3-bus-curr-max = <2100>;
-		mi,qc3-battery-warm-th = <450>;
+		mi,qc3-battery-warm-th = <480>;
 		mi,use-qcom-gauge;
 		mi,support-qc3p5-without-smb;
 	};
@@ -645,7 +645,7 @@ And public attribution of xiaomi platforms(like alioth and so and)
 		mi,pd-bus-curr-max = <3000>;
 		mi,pd-bus-curr-compensate  = <50>;
 		mi,pd-non-ffc-bat-volt-max = <4450>;
-		mi,pd-battery-warm-th = <450>;
+		mi,pd-battery-warm-th = <480>;
 		mi,use-qcom-gauge;
 		mi,therm-level-threshold = <12>;
 		mi,chg-enable-k11a;
