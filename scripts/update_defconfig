@@ -101,7 +101,7 @@ if [ -n  "$*" ]; then
   mv "$OUT_DIR"/defconfig ./arch/arm64/configs/"$1"_defconfig
 
 read -r -d '' KERNEL_COMMIT_MESSAGE << EOM
-ARM64: configs: ${DEVICE}: update auto-generated defconfig for ${DEVICE}
+configs: ${DEVICE}: update auto-generated defconfig for ${DEVICE}
 This update is generated automatically by using the update_defconfig script
 HEAD of the project used to prepare this commit:
 ${KERNEL_DEFCONFIG_URL}/tree/${KERNEL_DEFCONFIG_HEAD}
@@ -110,7 +110,7 @@ EOM
 else
 
 read -r -d '' KERNEL_COMMIT_MESSAGE << EOM
-ARM64: configs: xiaomi: update auto-generated defconfig for all devices
+configs: xiaomi: update auto-generated defconfig for all devices
 This update is generated automatically by using the update_defconfig script
 HEAD of the project used to prepare this commit:
 ${KERNEL_DEFCONFIG_URL}/tree/${KERNEL_DEFCONFIG_HEAD}
