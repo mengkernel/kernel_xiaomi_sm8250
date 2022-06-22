@@ -1,4 +1,4 @@
-kona_base_dtb := kona.dtb kona-v2.dtb kona-v2.1.dtb
+kona_base_dtb := kona-v2.1.dtb
 ifeq ($(CONFIG_BOARD_XIAOMI),y)
 
 ifeq ($(CONFIG_BOARD_XIAOMI_SM8250),y)
