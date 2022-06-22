@@ -173,4 +173,3 @@ L(done):
 	ret
 SYM_FUNC_END(__pi_strcmp)
 SYM_FUNC_ALIAS_WEAK(strcmp, __pi_strcmp)
-EXPORT_SYMBOL_NOKASAN(strcmp)
