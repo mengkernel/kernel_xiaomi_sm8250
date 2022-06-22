@@ -694,14 +694,17 @@ cat_flags := -mcpu=cortex-a77
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS   += -Os
 KBUILD_AFLAGS   += -Os
+KBUILD_LDFLAGS   += -Os
 else
 KBUILD_CFLAGS   += -O3
 KBUILD_AFLAGS   += -O3
+KBUILD_LDFLAGS   += -O3
 endif
 
 ifdef CONFIG_CAT_OPTIMIZE
 KBUILD_CFLAGS += $(cat_flags)
 KBUILD_AFLAGS += $(cat_flags)
+KBUILD_LDFLAGS += -mllvm $(cat_flags)
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
