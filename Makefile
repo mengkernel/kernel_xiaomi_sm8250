@@ -689,6 +689,8 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, format-overflow)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, int-in-bool-context)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 
+cat_flags := -mcpu=cortex-a77
+
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS   += -Os
 KBUILD_AFLAGS   += -Os
@@ -697,9 +699,9 @@ KBUILD_CFLAGS   += -O3
 KBUILD_AFLAGS   += -O3
 endif
 
-ifeq ($(CONFIG_ARCH_KONA),y)
-KBUILD_CFLAGS   += -mcpu=cortex-a77
-KBUILD_AFLAGS   += -mcpu=cortex-a77
+ifdef CONFIG_CAT_OPTIMIZE
+KBUILD_CFLAGS += $(cat_flags)
+KBUILD_AFLAGS += $(cat_flags)
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
