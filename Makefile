@@ -696,8 +696,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, format-overflow)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, int-in-bool-context)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 
-cat_flags := -mcpu=cortex-a77 \
-		 -mllvm -polly \
+cat_flags := -mllvm -polly \
 		 -mllvm -polly-run-inliner \
 		 -mllvm -polly-optimizer=isl \
 		 -mllvm -polly-enable-simplify \
@@ -719,7 +718,7 @@ endif
 ifdef CONFIG_CAT_OPTIMIZE
 KBUILD_CFLAGS += $(cat_flags)
 KBUILD_AFLAGS += $(cat_flags)
-KBUILD_LDFLAGS += -mllvm $(cat_flags)
+KBUILD_LDFLAGS += $(cat_flags)
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
