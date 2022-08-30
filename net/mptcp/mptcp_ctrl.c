@@ -2666,7 +2666,7 @@ int mptcp_conn_request(struct sock *sk, struct sk_buff *skb)
 #endif
 	}
 drop:
-	NET_INC_STATS(sock_net(sk), LINUX_MIB_LISTENDROPS);
+	__NET_INC_STATS(sock_net(sk), LINUX_MIB_LISTENDROPS);
 	return 0;
 }
 
