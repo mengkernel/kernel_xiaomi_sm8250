@@ -1829,8 +1829,8 @@ void mptcp_close(struct sock *meta_sk, long timeout)
 	int data_was_unread = 0;
 	int state;
 
-	mptcp_debug("%s: Close of meta_sk with tok %#x state %u\n",
-		    __func__, mpcb->mptcp_loc_token, meta_sk->sk_state);
+	mptcp_debug("%s: Close of meta_sk with tok %#x\n",
+		    __func__, mpcb->mptcp_loc_token);
 
 	WARN_ON(refcount_inc_not_zero(&mpcb->mpcb_refcnt) == 0);
 	mutex_lock(&mpcb->mpcb_mutex);
@@ -1866,7 +1866,6 @@ void mptcp_close(struct sock *meta_sk, long timeout)
 
 			if (tcp_sk(sk_it)->send_mp_fclose)
 				continue;
-
 			mptcp_sub_close(sk_it, 0);
 		}
 		goto adjudge_to_death;
