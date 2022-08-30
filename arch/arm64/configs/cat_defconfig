@@ -4,7 +4,7 @@
 #
 
 #
-# Compiler: kucing clang version 15.0.0 (https://github.com/llvm/llvm-project 0fd385c1b09cc3d45535b223304137dc23bdade3)
+# Compiler: kucing clang version 15.0.0 (https://github.com/llvm/llvm-project 3d3ef9d073e1e27ea57480b371b7f5a9f5642ed2)
 #
 CONFIG_GCC_VERSION=0
 CONFIG_CC_IS_CLANG=y
