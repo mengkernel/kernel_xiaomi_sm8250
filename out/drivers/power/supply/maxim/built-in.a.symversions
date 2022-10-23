@@ -1,0 +1,6 @@
+__crc_Delay_us = 0x4f5baf48;
+__crc_Delay_ns = 0x9def9f15;
+__crc_ow_reset = 0x02ce5386;
+__crc_read_byte = 0xdbd0bd27;
+__crc_write_byte = 0xe924d8f3;
+__crc_onewire_gpio_get_status = 0xf4ea2821;

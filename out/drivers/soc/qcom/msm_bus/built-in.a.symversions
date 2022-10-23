@@ -1,0 +1,17 @@
+__crc_msm_bus_type = 0x97410b0b;
+__crc_msm_bus_scale_register_client = 0x3fc8b008;
+__crc_msm_bus_scale_client_update_request = 0x7b1543b7;
+__crc_msm_bus_scale_client_update_context = 0xb104e9c7;
+__crc_msm_bus_scale_unregister_client = 0x76278f48;
+__crc_msm_bus_scale_register = 0xeade5757;
+__crc_msm_bus_scale_update_bw = 0xc4eac19d;
+__crc_msm_bus_scale_update_bw_context = 0x900fe792;
+__crc_msm_bus_scale_unregister = 0xd89c66d6;
+__crc_msm_bus_scale_query_tcs_cmd = 0xd89462e0;
+__crc_msm_bus_scale_query_tcs_cmd_all = 0xaa832633;
+__crc_msm_bus_cl_get_pdata = 0xbaf25721;
+__crc_msm_bus_cl_get_pdata_from_dev = 0xed6662e2;
+__crc_msm_bus_pdata_from_node = 0x22ce90c5;
+__crc_msm_bus_of_get_fab_data = 0x547bdbbc;
+__crc_msm_bus_bimc_set_ops = 0xf70d27a8;
+__crc_msm_bus_noc_set_ops = 0xe4b75746;

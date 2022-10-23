@@ -1,0 +1,7 @@
+__crc_scaled_ppm_to_ppb = 0x61407a47;
+__crc_ptp_clock_register = 0x9b7d026e;
+__crc_ptp_clock_unregister = 0x7b6d25aa;
+__crc_ptp_clock_event = 0xbc6c7c6a;
+__crc_ptp_clock_index = 0x0787d744;
+__crc_ptp_find_pin = 0xd7a6b40c;
+__crc_ptp_schedule_worker = 0x6c7c7718;

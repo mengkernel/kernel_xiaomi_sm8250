@@ -1,0 +1,3 @@
+__crc_msm_11ad_dev_init = 0x0ed3c381;
+__crc_msm_11ad_modinit = 0xcfdb4201;
+__crc_msm_11ad_modexit = 0x38007126;

@@ -1,0 +1,2 @@
+__crc_cam_ife_csid_hw_probe_init = 0x826aaae0;
+__crc_cam_ife_csid_hw_deinit = 0xfe59b666;

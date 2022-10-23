@@ -1,0 +1,17 @@
+__crc_xc2028_attach = 0x1c02ee89;
+__crc_simple_tuner_attach = 0xa6c22e67;
+__crc_tuners = 0x4c48939e;
+__crc_tuner_count = 0xc2821775;
+__crc_microtune_attach = 0x864dce0e;
+__crc_tda829x_attach = 0xc759e55e;
+__crc_tda829x_probe = 0xef66ee91;
+__crc_tea5767_attach = 0x7ffbbe44;
+__crc_tea5767_autodetection = 0x2fa765cb;
+__crc_tea5761_attach = 0x548addab;
+__crc_tea5761_autodetection = 0x431f8b4d;
+__crc_tda9887_attach = 0x6728748d;
+__crc_tda827x_attach = 0x761fbd65;
+__crc_tda18271_attach = 0x77ab5252;
+__crc_xc5000_attach = 0xde7d76a2;
+__crc_xc4000_attach = 0x340bc80e;
+__crc_mc44s803_attach = 0xf32f77ea;

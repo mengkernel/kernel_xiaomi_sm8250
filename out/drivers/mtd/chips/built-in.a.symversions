@@ -1,0 +1,4 @@
+__crc_register_mtd_chip_driver = 0x3be21c2f;
+__crc_unregister_mtd_chip_driver = 0x5a95aa9c;
+__crc_do_map_probe = 0x7c1a2493;
+__crc_map_destroy = 0xc7330bc1;

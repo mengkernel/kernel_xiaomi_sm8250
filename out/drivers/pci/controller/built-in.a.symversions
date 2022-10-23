@@ -1,0 +1,15 @@
+__crc_msm_pcie_reg_dump = 0x10975212;
+__crc_msm_pcie_debug_info = 0xb95ce9c9;
+__crc_msm_pcie_enumerate = 0x83a5a53a;
+__crc_msm_pcie_allow_l1 = 0x53167197;
+__crc_msm_pcie_prevent_l1 = 0xdd13e1d7;
+__crc_msm_pcie_set_target_link_speed = 0x2ebd9b1b;
+__crc_msm_pcie_set_link_bandwidth = 0x90f9dcce;
+__crc_msm_pcie_pm_control = 0x97f2b36a;
+__crc_msm_pcie_l1ss_timeout_disable = 0xfb7cfe86;
+__crc_msm_pcie_l1ss_timeout_enable = 0xb0b25681;
+__crc_msm_pcie_register_event = 0xd8799953;
+__crc_msm_pcie_deregister_event = 0x0f40329c;
+__crc_msm_pcie_recover_config = 0x88032985;
+__crc_msm_pcie_shadow_control = 0x3e6aa4b7;
+__crc_msm_msi_init = 0xacc9b77d;

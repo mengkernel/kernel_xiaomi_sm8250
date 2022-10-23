@@ -1,0 +1,3 @@
+__crc_touchscreen_parse_properties = 0x2ba449d7;
+__crc_touchscreen_set_mt_pos = 0xcf9b558d;
+__crc_touchscreen_report_pos = 0x181ba08c;

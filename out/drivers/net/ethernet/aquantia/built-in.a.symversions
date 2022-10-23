@@ -1,0 +1,11 @@
+__crc_atl_fwd_release_ring = 0x285d4e61;
+__crc_atl_fwd_request_ring = 0x98f64f1a;
+__crc_atl_fwd_set_ring_intr_mod = 0x3e20abac;
+__crc_atl_fwd_enable_ring = 0x16e486c9;
+__crc_atl_fwd_disable_ring = 0xe0057464;
+__crc_atl_fwd_release_event = 0x90b18610;
+__crc_atl_fwd_request_event = 0xc88e026e;
+__crc_atl_fwd_enable_event = 0x63d0c4ca;
+__crc_atl_fwd_disable_event = 0x932c07b1;
+__crc_atl_fwd_receive_skb = 0xdbdc268e;
+__crc_atl_fwd_transmit_skb = 0x554dac63;

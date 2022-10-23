@@ -1,0 +1,15 @@
+__crc_nf_br_ops = 0x802ae741;
+__crc_br_fdb_find_port = 0x233a6ddb;
+__crc_br_dev_queue_push_xmit = 0x5c9c5d25;
+__crc_br_forward_finish = 0x8cd22b75;
+__crc_br_forward = 0x42c674c7;
+__crc_br_should_route_hook = 0xae18a09a;
+__crc_br_handle_frame_finish = 0x8068a0b9;
+__crc_br_multicast_enabled = 0x6239ae8f;
+__crc_br_multicast_router = 0x32982163;
+__crc_br_multicast_list_adjacent = 0x858ed5c7;
+__crc_br_multicast_has_querier_anywhere = 0xa096e3b8;
+__crc_br_multicast_has_querier_adjacent = 0xd2c2fddb;
+__crc_ebt_register_table = 0xea8e5047;
+__crc_ebt_unregister_table = 0x0ef7a482;
+__crc_ebt_do_table = 0xc3eefa17;

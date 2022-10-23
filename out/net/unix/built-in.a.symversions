@@ -1,0 +1,12 @@
+__crc_unix_socket_table = 0x1d77b0f8;
+__crc_unix_table_lock = 0xad0f2b6c;
+__crc_unix_peer_get = 0xac0c7cfa;
+__crc_unix_inq_len = 0x1d473f85;
+__crc_unix_outq_len = 0x7d61817f;
+__crc_unix_tot_inflight = 0x1526b301;
+__crc_gc_inflight_list = 0x648eb59d;
+__crc_unix_gc_lock = 0x42bed8d4;
+__crc_unix_get_socket = 0xf0dfe8b7;
+__crc_unix_attach_fds = 0xec3be559;
+__crc_unix_detach_fds = 0xda36b0ad;
+__crc_unix_destruct_scm = 0x5c80ede0;

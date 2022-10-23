@@ -1,0 +1,6 @@
+__crc_can_ioctl = 0x8e7439a3;
+__crc_can_send = 0x45cf88ce;
+__crc_can_rx_register = 0xdf71a67f;
+__crc_can_rx_unregister = 0x5843b388;
+__crc_can_proto_register = 0xaef4d236;
+__crc_can_proto_unregister = 0xaa9fe505;

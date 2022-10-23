@@ -1,0 +1,8 @@
+__crc_xsk_umem_peek_addr = 0xd6bbda0c;
+__crc_xsk_umem_discard_addr = 0x63df4cb1;
+__crc_xsk_umem_complete_tx = 0xc160119d;
+__crc_xsk_umem_consume_tx_done = 0x10552f9e;
+__crc_xsk_umem_consume_tx = 0x4e75657f;
+__crc_xsk_reuseq_prepare = 0x77ca08a5;
+__crc_xsk_reuseq_swap = 0x425ebf5c;
+__crc_xsk_reuseq_free = 0x104151fc;

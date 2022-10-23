@@ -1,0 +1,7 @@
+__crc_dwc3_set_notifier = 0x00098e73;
+__crc_dwc3_notify_event = 0x3a295666;
+__crc_msm_dwc3_reset_dbm_ep = 0x0ce6bcbf;
+__crc_msm_ep_config = 0x78670b87;
+__crc_msm_ep_unconfig = 0x4635783a;
+__crc_msm_dwc3_reset_ep_after_lpm = 0x56918e77;
+__crc_usb_reset_host = 0x1d8a91df;

@@ -1,0 +1,7 @@
+__crc___tracepoint_android_vh_set_memory_x = 0xcf62f72c;
+__crc___tracepoint_android_vh_set_memory_nx = 0xb1b2c9cf;
+__crc___tracepoint_android_vh_set_memory_ro = 0xa10d174d;
+__crc___tracepoint_android_vh_set_memory_rw = 0x23168f14;
+__crc___tracepoint_android_vh_check_mmap_file = 0x7d478ad4;
+__crc___tracepoint_android_vh_check_file_open = 0xba8c1eb7;
+__crc___tracepoint_android_vh_check_bpf_syscall = 0x1a148fa9;

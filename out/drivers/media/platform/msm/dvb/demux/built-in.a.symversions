@@ -1,0 +1,12 @@
+__crc_sdmx_get_version = 0x32b2be32;
+__crc_sdmx_open_session = 0xdd1f00b4;
+__crc_sdmx_close_session = 0xb1176e15;
+__crc_sdmx_set_session_cfg = 0x87de9aac;
+__crc_sdmx_add_filter = 0xbd0de218;
+__crc_sdmx_remove_filter = 0x95266d32;
+__crc_sdmx_set_kl_ind = 0x080ba1e1;
+__crc_sdmx_add_raw_pid = 0xa6a9527a;
+__crc_sdmx_remove_raw_pid = 0x513530d2;
+__crc_sdmx_process = 0xa8f82d07;
+__crc_sdmx_get_dbg_counters = 0x4527cabe;
+__crc_sdmx_reset_dbg_counters = 0xf3c55576;
