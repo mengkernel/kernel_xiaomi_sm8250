@@ -1,0 +1,9 @@
+environment:
+  TZ: Asia/Jakarta
+script:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+  - sudo apt update
+  - sudo apt install -y tzdata bc libssl-dev bison flex make git python python3 curl wget zip cpio sudo libxml2 libc6 zstd libstdc++6 software-properties-common build-essential
+  - sudo apt upgrade -y 
+  - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-clang.sh
+  - bash build.sh 20221022
