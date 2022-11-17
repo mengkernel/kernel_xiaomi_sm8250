@@ -2802,8 +2802,6 @@
 				<&gcc GCC_NPU_BWMON_AXI_CLK>;
 		clock-names = "npu_bwmon_ahb", "npu_bwmon_axi",
 				"npu_bwmon2_axi";
-		qcom,bwmon_clks = "npu_bwmon_ahb", "npu_bwmon_axi",
-				"npu_bwmon2_axi";
 		qcom,msm_bus = <154 512>;
 		qcom,msm_bus_name = "npu_bwmon_cdsp";
 		interrupts = <GIC_SPI 125 IRQ_TYPE_LEVEL_HIGH>;
@@ -2847,8 +2845,6 @@
 				<&gcc GCC_NPU_BWMON_DSP_CFG_AHB_CLK>,
 				<&gcc GCC_NPU_BWMON_AXI_CLK>;
 		clock-names = "npu_bwmon_ahb", "npu_bwmon_axi",
-				"npu_bwmon2_axi";
-		qcom,bwmon_clks = "npu_bwmon_ahb", "npu_bwmon_axi",
 				"npu_bwmon2_axi";
 		qcom,msm_bus = <154 512>;
 		qcom,msm_bus_name = "npu_bwmon_cdsp";
