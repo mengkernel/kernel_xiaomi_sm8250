@@ -539,7 +539,7 @@ static int start_monitor(struct devfreq *df, bool init)
 	unsigned long mbps;
 	int ret;
 
-	if (init && df->dev_suspended) {
+	if (init && atomic_read(&df->suspend_count) > 0) {
 		node->init_pending = true;
 		return 0;
 	} else if (!init && node->init_pending) {
@@ -586,7 +586,7 @@ static void stop_monitor(struct devfreq *df, bool init)
 
 	if (init) {
 		devfreq_monitor_stop(df);
-		if (!df->dev_suspended)
+		if (!(atomic_read(&df->suspend_count) > 0))
 			hw->stop_hwmon(hw);
 	} else {
 		devfreq_monitor_suspend(df);
@@ -720,7 +720,7 @@ static int devfreq_bw_hwmon_get_freq(struct devfreq *df,
 		return -EINVAL;
 
 	/* Suspend/resume sequence */
-	if (!node->mon_started || df->dev_suspended) {
+	if (!node->mon_started || atomic_read(&df->suspend_count) > 0) {
 		*freq = node->resume_freq;
 		*node->dev_ab = node->resume_ab;
 		return 0;
@@ -892,7 +892,7 @@ static int devfreq_bw_hwmon_ev_handler(struct devfreq *df,
 		 */
 		hw = node->hw;
 
-		if (!node->mon_started || df->dev_suspended) {
+		if (!node->mon_started || atomic_read(&df->suspend_count) > 0) {
 			devfreq_interval_update(df, &sample_ms);
 			break;
 		}
