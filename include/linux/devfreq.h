@@ -180,7 +180,6 @@ struct devfreq {
 #endif
 
 	struct srcu_notifier_head transition_notifier_list;
-	bool dev_suspended;
 };
 
 #ifdef CONFIG_MIGT_ENERGY_MODEL
