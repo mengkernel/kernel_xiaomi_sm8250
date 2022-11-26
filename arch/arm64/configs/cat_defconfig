@@ -4,12 +4,12 @@
 #
 
 #
-# Compiler: kucing clang version 15.0.3 (https://github.com/llvm/llvm-project 4a2c05b05ed07f1f620e94f6524a8b4b2760a0b1)
+# Compiler: kucing clang version 15.0.5 (https://github.com/llvm/llvm-project 154e88af7ec97d9b9f389e55d45bf07108a9a097)
 #
 CONFIG_GCC_VERSION=0
 CONFIG_CC_IS_CLANG=y
 CONFIG_LD_IS_LLD=y
-CONFIG_CLANG_VERSION=150003
+CONFIG_CLANG_VERSION=150005
 CONFIG_CC_HAS_ASM_GOTO=y
 CONFIG_IRQ_WORK=y
 CONFIG_BUILDTIME_EXTABLE_SORT=y
