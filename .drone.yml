@@ -11,4 +11,4 @@ steps:
    commands:
       - cd /drone/src
       - wget -q https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-clang.sh
-      - bash build-clang.sh 20221022
+      - bash build-clang.sh 20221124
