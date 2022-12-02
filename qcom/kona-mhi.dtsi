@@ -627,7 +627,6 @@
 				mhi,brstmode = <3>;
 				mhi,hw-ev;
 				mhi,client-manage;
-				mhi,force-uncached;
 			};
 
 			mhi_event@9 {

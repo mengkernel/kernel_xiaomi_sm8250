@@ -105,7 +105,3 @@
 	#clock-cells = <1>;
 	#reset-cells = <1>;
 };
-
-&qupv3_se1_i2c {
-	status = "disabled";
-};
