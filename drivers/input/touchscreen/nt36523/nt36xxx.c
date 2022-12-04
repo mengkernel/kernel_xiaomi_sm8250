@@ -59,7 +59,9 @@ uint8_t esd_check = false;
 uint8_t esd_retry = 0;
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
 
+#ifdef CONFIG_CPU_BOOST
 extern void touch_irq_boost(void);
+#endif
 extern void lpm_disable_for_dev(bool on, char event_dev);
 extern int pen_charge_state_notifier_register_client(struct notifier_block *nb);
 extern int pen_charge_state_notifier_unregister_client(struct notifier_block *nb);
@@ -1684,7 +1686,9 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 	}
 #endif
 
+#ifdef CONFIG_CPU_BOOST
 	touch_irq_boost();
+#endif
 	pm_stay_awake(&ts->client->dev);
 	lpm_disable_for_dev(true, 0x1);
 
