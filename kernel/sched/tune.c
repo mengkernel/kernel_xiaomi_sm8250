@@ -556,12 +556,14 @@ int schedtune_task_boost(struct task_struct *p)
 	rcu_read_lock();
 	st = task_schedtune(p);
 	task_boost = st->boost;
+#if IS_ENABLED(CONFIG_MIHW)
 	if (sched_boost_top_app()) {
 		if (1 == st->sched_boost_no_override)
 			task_boost = 20;
 		if (is_critical_task(p))
 			task_boost = 40;
 	}
+#endif
 #ifdef CONFIG_PERF_HUMANTASK
 	if (p->human_task)
 		task_boost = 40;
@@ -600,9 +602,11 @@ bool schedtune_prefer_high_cap(struct task_struct *p)
 	rcu_read_lock();
 	st = task_schedtune(p);
 	prefer_high_cap = st->prefer_high_cap;
+#if IS_ENABLED(CONFIG_MIHW)
 	if (sched_boost_top_app() &&
 			st->sched_boost_no_override == 1)
 		prefer_idle = 1;
+#endif
 	rcu_read_unlock();
 
 	return prefer_high_cap;
