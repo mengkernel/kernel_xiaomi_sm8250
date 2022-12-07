@@ -58,7 +58,7 @@ static void panelon_dimming_enable_delayed_work(struct work_struct *work)
 		dsi_panel_set_disp_param(dsi_panel, DISPPARAM_DIMMING);
 	else {
 		DSI_INFO("hbm_enabled(%d), delay of dimming on\n", mi_cfg->hbm_enabled);
-		schedule_delayed_work(&mi_cfg->dimming_enable_delayed_work,
+		queue_delayed_work(system_power_efficient_wq, &mi_cfg->dimming_enable_delayed_work,
 			msecs_to_jiffies(mi_cfg->panel_on_dimming_delay));
 	}
 }
@@ -3913,7 +3913,7 @@ int dsi_panel_set_disp_param(struct dsi_panel *panel, u32 param)
 			cancel_delayed_work(&mi_cfg->cabc_delayed_work);
 			pr_info("delayed_work schedule --- delay cabc mode\n");
 			__pm_wakeup_event(mi_cfg->aod_wakelock, DEFAULT_CABC_WRITE_DELAY + 100);
-			schedule_delayed_work(&mi_cfg->cabc_delayed_work, msecs_to_jiffies(DEFAULT_CABC_WRITE_DELAY));
+			queue_delayed_work(system_power_efficient_wq, &mi_cfg->cabc_delayed_work, msecs_to_jiffies(DEFAULT_CABC_WRITE_DELAY));
 
 			param = param & 0xFFFFF0FF;
 			if (!param)
@@ -4311,7 +4311,7 @@ int dsi_panel_set_disp_param(struct dsi_panel *panel, u32 param)
 				if (mi_cfg->fp_status == AUTH_START) {
 					pr_info("delayed_work schedule --- delay enter aod mode\n");
 					__pm_wakeup_event(mi_cfg->aod_wakelock, DEFAULT_FOD_OFF_ENTER_AOD_DELAY + 100);
-					schedule_delayed_work(&mi_cfg->enter_aod_delayed_work,
+					queue_delayed_work(system_power_efficient_wq, &mi_cfg->enter_aod_delayed_work,
 						msecs_to_jiffies(DEFAULT_FOD_OFF_ENTER_AOD_DELAY));
 				}
 			}
@@ -4400,7 +4400,7 @@ int dsi_panel_set_disp_param(struct dsi_panel *panel, u32 param)
 					pr_info("delayed_work schedule --- delay enter aod mode\n");
 					mi_cfg->into_aod_pending = true;
 					__pm_wakeup_event(mi_cfg->aod_wakelock, DEFAULT_FOD_OFF_ENTER_AOD_DELAY + 100);
-					schedule_delayed_work(&mi_cfg->enter_aod_delayed_work,
+					queue_delayed_work(system_power_efficient_wq, &mi_cfg->enter_aod_delayed_work,
 						msecs_to_jiffies(DEFAULT_FOD_OFF_ENTER_AOD_DELAY));
 				}
 			}

@@ -89,7 +89,7 @@ static irqreturn_t dp_gpio_isr(int unused, void *data)
 
 	if (!gpio_hpd->hpd && hpd) {
 		gpio_hpd->hpd = true;
-		queue_delayed_work(system_wq, &gpio_hpd->work, 0);
+		queue_delayed_work(system_power_efficient_wq, &gpio_hpd->work, 0);
 		return IRQ_HANDLED;
 	}
 
@@ -111,7 +111,7 @@ static irqreturn_t dp_gpio_isr(int unused, void *data)
 	}
 
 	gpio_hpd->hpd = false;
-	queue_delayed_work(system_wq, &gpio_hpd->work, 0);
+	queue_delayed_work(system_power_efficient_wq, &gpio_hpd->work, 0);
 	return IRQ_HANDLED;
 }
 
@@ -206,7 +206,7 @@ int dp_gpio_hpd_register(struct dp_hpd *dp_hpd)
 	}
 
 	if (gpio_hpd->hpd)
-		queue_delayed_work(system_wq, &gpio_hpd->work, 0);
+		queue_delayed_work(system_power_efficient_wq, &gpio_hpd->work, 0);
 
 	return rc;
 }
