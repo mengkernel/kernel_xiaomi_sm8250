@@ -8,18 +8,7 @@
 # in the COPYING file in the root directory of this source tree).
 # You may select, at your option, one of the above-listed licenses.
 # ################################################################
-obj-$(CONFIG_ZSTD_COMPRESS) += zstd_compress.o
-obj-$(CONFIG_ZSTD_DECOMPRESS) += zstd_decompress.o
-
-ccflags-y += -Wno-error=deprecated-declarations
-
 obj-y := \
-		zstd_compress_module.o \
-		common/debug.o \
-		common/entropy_common.o \
-		common/error_private.o \
-		common/fse_decompress.o \
-		common/zstd_common.o \
 		zstd_compress_module.o \
 		compress/fse_compress.o \
 		compress/hist.o \
@@ -35,7 +24,12 @@ obj-y := \
 		compress/zstd_opt.o \
 		zstd_decompress_module.o \
 		decompress/huf_decompress.o \
-		decompress/huf_decompress_amd64.o \
 		decompress/zstd_ddict.o \
 		decompress/zstd_decompress.o \
 		decompress/zstd_decompress_block.o \
+		zstd_common_module.o \
+		common/debug.o \
+		common/entropy_common.o \
+		common/error_private.o \
+		common/fse_decompress.o \
+		common/zstd_common.o \
