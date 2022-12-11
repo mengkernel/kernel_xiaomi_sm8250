@@ -14,7 +14,6 @@
 #include <asm/simd.h>
 #include <asm/unaligned.h>
 #include <crypto/internal/hash.h>
-#include <crypto/internal/simd.h>
 #include <crypto/sha3.h>
 #include <linux/cpufeature.h>
 #include <linux/crypto.h>
@@ -37,7 +36,7 @@ static int sha3_update(struct shash_desc *desc, const u8 *data,
 	struct sha3_state *sctx = shash_desc_ctx(desc);
 	unsigned int digest_size = crypto_shash_digestsize(desc->tfm);
 
-	if (!crypto_simd_usable())
+	if (!may_use_simd())
 		return crypto_sha3_update(desc, data, len);
 
 	if ((sctx->partial + len) >= sctx->rsiz) {
@@ -81,7 +80,7 @@ static int sha3_final(struct shash_desc *desc, u8 *out)
 	__le64 *digest = (__le64 *)out;
 	int i;
 
-	if (!crypto_simd_usable())
+	if (!may_use_simd())
 		return crypto_sha3_final(desc, out);
 
 	sctx->buf[sctx->partial++] = 0x06;

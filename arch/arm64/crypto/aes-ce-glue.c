@@ -12,7 +12,6 @@
 #include <asm/simd.h>
 #include <asm/unaligned.h>
 #include <crypto/aes.h>
-#include <crypto/internal/simd.h>
 #include <linux/cpufeature.h>
 #include <linux/crypto.h>
 #include <linux/module.h>
@@ -53,7 +52,7 @@ static void aes_cipher_encrypt(struct crypto_tfm *tfm, u8 dst[], u8 const src[])
 {
 	struct crypto_aes_ctx *ctx = crypto_tfm_ctx(tfm);
 
-	if (!crypto_simd_usable()) {
+	if (!may_use_simd()) {
 		__aes_arm64_encrypt(ctx->key_enc, dst, src, num_rounds(ctx));
 		return;
 	}
@@ -67,7 +66,7 @@ static void aes_cipher_decrypt(struct crypto_tfm *tfm, u8 dst[], u8 const src[])
 {
 	struct crypto_aes_ctx *ctx = crypto_tfm_ctx(tfm);
 
-	if (!crypto_simd_usable()) {
+	if (!may_use_simd()) {
 		__aes_arm64_decrypt(ctx->key_dec, dst, src, num_rounds(ctx));
 		return;
 	}

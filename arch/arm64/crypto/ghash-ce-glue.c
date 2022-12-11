@@ -17,7 +17,6 @@
 #include <crypto/gf128mul.h>
 #include <crypto/internal/aead.h>
 #include <crypto/internal/hash.h>
-#include <crypto/internal/simd.h>
 #include <crypto/internal/skcipher.h>
 #include <crypto/scatterwalk.h>
 #include <linux/cpufeature.h>
@@ -106,7 +105,7 @@ static void ghash_do_update(int blocks, u64 dg[], const char *src,
 						struct ghash_key const *k,
 						const char *head))
 {
-	if (likely(crypto_simd_usable())) {
+	if (likely(may_use_simd())) {
 		kernel_neon_begin();
 		simd_update(blocks, dg, src, key, head);
 		kernel_neon_end();
@@ -458,7 +457,7 @@ static int gcm_encrypt(struct aead_request *req)
 
 	err = skcipher_walk_aead_encrypt(&walk, req, false);
 
-	if (likely(crypto_simd_usable() && walk.total >= 2 * AES_BLOCK_SIZE)) {
+	if (likely(may_use_simd() && walk.total >= 2 * AES_BLOCK_SIZE)) {
 		u32 const *rk = NULL;
 
 		kernel_neon_begin();
@@ -582,7 +581,7 @@ static int gcm_decrypt(struct aead_request *req)
 
 	err = skcipher_walk_aead_decrypt(&walk, req, false);
 
-	if (likely(crypto_simd_usable() && walk.total >= 2 * AES_BLOCK_SIZE)) {
+	if (likely(may_use_simd() && walk.total >= 2 * AES_BLOCK_SIZE)) {
 		u32 const *rk = NULL;
 
 		kernel_neon_begin();

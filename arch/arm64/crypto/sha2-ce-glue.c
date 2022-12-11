@@ -12,7 +12,6 @@
 #include <asm/simd.h>
 #include <asm/unaligned.h>
 #include <crypto/internal/hash.h>
-#include <crypto/internal/simd.h>
 #include <crypto/sha.h>
 #include <crypto/sha256_base.h>
 #include <linux/cpufeature.h>
@@ -53,7 +52,7 @@ static int sha256_ce_update(struct shash_desc *desc, const u8 *data,
 {
 	struct sha256_ce_state *sctx = shash_desc_ctx(desc);
 
-	if (!crypto_simd_usable())
+	if (!may_use_simd())
 		return sha256_base_do_update(desc, data, len,
 				(sha256_block_fn *)sha256_block_data_order);
 
@@ -72,7 +71,7 @@ static int sha256_ce_finup(struct shash_desc *desc, const u8 *data,
 	struct sha256_ce_state *sctx = shash_desc_ctx(desc);
 	bool finalize = !sctx->sst.count && !(len % SHA256_BLOCK_SIZE) && len;
 
-	if (!crypto_simd_usable()) {
+	if (!may_use_simd()) {
 		if (len)
 			sha256_base_do_update(desc, data, len,
 				(sha256_block_fn *)sha256_block_data_order);
@@ -101,7 +100,7 @@ static int sha256_ce_final(struct shash_desc *desc, u8 *out)
 {
 	struct sha256_ce_state *sctx = shash_desc_ctx(desc);
 
-	if (!crypto_simd_usable()) {
+	if (!may_use_simd()) {
 		sha256_base_do_finalize(desc,
 				(sha256_block_fn *)sha256_block_data_order);
 		return sha256_base_finish(desc, out);

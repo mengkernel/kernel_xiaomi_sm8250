@@ -21,7 +21,6 @@
 
 #include <crypto/algapi.h>
 #include <crypto/internal/chacha.h>
-#include <crypto/internal/simd.h>
 #include <crypto/internal/skcipher.h>
 #include <linux/jump_label.h>
 #include <linux/kernel.h>
@@ -64,7 +63,7 @@ static void chacha_doneon(u32 *state, u8 *dst, const u8 *src,
 
 void hchacha_block_arch(const u32 *state, u32 *stream, int nrounds)
 {
-	if (!static_branch_likely(&have_neon) || !crypto_simd_usable()) {
+	if (!static_branch_likely(&have_neon) || !may_use_simd()) {
 		hchacha_block_generic(state, stream, nrounds);
 	} else {
 		kernel_neon_begin();
@@ -84,7 +83,7 @@ void chacha_crypt_arch(u32 *state, u8 *dst, const u8 *src, unsigned int bytes,
 		       int nrounds)
 {
 	if (!static_branch_likely(&have_neon) || bytes <= CHACHA_BLOCK_SIZE ||
-	    !crypto_simd_usable())
+	    !may_use_simd())
 		return chacha_crypt_generic(state, dst, src, bytes, nrounds);
 
 	do {
@@ -119,7 +118,7 @@ static int chacha_neon_stream_xor(struct skcipher_request *req,
 			nbytes = rounddown(nbytes, walk.stride);
 
 		if (!static_branch_likely(&have_neon) ||
-		    !crypto_simd_usable()) {
+		    !may_use_simd()) {
 			chacha_crypt_generic(state, walk.dst.virt.addr,
 					     walk.src.virt.addr, nbytes,
 					     ctx->nrounds);
