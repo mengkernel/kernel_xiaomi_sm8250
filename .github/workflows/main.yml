@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ "rebase" ]
+    branches: [ "kucing-13-beta" ]
 jobs:
   build:
     runs-on: self-hosted
