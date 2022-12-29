@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    container:
+      image: diazaji/python:kernel
     steps:
     - uses: actions/checkout@v3
     - name: build
