@@ -2,6 +2,9 @@ name: CI
 on:
   push:
     branches: [ "kucing-13-beta" ]
+env:
+  TZ: "Asia/Jakarta"
+  TELEGRAM_TOKEN: "${{ secrets.TELEGRAM_TOKEN }}"
 jobs:
   build:
     runs-on: self-hosted
