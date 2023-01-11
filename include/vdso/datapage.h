@@ -10,7 +10,7 @@
 #include <uapi/linux/types.h>
 #include <uapi/asm-generic/errno-base.h>
 
-#include <linux/bits.h>
+#include <vdso/bits.h>
 #include <vdso/clocksource.h>
 #include <vdso/ktime.h>
 #include <vdso/limits.h>
