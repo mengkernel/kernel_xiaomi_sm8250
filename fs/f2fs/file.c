@@ -2574,7 +2574,7 @@ static int f2fs_ioc_gc_range(struct file *filp, unsigned long arg)
 	return __f2fs_ioc_gc_range(filp, &range);
 }
 
-static int f2fs_ioc_write_checkpoint(struct file *filp, unsigned long arg)
+static int f2fs_ioc_write_checkpoint(struct file *filp)
 {
 	struct inode *inode = file_inode(filp);
 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
@@ -3358,7 +3358,7 @@ int f2fs_precache_extents(struct inode *inode)
 	return 0;
 }
 
-static int f2fs_ioc_precache_extents(struct file *filp, unsigned long arg)
+static int f2fs_ioc_precache_extents(struct file *filp)
 {
 	return f2fs_precache_extents(file_inode(filp));
 }
@@ -4112,7 +4112,7 @@ static int redirty_blocks(struct inode *inode, pgoff_t page_idx, int len)
 	return ret;
 }
 
-static int f2fs_ioc_decompress_file(struct file *filp, unsigned long arg)
+static int f2fs_ioc_decompress_file(struct file *filp)
 {
 	struct inode *inode = file_inode(filp);
 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
@@ -4185,7 +4185,7 @@ out:
 	return ret;
 }
 
-static int f2fs_ioc_compress_file(struct file *filp, unsigned long arg)
+static int f2fs_ioc_compress_file(struct file *filp)
 {
 	struct inode *inode = file_inode(filp);
 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
@@ -4305,7 +4305,7 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	case F2FS_IOC_GARBAGE_COLLECT_RANGE:
 		return f2fs_ioc_gc_range(filp, arg);
 	case F2FS_IOC_WRITE_CHECKPOINT:
-		return f2fs_ioc_write_checkpoint(filp, arg);
+		return f2fs_ioc_write_checkpoint(filp);
 	case F2FS_IOC_DEFRAGMENT:
 		return f2fs_ioc_defragment(filp, arg);
 	case F2FS_IOC_MOVE_RANGE:
@@ -4323,7 +4323,7 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	case F2FS_IOC_SET_PIN_FILE:
 		return f2fs_ioc_set_pin_file(filp, arg);
 	case F2FS_IOC_PRECACHE_EXTENTS:
-		return f2fs_ioc_precache_extents(filp, arg);
+		return f2fs_ioc_precache_extents(filp);
 	case F2FS_IOC_RESIZE_FS:
 		return f2fs_ioc_resize_fs(filp, arg);
 	case FS_IOC_ENABLE_VERITY:
@@ -4349,9 +4349,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	case F2FS_IOC_SET_COMPRESS_OPTION:
 		return f2fs_ioc_set_compress_option(filp, arg);
 	case F2FS_IOC_DECOMPRESS_FILE:
-		return f2fs_ioc_decompress_file(filp, arg);
+		return f2fs_ioc_decompress_file(filp);
 	case F2FS_IOC_COMPRESS_FILE:
-		return f2fs_ioc_compress_file(filp, arg);
+		return f2fs_ioc_compress_file(filp);
 	default:
 		return -ENOTTY;
 	}
