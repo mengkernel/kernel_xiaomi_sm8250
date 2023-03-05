@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
  * Copyright (c) 2017-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/module.h>
@@ -231,7 +232,7 @@ static int cam_ois_apply_settings(struct cam_ois_ctrl_t *o_ctrl,
 		&(i2c_set->list_head), list) {
 		if (i2c_list->op_code ==  CAM_SENSOR_I2C_WRITE_RANDOM) {
 			rc = camera_io_dev_write(&(o_ctrl->io_master_info),
-				&(i2c_list->i2c_settings));
+				&(i2c_list->i2c_settings), false);
 			if (rc < 0) {
 				CAM_ERR(CAM_OIS,
 					"Failed in Applying i2c wrt settings");
@@ -564,7 +565,7 @@ static int cam_lc898124_ois_fw_download(struct cam_ois_ctrl_t *o_ctrl)
 	write_setting.reg_setting= ois_pm_add_array;
 
 	rc = camera_io_dev_write_continuous(&(o_ctrl->io_master_info),
-		&write_setting, 1);
+		&i2c_reg_setting, 1, false);
 	if (rc < 0) {
 		CAM_ERR(CAM_OIS, "OIS ois pm add failed %d", rc);
 	}
@@ -702,54 +703,10 @@ static int cam_lc898124_ois_fw_download(struct cam_ois_ctrl_t *o_ctrl)
 		goto release_firmware;
 	}
 
-
-	rc = request_firmware(&fw_xm, fw_name_mem, dev);
-	if (rc) {
-		CAM_INFO(CAM_OIS, "no fw named %s, skip", fw_name_mem);
-		rc = 0;
-	} else {
-		total_bytes = fw_xm->size;
-		i2c_reg_setting.addr_type = CAMERA_SENSOR_I2C_TYPE_BYTE;
-		i2c_reg_setting.data_type = CAMERA_SENSOR_I2C_TYPE_BYTE;
-		i2c_reg_setting.size = total_bytes;
-		i2c_reg_setting.delay = 0;
-		fw_size_xm = PAGE_ALIGN(sizeof(struct cam_sensor_i2c_reg_array) *
-			total_bytes) >> PAGE_SHIFT;
-		page_xm = cma_alloc(dev_get_cma_area((o_ctrl->soc_info.dev)),
-			fw_size_xm, 0, GFP_KERNEL);
-		if (!page_xm) {
-			CAM_ERR(CAM_OIS, "Failed in allocating i2c_array");
-			release_firmware(fw);
-			return -ENOMEM;
-		}
-
-		i2c_reg_setting.reg_setting = (struct cam_sensor_i2c_reg_array *) (
-			page_address(page_xm));
-
-		ptr = (uint8_t *)fw_xm->data;
-		mem_addr = ptr[0];
-		for (i = 0; i < total_bytes;) {
-			CAM_DBG(CAM_OIS, "download	%s,mem_addr=0x%04x", fw_name_mem,mem_addr);
-			for (cnt = 0; cnt < LC124EP3_OIS_TRANS_SIZE && i < total_bytes;
-				cnt++, i++) {
-				i2c_reg_setting.reg_setting[cnt].reg_addr = mem_addr;
-				i2c_reg_setting.reg_setting[cnt].reg_data = ptr[i+1];
-				i2c_reg_setting.reg_setting[cnt].delay = 0;
-				i2c_reg_setting.reg_setting[cnt].data_mask = 0;
-			}
-			i2c_reg_setting.size = cnt;
-				mem_addr = ptr[i];
-			rc = camera_io_dev_write_continuous(&(o_ctrl->io_master_info),
-				&i2c_reg_setting, 1);
-			if (rc < 0)
-				CAM_ERR(CAM_OIS, "OIS FW Memory download failed %d", rc);
-		}
-		cma_release(dev_get_cma_area((o_ctrl->soc_info.dev)),
-			page_xm, fw_size_xm);
-		page_xm = NULL;
-		fw_size_xm = 0;
-		release_firmware(fw_xm);
-	}
+	rc = camera_io_dev_write_continuous(&(o_ctrl->io_master_info),
+		&i2c_reg_setting, 1, false);
+	if (rc < 0)
+		CAM_ERR(CAM_OIS, "OIS FW download failed %d", rc);
 
 release_firmware:
 	cma_release(dev_get_cma_area((o_ctrl->soc_info.dev)),
