@@ -13,7 +13,7 @@ jobs:
     - name: build
       run: |
         wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-clang.sh
-        bash build.sh 20230406
+        bash build.sh 20230501
   build-jet-16:
     runs-on: buildjet-16vcpu-ubuntu-2204
     container:
@@ -23,4 +23,4 @@ jobs:
     - name: build
       run: |
         wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-clang.sh
-        bash build.sh 20221208
+        bash build.sh 20230501
