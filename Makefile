@@ -696,30 +696,36 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, format-overflow)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, int-in-bool-context)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, address-of-packed-member)
 
-cat_flags := -mcpu=cortex-a77 \
-		 -mllvm -polly \
-		 -mllvm -polly-run-inliner \
+cat_polly_flags := -mllvm -polly \
+		 -mllvm -polly-position=early \
 		 -mllvm -polly-optimizer=isl \
-		 -mllvm -polly-enable-simplify \
-		 -mllvm -polly-vectorizer=polly \
-		 -mllvm -polly-detect-keep-going \
 		 -mllvm -polly-code-generation=full \
-		 -mllvm -polly-isl-arg=--no-schedule-serialize-sccs
+		 -mllvm -polly-vectorizer=stripmine \
+		 -mllvm -polly-enable-delicm \
+		 -mllvm -polly-enable-simplify \
+		 -mllvm -polly-run-inliner
+
+cat_arch_flags := -ffast-math \
+		 -fstack-arrays \
+		 -mcpu=cortex-a77 \
+		 -march=armv8.2-a \
+		 -mfpu=crypto-neon-fp-armv8 \
+		 -mtune=cortex-a77
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS   += -Os
-KBUILD_AFLAGS   += -Os
-KBUILD_LDFLAGS   += -Os
+KBUILD_CFLAGS	+= -Os
+KBUILD_AFLAGS	+= -Os
+KBUILD_LDFLAGS	+= -Os
 else
-KBUILD_CFLAGS   += -O3
-KBUILD_AFLAGS   += -O3
-KBUILD_LDFLAGS   += -O3
+KBUILD_CFLAGS	+= -O3
+KBUILD_AFLAGS	+= -O3
+KBUILD_LDFLAGS	+= -O3
 endif
 
 ifdef CONFIG_CAT_OPTIMIZE
-KBUILD_CFLAGS += $(cat_flags)
-KBUILD_AFLAGS += $(cat_flags)
-KBUILD_LDFLAGS += -mllvm $(cat_flags)
+KBUILD_CFLAGS += $(cat_arch_flags) $(cat_polly_flags)
+KBUILD_AFLAGS += $(cat_arch_flags) $(cat_polly_flags)
+KBUILD_LDFLAGS += $(cat_polly_flags)
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
