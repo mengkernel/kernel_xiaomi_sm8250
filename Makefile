@@ -709,7 +709,6 @@ cat_arch_flags := -ffast-math \
 		 -fstack-arrays \
 		 -mcpu=cortex-a77 \
 		 -march=armv8.2-a \
-		 -mfpu=crypto-neon-fp-armv8 \
 		 -mtune=cortex-a77
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
