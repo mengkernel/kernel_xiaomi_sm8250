@@ -9,7 +9,7 @@ jobs:
   build-jet-16:
     runs-on: buildjet-16vcpu-ubuntu-2204
     container:
-      image: diazaji/python:kernel
+      image: diazaji/debian:kernel
     steps:
     - uses: actions/checkout@v3
     - name: build
