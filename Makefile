@@ -722,9 +722,13 @@ KBUILD_LDFLAGS	+= -O3
 endif
 
 ifdef CONFIG_CAT_OPTIMIZE
-KBUILD_CFLAGS += $(cat_arch_flags) $(cat_polly_flags)
-KBUILD_AFLAGS += $(cat_arch_flags) $(cat_polly_flags)
+KBUILD_CFLAGS += $(cat_arch_flags)
+KBUILD_AFLAGS += $(cat_arch_flags)
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += $(cat_polly_flags)
+KBUILD_AFLAGS += $(cat_polly_flags)
 KBUILD_LDFLAGS += $(cat_polly_flags)
+endif
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
