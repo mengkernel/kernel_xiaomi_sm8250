@@ -700,7 +700,7 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, restrict)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, array-bounds)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, array-compare)
 
-cat_polly_flags := -mllvm -polly \
+cat_llvm_flags := -mllvm -polly \
 		 -mllvm -polly-position=early \
 		 -mllvm -polly-optimizer=isl \
 		 -mllvm -polly-code-generation=full \
@@ -709,7 +709,9 @@ cat_polly_flags := -mllvm -polly \
 		 -mllvm -polly-enable-simplify \
 		 -mllvm -polly-run-inliner
 
-cat_arch_flags := -ffast-math \
+cat_gcc_flags := -fgraphite -fgraphite-identity -floop-nest-optimize
+
+cat_flags := -ffast-math \
 		 -mcpu=cortex-a55 \
 		 -mtune=cortex-a55 \
 		 -march=armv8.2-a
@@ -725,9 +727,18 @@ KBUILD_LDFLAGS	+= -O3
 endif
 
 ifdef CONFIG_CAT_OPTIMIZE
-KBUILD_CFLAGS += $(cat_arch_flags) $(cat_polly_flags)
-KBUILD_AFLAGS += $(cat_arch_flags) $(cat_polly_flags)
-KBUILD_LDFLAGS += $(cat_polly_flags)
+KBUILD_CFLAGS += $(cat_flags)
+KBUILD_AFLAGS += $(cat_flags)
+ifeq ($(cc-name),clang)
+KBUILD_CFLAGS += $(cat_llvm_flags)
+KBUILD_AFLAGS += $(cat_llvm_flags)
+ifneq ($(LLVM),)
+KBUILD_LDFLAGS += $(cat_llvm_flags)
+endif
+else
+KBUILD_CFLAGS += $(cat_gcc_flags)
+KBUILD_AFLAGS += $(cat_gcc_flags)
+endif
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
