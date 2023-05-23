@@ -14,5 +14,5 @@ jobs:
     - uses: actions/checkout@v3
     - name: build
       run: |
-        wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-clang.sh
-        bash build.sh 20230509
+        wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-gcc.sh
+        bash build.sh latest
