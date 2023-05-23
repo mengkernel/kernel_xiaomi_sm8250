@@ -3,8 +3,6 @@
 echo "Regenerate cat_defconfig ..."
 mkdir out || exit 0
 make alioth_defconfig \
-  CC=clang \
-  LD=ld.lld \
   O=out || exit 0
 mv out/.config arch/arm64/configs/cat_defconfig || exit 0
 rm -rf out
