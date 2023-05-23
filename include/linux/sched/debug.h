@@ -50,4 +50,6 @@ extern char __sched_text_start[], __sched_text_end[];
 /* Is this address in the __sched functions? */
 extern int in_sched_functions(unsigned long addr);
 
+extern void show_state_filter_single(unsigned long state_filter);
+
 #endif /* _LINUX_SCHED_DEBUG_H */
