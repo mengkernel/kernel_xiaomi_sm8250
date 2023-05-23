@@ -709,11 +709,9 @@ cat_polly_flags := -mllvm -polly \
 		 -mllvm -polly-enable-simplify \
 		 -mllvm -polly-run-inliner
 
-cat_gcc_flags := -fgraphite-identity -floop-nest-optimize
+cat_gcc_flags := -fgraphite-identity -floop-nest-optimize -fipa-pta
 
-cat_arch_flags := -mcpu=cortex-a55 \
-		 -mtune=cortex-a55 \
-		 -march=armv8.2-a
+cat_arch_flags := -mcpu=cortex-a55 -mtune=cortex-a55 -march=armv8.2-a
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
