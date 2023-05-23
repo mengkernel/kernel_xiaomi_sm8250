@@ -706,8 +706,9 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, sizeof-pointer-memaccess)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-result)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-value)
 
-cat_arch_flags := -mcpu=cortex-a77
-cat_llvm_flags := -mllvm -polly \
+cat_arch_flags	:= -mcpu=cortex-a77
+cat_gcc_flags	:= -fgraphite -fgraphite-identity -floop-nest-optimize
+cat_llvm_flags	:= -mllvm -polly \
 		 -mllvm -polly-position=early \
 		 -mllvm -polly-optimizer=isl \
 		 -mllvm -polly-code-generation=full \
@@ -735,6 +736,9 @@ ifeq ($(cc-name),clang)
 KBUILD_CFLAGS	+= $(cat_llvm_flags)
 KBUILD_AFLAGS	+= $(cat_llvm_flags)
 KBUILD_LDFLAGS	+= $(cat_llvm_flags)
+else
+KBUILD_CFLAGS	+= $(cat_gcc_flags)
+KBUILD_AFLAGS	+= $(cat_gcc_flags)
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
