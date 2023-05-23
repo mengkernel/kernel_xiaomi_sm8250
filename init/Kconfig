@@ -1380,9 +1380,8 @@ config CC_OPTIMIZE_FOR_SIZE
 endchoice
 
 config CAT_OPTIMIZE
-	bool "Enable some clang optimization flags for SM8250"
+	bool "Enable some optimization flags for SM8250"
 	default y
-	depends on CC_IS_CLANG
 	depends on ARCH_KONA
 
 config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
