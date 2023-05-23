@@ -8191,10 +8191,11 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 	int want_affine = 0;
 	int sync = (wake_flags & WF_SYNC) && !(current->flags & PF_EXITING);
 
-#ifdef CONFIG_PACKAGE_RUNTIME_INFO
 	if (static_branch_unlikely(&sched_energy_present)) {
 		rcu_read_lock();
+#ifdef CONFIG_PACKAGE_RUNTIME_INFO
 		wake_render(p);
+#endif
 
 		new_cpu = find_energy_efficient_cpu(p, prev_cpu, sync,
 						    sibling_count_hint);
@@ -8203,7 +8204,6 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int sd_flag, int wake_f
 		rcu_read_unlock();
 		return new_cpu;
 	}
-#endif
 
 	if (sd_flag & SD_BALANCE_WAKE) {
 		record_wakee(p);
