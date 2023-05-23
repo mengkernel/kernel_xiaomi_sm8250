@@ -709,6 +709,8 @@ cat_polly_flags := -mllvm -polly \
 		 -mllvm -polly-enable-simplify \
 		 -mllvm -polly-run-inliner
 
+cat_gcc_flags := -fgraphite-identity -floop-nest-optimize
+
 cat_arch_flags := -mcpu=cortex-a55 \
 		 -mtune=cortex-a55 \
 		 -march=armv8.2-a
@@ -728,6 +730,9 @@ ifeq ($(cc-name),clang)
 KBUILD_CFLAGS += $(cat_polly_flags)
 KBUILD_AFLAGS += $(cat_polly_flags)
 KBUILD_LDFLAGS += $(cat_polly_flags)
+else
+KBUILD_CFLAGS += $(cat_gcc_flags)
+KBUILD_AFLAGS += $(cat_gcc_flags)
 endif
 endif
 
