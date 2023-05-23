@@ -707,7 +707,10 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-result)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-value)
 
 cat_arch_flags	:= -mcpu=cortex-a77
-cat_gcc_flags	:= -fgraphite -fgraphite-identity -floop-nest-optimize
+cat_gcc_flags	:= -fipa-pta \
+		 -fgraphite \
+		 -fgraphite-identity \
+		 -floop-nest-optimize
 cat_llvm_flags	:= -mllvm -polly \
 		 -mllvm -polly-position=early \
 		 -mllvm -polly-optimizer=isl \
