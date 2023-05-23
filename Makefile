@@ -709,19 +709,16 @@ cat_polly_flags := -mllvm -polly \
 		 -mllvm -polly-enable-simplify \
 		 -mllvm -polly-run-inliner
 
-cat_arch_flags := -ffast-math \
-		 -mcpu=cortex-a55 \
+cat_arch_flags := -mcpu=cortex-a55 \
 		 -mtune=cortex-a55 \
 		 -march=armv8.2-a
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 KBUILD_AFLAGS	+= -Os
-KBUILD_LDFLAGS	+= -Os
 else
-KBUILD_CFLAGS	+= -O3
-KBUILD_AFLAGS	+= -O3
-KBUILD_LDFLAGS	+= -O3
+KBUILD_CFLAGS	+= -Ofast
+KBUILD_AFLAGS	+= -Ofast
 endif
 
 ifdef CONFIG_CAT_OPTIMIZE
