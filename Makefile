@@ -709,7 +709,7 @@ cat_polly_flags := -mllvm -polly \
 		 -mllvm -polly-enable-simplify \
 		 -mllvm -polly-run-inliner
 
-cat_arch_flags := -ffast-math -fstack-arrays \
+cat_arch_flags := -ffast-math \
 		 -mcpu=cortex-a55 \
 		 -mtune=cortex-a55 \
 		 -march=armv8.2-a
