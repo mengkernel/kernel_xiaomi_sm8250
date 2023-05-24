@@ -651,7 +651,8 @@ LTO_CFLAGS	:= -flto -flto=jobserver -fno-fat-lto-objects \
 		   -fuse-linker-plugin -fwhole-program
 KBUILD_CFLAGS	+= $(LTO_CFLAGS) --param=max-inline-insns-auto=1000
 LTO_LDFLAGS	:= $(LTO_CFLAGS) -Wno-lto-type-mismatch -Wno-psabi \
-		   -Wno-stringop-overflow -flinker-output=nolto-rel
+		   -Wno-stringop-overflow -flinker-output=nolto-rel \
+		   --plugin-opt=-O3
 LDFINAL		:= $(CONFIG_SHELL) $(srctree)/scripts/gcc-ld $(LTO_LDFLAGS)
 AR		:= $(CROSS_COMPILE)gcc-ar
 NM		:= $(CROSS_COMPILE)gcc-nm
@@ -737,9 +738,11 @@ cat_arch_flags := -mcpu=cortex-a55 -mtune=cortex-a55 -march=armv8.2-a
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
 KBUILD_AFLAGS	+= -Os
+KBUILD_LDFLAGS	+= -Os
 else
 KBUILD_CFLAGS	+= -O3
 KBUILD_AFLAGS	+= -O3
+KBUILD_LDFLAGS	+= -O3
 endif
 
 ifdef CONFIG_CAT_OPTIMIZE
