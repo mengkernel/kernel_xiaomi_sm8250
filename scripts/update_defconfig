@@ -194,6 +194,9 @@ echo "================================================="
 echo "Done!"
 rm -rf "$OUT_DIR"
 
+# regenerate defconfig
+${KERNEL_TOP}/scripts/regenerate
+
 unset KERNEL_TOP
 unset KERNEL_CFG
 unset OUT_DIR
