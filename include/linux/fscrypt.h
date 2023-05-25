@@ -143,7 +143,7 @@ static inline void fscrypt_handle_d_move(struct dentry *dentry)
  */
 static inline bool fscrypt_is_nokey_name(const struct dentry *dentry)
 {
-	return dentry->d_flags & DCACHE_ENCRYPTED_NAME;
+	return dentry->d_flags & DCACHE_NOKEY_NAME;
 }
 
 /* crypto.c */
@@ -769,7 +769,7 @@ static inline int fscrypt_prepare_rename(struct inode *old_dir,
  * plaintext name; otherwise, it is assumed to be by no-key name.
  *
  * After calling this function, a filesystem should ensure that it's dentry
- * operations contain fscrypt_d_revalidate if DCACHE_ENCRYPTED_NAME was set,
+ * operations contain fscrypt_d_revalidate if DCACHE_NOKEY_NAME was set,
  * so that the dentry can be invalidated if the key is later added.
  *
  * Return: 0 on success; -ENOENT if the directory's key is unavailable but the
