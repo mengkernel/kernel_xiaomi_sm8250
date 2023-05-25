@@ -254,7 +254,7 @@ retry:
 				goto next;
 			}
 
-			err = f2fs_get_node_info(sbi, dn.nid, &ni, false);
+			err = f2fs_get_node_info(sbi, dn.nid, &ni);
 			if (err) {
 				f2fs_put_dnode(&dn);
 				return err;
@@ -509,39 +509,9 @@ void f2fs_balance_fs(struct f2fs_sb_info *sbi, bool need)
 	 * dir/node pages without enough free segments.
 	 */
 	if (has_not_enough_free_secs(sbi, 0, 0)) {
-		if (test_opt(sbi, GC_MERGE) && sbi->gc_thread &&
-					sbi->gc_thread->f2fs_gc_task) {
-			DEFINE_WAIT(wait);
-
-			prepare_to_wait(&sbi->gc_thread->fggc_wq, &wait,
-						TASK_UNINTERRUPTIBLE);
-			wake_up(&sbi->gc_thread->gc_wait_queue_head);
-			io_schedule();
-			finish_wait(&sbi->gc_thread->fggc_wq, &wait);
-		} else {
-			down_write(&sbi->gc_lock);
-			f2fs_gc(sbi, false, false, NULL_SEGNO);
-		}
+		down_write(&sbi->gc_lock);
+		f2fs_gc(sbi, false, false, NULL_SEGNO);
 	}
-}
-
-static inline bool excess_dirty_threshold(struct f2fs_sb_info *sbi)
-{
-	int factor = rwsem_is_locked(&sbi->cp_rwsem) ? 3 : 2;
-	unsigned int dents = get_pages(sbi, F2FS_DIRTY_DENTS);
-	unsigned int qdata = get_pages(sbi, F2FS_DIRTY_QDATA);
-	unsigned int nodes = get_pages(sbi, F2FS_DIRTY_NODES);
-	unsigned int meta = get_pages(sbi, F2FS_DIRTY_META);
-	unsigned int imeta = get_pages(sbi, F2FS_DIRTY_IMETA);
-	unsigned int threshold = sbi->blocks_per_seg * factor *
-					DEFAULT_DIRTY_THRESHOLD;
-	unsigned int global_threshold = threshold * 3 / 2;
-
-	if (dents >= threshold || qdata >= threshold ||
-		nodes >= threshold || meta >= threshold ||
-		imeta >= threshold)
-		return true;
-	return dents + qdata + nodes + meta + imeta >  global_threshold;
 }
 
 void f2fs_balance_fs_bg(struct f2fs_sb_info *sbi, bool from_bg)
@@ -562,38 +532,31 @@ void f2fs_balance_fs_bg(struct f2fs_sb_info *sbi, bool from_bg)
 	else
 		f2fs_build_free_nids(sbi, false, false);
 
-	if (excess_dirty_nats(sbi) || excess_dirty_threshold(sbi) ||
-		excess_prefree_segs(sbi) || !f2fs_space_for_roll_forward(sbi))
-		goto do_sync;
-
-	/* there is background inflight IO or foreground operation recently */
-	if (is_inflight_io(sbi, REQ_TIME) ||
-		(!f2fs_time_over(sbi, REQ_TIME) && rwsem_is_locked(&sbi->cp_rwsem)))
+	if (!is_idle(sbi, REQ_TIME) &&
+		(!excess_dirty_nats(sbi) && !excess_dirty_nodes(sbi)))
 		return;
-
-	/* exceed periodical checkpoint timeout threshold */
-	if (f2fs_time_over(sbi, CP_TIME))
-		goto do_sync;
 
 	/* checkpoint is the only way to shrink partial cached entries */
-	if (f2fs_available_free_memory(sbi, NAT_ENTRIES) ||
-		f2fs_available_free_memory(sbi, INO_ENTRIES))
-		return;
+	if (!f2fs_available_free_memory(sbi, NAT_ENTRIES) ||
+			!f2fs_available_free_memory(sbi, INO_ENTRIES) ||
+			excess_prefree_segs(sbi) ||
+			excess_dirty_nats(sbi) ||
+			excess_dirty_nodes(sbi) ||
+			f2fs_time_over(sbi, CP_TIME)) {
+		if (test_opt(sbi, DATA_FLUSH) && from_bg) {
+			struct blk_plug plug;
 
-do_sync:
-	if (test_opt(sbi, DATA_FLUSH) && from_bg) {
-		struct blk_plug plug;
+			mutex_lock(&sbi->flush_lock);
 
-		mutex_lock(&sbi->flush_lock);
+			blk_start_plug(&plug);
+			f2fs_sync_dirty_inodes(sbi, FILE_INODE);
+			blk_finish_plug(&plug);
 
-		blk_start_plug(&plug);
-		f2fs_sync_dirty_inodes(sbi, FILE_INODE);
-		blk_finish_plug(&plug);
-
-		mutex_unlock(&sbi->flush_lock);
+			mutex_unlock(&sbi->flush_lock);
+		}
+		f2fs_sync_fs(sbi->sb, true);
+		stat_inc_bg_cp_count(sbi->stat_info);
 	}
-	f2fs_sync_fs(sbi->sb, true);
-	stat_inc_bg_cp_count(sbi->stat_info);
 }
 
 static int __submit_flush_wait(struct f2fs_sb_info *sbi,
@@ -643,6 +606,8 @@ repeat:
 	if (kthread_should_stop())
 		return 0;
 
+	sb_start_intwrite(sbi->sb);
+
 	if (!llist_empty(&fcc->issue_list)) {
 		struct flush_cmd *cmd, *next;
 		int ret;
@@ -662,6 +627,8 @@ repeat:
 		}
 		fcc->dispatch_list = NULL;
 	}
+
+	sb_end_intwrite(sbi->sb);
 
 	wait_event_interruptible(*q,
 		kthread_should_stop() || !llist_empty(&fcc->issue_list));
@@ -2862,15 +2829,6 @@ skip:
 
 		if (fatal_signal_pending(current))
 			break;
-
-		/*
-		 * If the trim thread is running and we receive the SCREEN_ON
-		 * event, we will send SIGUSR1 singnal to teriminate the trim
-		 * thread. So if there is a SIGUSR1 signal pending in current
-		 * thread, we need stop issuing discard commands and return.
-		 */
-		if (signal_pending(current) && sigismember(&current->pending.signal, SIGUSR1))
-			break;
 	}
 
 	blk_finish_plug(&plug);
@@ -2923,6 +2881,15 @@ int f2fs_trim_fs(struct f2fs_sb_info *sbi, struct fstrim_range *range)
 	err = f2fs_write_checkpoint(sbi, &cpc);
 	up_write(&sbi->gc_lock);
 	if (err)
+		goto out;
+
+	/*
+	 * We filed discard candidates, but actually we don't need to wait for
+	 * all of them, since they'll be issued in idle time along with runtime
+	 * discard option. User configuration looks like using runtime discard
+	 * or periodic fstrim instead of it.
+	 */
+	if (f2fs_realtime_discard_enable(sbi))
 		goto out;
 
 	start_block = START_BLOCK(sbi, start_segno);
