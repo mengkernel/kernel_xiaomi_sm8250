@@ -652,7 +652,7 @@ export LLVM_AR LLVM_NM
 endif
 
 ifdef CONFIG_LTO_GCC
-LTO_CFLAGS	:= -flto -flto=jobserver -fno-fat-lto-objects \
+LTO_CFLAGS	:= -flto=$(NPROC) -fno-fat-lto-objects \
 		   -fuse-linker-plugin -fwhole-program
 KBUILD_CFLAGS	+= $(LTO_CFLAGS) --param=max-inline-insns-auto=1000
 LTO_LDFLAGS	:= $(LTO_CFLAGS) -S -Wno-lto-type-mismatch -Wno-psabi \
