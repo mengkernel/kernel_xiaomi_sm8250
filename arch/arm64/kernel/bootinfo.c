@@ -44,25 +44,25 @@ static const char * const reset_reasons[RS_REASON_MAX] = {
 static struct kobject *bootinfo_kobj;
 static powerup_reason_t powerup_reason;
 
-#define bootinfo_attr(_name) \
+#define bootinfo_attr(_name)					\
 static struct kobj_attribute _name##_attr = {	\
-	.attr	= {				\
-		.name = __stringify(_name),	\
-		.mode = 0644,			\
-	},					\
-	.show	= _name##_show,			\
-	.store	= NULL,				\
+	.attr	= {									\
+		.name = __stringify(_name),				\
+		.mode = 0644,							\
+	},											\
+	.show	= _name##_show,						\
+	.store	= NULL,								\
 }
 
 #define bootinfo_func_init(type, name, initval)	\
-static type name = (initval);			\
-type get_##name(void)				\
-{						\
-	return name;				\
-}						\
-void set_##name(type __##name)			\
-{						\
-	name = __##name;			\
+static type name = (initval);					\
+type get_##name(void)							\
+{												\
+	return name;								\
+}												\
+void set_##name(u32 __##name)					\
+{												\
+	name = __##name;							\
 }
 
 int is_abnormal_powerup(void)
@@ -146,7 +146,7 @@ static ssize_t powerup_reason_details_show(struct kobject *kobj,
 
 bootinfo_attr(powerup_reason);
 bootinfo_attr(powerup_reason_details);
-bootinfo_func_init(u32, powerup_reason, 0);
+bootinfo_func_init(powerup_reason_t, powerup_reason, 0);
 
 static struct attribute *g[] = {
 	&powerup_reason_attr.attr,
