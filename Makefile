@@ -652,7 +652,7 @@ export LLVM_AR LLVM_NM
 endif
 
 ifdef CONFIG_LTO_GCC
-LTO_CFLAGS	:= -flto -flto=jobserver -fno-fat-lto-objects \
+LTO_CFLAGS	:= -flto=$(NPROC) -fno-fat-lto-objects \
 		   -fuse-linker-plugin -fwhole-program -fipa-pta \
 		   -fdevirtualize-at-ltrans
 KBUILD_CFLAGS	+= $(LTO_CFLAGS) --param=max-inline-insns-auto=1000
