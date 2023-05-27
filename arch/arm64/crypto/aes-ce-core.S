@@ -9,7 +9,7 @@
 #include <linux/linkage.h>
 #include <asm/assembler.h>
 
-	.arch		armv8-a+crypto
+	.arch		armv8.2-a+crypto
 
 ENTRY(__aes_ce_encrypt)
 	sub		w3, w3, #2

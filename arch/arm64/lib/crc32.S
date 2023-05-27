@@ -12,7 +12,7 @@
 #include <asm/alternative.h>
 #include <asm/assembler.h>
 
-	.arch		armv8-a+crc
+	.arch		armv8.2-a+crc
 
 	.macro		byteorder, reg, be
 	.if		\be

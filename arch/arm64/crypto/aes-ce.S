@@ -15,7 +15,7 @@
 #define AES_ENTRY(func)		ENTRY(ce_ ## func)
 #define AES_ENDPROC(func)	ENDPROC(ce_ ## func)
 
-	.arch		armv8-a+crypto
+	.arch		armv8.2-a+crypto
 
 	/* preload all round keys */
 	.macro		load_round_keys, rounds, rk

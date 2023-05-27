@@ -12,7 +12,7 @@
 #include <asm/assembler.h>
 
 	.text
-	.arch		armv8-a+crypto
+	.arch		armv8.2-a+crypto
 
 	k0		.req	v0
 	k1		.req	v1
