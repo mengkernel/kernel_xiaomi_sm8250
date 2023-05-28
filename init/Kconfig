@@ -1352,6 +1352,7 @@ config CAT_OPTIMIZE
 	depends on ARCH_KONA
 
 config LTO_GCC
+	select LTO
 	bool "Enable Link Time Optimization for GCC"
 
 config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
