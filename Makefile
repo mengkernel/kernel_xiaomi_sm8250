@@ -951,9 +951,7 @@ export DISABLE_LTO_CLANG
 
 # -O3 optimization level for LTO
 KBUILD_LDFLAGS	+= --lto-O3
-endif
 
-ifdef CONFIG_LTO
 LTO_CFLAGS	:= $(lto-clang-flags)
 KBUILD_CFLAGS	+= $(LTO_CFLAGS)
 
