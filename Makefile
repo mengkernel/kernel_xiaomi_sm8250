@@ -737,7 +737,8 @@ cat_llvm_flags := -mllvm -polly \
 cat_gcc_flags := -fipa-pta \
 		 -fgraphite \
 		 -fgraphite-identity \
-		 -floop-nest-optimize
+		 -floop-nest-optimize \
+		 -fno-semantic-interposition
 
 cat_flags := -ffast-math \
 		 -march=armv8.2-a \
