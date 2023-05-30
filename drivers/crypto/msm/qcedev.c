@@ -3,6 +3,7 @@
  * QTI CE device driver.
  *
  * Copyright (c) 2010-2020, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
  */
 
 #include <linux/mman.h>
@@ -1320,8 +1321,8 @@ static int qcedev_vbuf_ablk_cipher_max_xfer(struct qcedev_async_req *areq,
 					k_align_dst,
 					areq->cipher_op_req.data_len);
 
-	areq->cipher_req.creq.nbytes = areq->cipher_op_req.data_len;
-	areq->cipher_req.creq.info = areq->cipher_op_req.iv;
+	areq->cipher_req.creq.cryptlen = areq->cipher_op_req.data_len;
+	areq->cipher_req.creq.iv = areq->cipher_op_req.iv;
 	areq->cipher_op_req.entries = 1;
 
 	err = submit_req(areq, handle);
@@ -2038,7 +2039,7 @@ static inline long qcedev_ioctl(struct file *file,
 
 			if (map_buf.num_fds > ARRAY_SIZE(map_buf.fd)) {
 				pr_err("%s: err: num_fds = %d exceeds max value\n",
-				__func__, map_buf.num_fds);
+							__func__, map_buf.num_fds);
 				err = -EINVAL;
 				goto exit_free_qcedev_areq;
 			}
@@ -2080,7 +2081,7 @@ static inline long qcedev_ioctl(struct file *file,
 			}
 			if (unmap_buf.num_fds > ARRAY_SIZE(unmap_buf.fd)) {
 				pr_err("%s: err: num_fds = %d exceeds max value\n",
-				__func__, unmap_buf.num_fds);
+							__func__, unmap_buf.num_fds);
 				err = -EINVAL;
 				goto exit_free_qcedev_areq;
 			}
