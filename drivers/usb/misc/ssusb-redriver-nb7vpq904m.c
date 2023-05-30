@@ -141,7 +141,6 @@ struct ssusb_redriver {
 	bool host_active;
 	bool vbus_active;
 	bool is_usb3;
-	bool is_set_aux;
 	enum plug_orientation typec_orientation;
 	enum operation_mode op_mode;
 
@@ -781,8 +780,6 @@ static int ssusb_redriver_default_config(struct ssusb_redriver *redriver)
 		if (ret)
 			goto err;
 	}
-
-	redriver->is_set_aux = of_property_read_bool(node, "set-aux-enable");
 
 	ret = ssusb_redriver_channel_update(redriver);
 	if (ret)
