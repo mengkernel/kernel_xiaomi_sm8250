@@ -17,13 +17,7 @@ export OUT_DIR
 # Set compiler PATH
 PATH=$HOME/gas64:$HOME/aosp-clang/bin:$PATH
 
-BUILD="make O=$OUT_DIR \
-ARCH=arm64 \
-LLVM=1 \
-CLANG_TRIPLE=aarch64-linux-gnu- \
-CROSS_COMPILE=aarch64-linux-gnu- \
--j$(nproc --all)
-"
+BUILD="make O=$OUT_DIR -j$(nproc --all)"
 export BUILD
 
 cd "$KERNEL_TOP" || exit
@@ -83,7 +77,7 @@ if [ -n  "$*" ]; then
   echo "================================================="
   echo "SOC -> ${SOC} :: Device -> $1"
   echo "Running scripts/kconfig/merge_config.sh ..."
-  ret=$(ARCH=arm64 LLVM=1 scripts/kconfig/merge_config.sh \
+  ret=$(scripts/kconfig/merge_config.sh \
     -O "${OUT_DIR}" \
     ${KERNEL_CFG}/../${SOC}-perf_defconfig \
     ${KERNEL_CFG}/xiaomi-kona-common.config \
@@ -171,7 +165,7 @@ EOM
       echo "================================================="
       echo "SOC -> ${SOC} :: Device -> $device"
       echo "Running scripts/kconfig/merge_config.sh ..."
-      ret=$(ARCH=arm64 LLVM=1 scripts/kconfig/merge_config.sh \
+      ret=$(scripts/kconfig/merge_config.sh \
         -O "${OUT_DIR}" \
         ${KERNEL_CFG}/../${SOC}-perf_defconfig \
         ${KERNEL_CFG}/xiaomi-kona-common.config \
