@@ -96,7 +96,6 @@ if [ -n  "$*" ]; then
 
 read -r -d '' KERNEL_COMMIT_MESSAGE << EOM
 ARM64: configs: ${DEVICE}: update auto-generated defconfig for ${DEVICE}
-
 This update is generated automatically by using the update_defconfig script
 HEAD of the project used to prepare this commit:
 ${KERNEL_DEFCONFIG_URL}/tree/${KERNEL_DEFCONFIG_HEAD}
@@ -106,7 +105,6 @@ else
 
 read -r -d '' KERNEL_COMMIT_MESSAGE << EOM
 ARM64: configs: xiaomi: update auto-generated defconfig for all devices
-
 This update is generated automatically by using the update_defconfig script
 HEAD of the project used to prepare this commit:
 ${KERNEL_DEFCONFIG_URL}/tree/${KERNEL_DEFCONFIG_HEAD}
@@ -188,11 +186,10 @@ echo "================================================="
 echo "Done!"
 rm -rf "$OUT_DIR"
 
+echo "You can now commit the updated defconfig with the following as the commit message:"
+echo "${KERNEL_COMMIT_MESSAGE}"
+
 unset KERNEL_TOP
 unset KERNEL_CFG
 unset OUT_DIR
 unset BUILD
-
-# Commit automatically
-git add arch/arm64/configs
-git commit -m "${KERNEL_COMMIT_MESSAGE}"
