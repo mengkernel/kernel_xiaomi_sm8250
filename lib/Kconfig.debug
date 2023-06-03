@@ -317,8 +317,12 @@ config PAGE_OWNER_ENABLE_DEFAULT
 	  a fair amount of memory if enabled. See tools/vm/page_owner_sort.c
 	  for user-space helper.
 
+config ALIAS_DEBUG_FS
+	bool "Debug Filesystem"
+
 config DEBUG_FS
 	bool "Debug Filesystem"
+	select ALIAS_DEBUG_FS
 	help
 	  debugfs is a virtual file system that kernel developers use to put
 	  debugging files into.  Enable this option to be able to read and
