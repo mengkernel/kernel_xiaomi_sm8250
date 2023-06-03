@@ -1348,8 +1348,8 @@ endchoice
 
 config CAT_OPTIMIZE
 	bool "Enable some optimization flags for SM8250"
+	depends on ARCH_KONA && !GCOV_KERNEL
 	default y
-	depends on ARCH_KONA
 
 config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
 	bool

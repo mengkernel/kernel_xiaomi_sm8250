@@ -532,6 +532,7 @@ config LTO_CLANG
 
 config LTO_GCC
 	bool "Use GCC Link Time Optimization (LTO) (EXPERIMENTAL)"
+	depends on !GCOV_KERNEL
 	select LTO
 
 endchoice
