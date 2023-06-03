@@ -62,7 +62,7 @@ static const struct file_operations __fops = {				\
 
 typedef struct vfsmount *(*debugfs_automount_t)(struct dentry *, void *);
 
-#if defined(CONFIG_DEBUG_FS)
+#if defined(CONFIG_ALIAS_DEBUG_FS)
 
 struct dentry *debugfs_lookup(const char *name, struct dentry *parent);
 
@@ -166,7 +166,7 @@ ssize_t debugfs_write_file_bool(struct file *file, const char __user *user_buf,
 #include <linux/err.h>
 
 /*
- * We do not return NULL from these functions if CONFIG_DEBUG_FS is not enabled
+ * We do not return NULL from these functions if CONFIG_ALIAS_DEBUG_FS is not enabled
  * so users have a chance to detect if there was a real error or not.  We don't
  * want to duplicate the design decision mistakes of procfs and devfs again.
  */
