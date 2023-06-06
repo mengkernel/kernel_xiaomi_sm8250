@@ -15,4 +15,4 @@ jobs:
     - name: build
       run: |
         wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build-gcc.sh
-        bash build.sh
+        bash build.sh stable
