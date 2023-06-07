@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [ "kucing-13-beta" ]
+    branches: [ "kucing-13-gcov" ]
 env:
   TZ: "Asia/Jakarta"
   TELEGRAM_TOKEN: "${{ secrets.TELEGRAM_TOKEN }}"
