@@ -769,7 +769,11 @@ endif
 
 # Profile Guided Optimization
 ifeq ($(CONFIG_PGO), y)
-KBUILD_CFLAGS	+= -fprofile-use -Wno-coverage-mismatch -Wno-error=coverage-mismatch
+KBUILD_CFLAGS	+= -ftracer \
+		   -funroll-loops \
+		   -fbranch-probabilities \
+		   -fprofile-reorder-functions \
+		   -Wno-error=coverage-mismatch
 endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
