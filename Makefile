@@ -747,7 +747,7 @@ KBUILD_CFLAGS	+= -Os
 KBUILD_AFLAGS	+= -Os
 KBUILD_LDFLAGS	+= -Os
 else ifdef CONFIG_GCOV_KERNEL
-KBUILD_CFLAGS	+= -O2
+KBUILD_CFLAGS	+= -O2 -fno-inline-functions -fno-inline-small-functions -fno-inline-functions-called-once
 KBUILD_AFLAGS	+= -O2
 KBUILD_LDFLAGS	+= -O2
 else
