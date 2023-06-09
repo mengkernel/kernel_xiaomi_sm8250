@@ -1347,9 +1347,9 @@ config CC_OPTIMIZE_FOR_SIZE
 endchoice
 
 config CAT_OPTIMIZE
-	bool "Enable some optimization flags for SM8250"
-	default y
+	bool "Enable custom optimization flags"
 	depends on ARCH_KONA
+	default n
 
 config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
 	bool
