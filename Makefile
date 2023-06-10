@@ -706,7 +706,8 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, sizeof-pointer-memaccess)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-result)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-value)
 
-cat_arch_flags	:= -mcpu=cortex-a77
+cat_arch_flags	:= -mcpu=cortex-a77+crypto \
+		 -march=armv8.2-a+crypto
 cat_gcc_flags	:= -fipa-pta \
 		 -fgraphite \
 		 -fgraphite-identity \
@@ -733,9 +734,6 @@ endif
 
 KBUILD_CFLAGS	+= $(cat_arch_flags)
 KBUILD_AFLAGS	+= $(cat_arch_flags)
-ifneq ($(LLVM),)
-KBUILD_LDFLAGS	+= -mllvm $(cat_arch_flags)
-endif
 ifeq ($(cc-name),clang)
 KBUILD_CFLAGS	+= $(cat_llvm_flags)
 KBUILD_AFLAGS	+= $(cat_llvm_flags)
