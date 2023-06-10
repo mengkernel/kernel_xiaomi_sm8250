@@ -740,7 +740,7 @@ cat_gcc_flags := -fipa-pta \
 		 -floop-nest-optimize \
 		 -fno-semantic-interposition
 
-cat_flags := -ffast-math -mcpu=cortex-a55
+cat_flags := -ffast-math -mcpu=cortex-a55+crypto -march=armv8.2-a+crypto
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS	+= -Os
