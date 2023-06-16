@@ -5,6 +5,7 @@ on:
 env:
   TZ: "Asia/Jakarta"
   TELEGRAM_TOKEN: "${{ secrets.TELEGRAM_TOKEN }}"
+  GCC_IGNORE_WERROR: true
 jobs:
   build-gcc:
     runs-on: buildjet-16vcpu-ubuntu-2204
