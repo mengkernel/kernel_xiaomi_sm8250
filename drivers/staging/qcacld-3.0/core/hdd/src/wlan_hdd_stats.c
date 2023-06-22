@@ -1328,13 +1328,12 @@ void hdd_lost_link_info_cb(hdd_handle_t hdd_handle,
 	hdd_debug("rssi on disconnect %d", adapter->rssi_on_disconnect);
 }
 
-const struct
-nla_policy
-	qca_wlan_vendor_ll_set_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_MAX + 1] = {
-	[QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_MPDU_SIZE_THRESHOLD] = {
-						.type = NLA_U32},
-	[QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_AGGRESSIVE_STATS_GATHERING] = {
-						.type = NLA_U32},
+const struct nla_policy qca_wlan_vendor_ll_set_policy[
+			QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_MAX + 1] = {
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_MPDU_SIZE_THRESHOLD]
+						= { .type = NLA_U32 },
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_SET_CONFIG_AGGRESSIVE_STATS_GATHERING]
+						= { .type = NLA_U32 },
 };
 
 /**
@@ -1456,9 +1455,8 @@ int wlan_hdd_cfg80211_ll_stats_set(struct wiphy *wiphy,
 	return errno;
 }
 
-const struct
-nla_policy
-	qca_wlan_vendor_ll_get_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_MAX + 1] = {
+const struct nla_policy qca_wlan_vendor_ll_get_policy[
+			QCA_WLAN_VENDOR_ATTR_LL_STATS_GET_MAX + 1] = {
 	/* Unsigned 32bit value provided by the caller issuing the GET stats
 	 * command. When reporting
 	 * the stats results, the driver uses the same value to indicate
@@ -2673,15 +2671,42 @@ void wlan_hdd_cfg80211_link_layer_stats_ext_callback(hdd_handle_t ctx,
 	hdd_exit();
 }
 
-static const struct nla_policy
+const struct nla_policy
 qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_CFG_PERIOD] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_CFG_THRESHOLD] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_PS_CHG] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TID] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_NUM_MSDU] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_STATUS] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_PS_STATE] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_MAC_ADDRESS] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_GLOBAL] = {
 		.type = NLA_U32
 	},
-	[QCA_WLAN_VENDOR_ATTR_LL_STATS_CFG_THRESHOLD] = {
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_EVENT_MODE] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_IFACE_ID] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_ID] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_BITMAP] = {
@@ -2694,6 +2719,18 @@ qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_SIGNAL_BITMAP] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_NUM] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_CHANNEL_NUM] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_CCA_BSS] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_MSDU] = {
@@ -2723,6 +2760,15 @@ qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_NO_BACK] = {
 		.type = NLA_U32
 	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_AGGR_NUM] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_SUCC_MCS_NUM] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_FAIL_MCS_NUM] = {
+		.type = NLA_U32
+	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_AGGR] = {
 		.type = NLA_U32
 	},
@@ -2730,6 +2776,9 @@ qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_FAIL_MCS] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_DELAY_ARRAY_SIZE] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_DELAY] = {
@@ -2759,6 +2808,12 @@ qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_RX_MPDU_DISCARD] = {
 		.type = NLA_U32
 	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_RX_AGGR_NUM] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_RX_MCS_NUM] = {
+		.type = NLA_U32
+	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_RX_MCS] = {
 		.type = NLA_U32
 	},
@@ -2783,6 +2838,9 @@ qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_TX_TIME] = {
 		.type = NLA_U32
 	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_RX_TIME] = {
+		.type = NLA_U32
+	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_RX_BUSY] = {
 		.type = NLA_U32
 	},
@@ -2801,10 +2859,22 @@ qca_wlan_vendor_ll_ext_policy[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_OUT_BSS_TIME] = {
 		.type = NLA_U32
 	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_ANT_NUM] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_PEER_SIGNAL] = {
+		.type = NLA_U32
+	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_ANT_SNR] = {
 		.type = NLA_U32
 	},
 	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_ANT_NF] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_IFACE_RSSI_BEACON] = {
+		.type = NLA_U32
+	},
+	[QCA_WLAN_VENDOR_ATTR_LL_STATS_EXT_IFACE_SNR_BEACON] = {
 		.type = NLA_U32
 	},
 };

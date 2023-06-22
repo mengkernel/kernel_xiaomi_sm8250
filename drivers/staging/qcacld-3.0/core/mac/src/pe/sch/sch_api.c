@@ -385,8 +385,6 @@ int sch_gen_timing_advert_frame(struct mac_context *mac_ctx, tSirMacAddr self_ad
 		{0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},
 	};
 
-	qdf_mem_zero((uint8_t *)&frame, sizeof(tDot11fTimingAdvertisementFrame));
-
 	/* Populate the TA fields */
 	status = populate_dot11f_timing_advert_frame(mac_ctx, &frame);
 	if (!QDF_IS_STATUS_SUCCESS(status)) {
@@ -400,6 +398,8 @@ int sch_gen_timing_advert_frame(struct mac_context *mac_ctx, tSirMacAddr self_ad
 		pe_err("Error getting packed frame size %x", status);
 		return -EINVAL;
 	}
+	if (DOT11F_WARNED(status))
+		pe_warn("Warning getting packed frame size");
 
 	if (DOT11F_WARNED(status))
 		pe_warn("Warning getting packed frame size");
@@ -418,6 +418,8 @@ int sch_gen_timing_advert_frame(struct mac_context *mac_ctx, tSirMacAddr self_ad
 		pe_err("Error packing frame %x", status);
 		goto fail;
 	}
+	if (DOT11F_WARNED(status))
+		pe_warn("Warning packing frame");
 
 	if (DOT11F_WARNED(status))
 		pe_warn("Warning packing frame");

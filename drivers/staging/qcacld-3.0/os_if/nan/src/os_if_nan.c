@@ -40,8 +40,8 @@
 #define NAN_CMD_MAX_SIZE 2048
 
 /* NLA policy */
-static const struct nla_policy
-nan_attr_policy[QCA_WLAN_VENDOR_ATTR_NAN_PARAMS_MAX + 1] = {
+const struct nla_policy nan_attr_policy[
+			QCA_WLAN_VENDOR_ATTR_NAN_PARAMS_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_NAN_CMD_DATA] = {
 						.type = NLA_BINARY,
 						.len = NAN_CMD_MAX_SIZE
@@ -61,8 +61,8 @@ nan_attr_policy[QCA_WLAN_VENDOR_ATTR_NAN_PARAMS_MAX + 1] = {
 };
 
 /* NLA policy */
-static const struct nla_policy
-vendor_attr_policy[QCA_WLAN_VENDOR_ATTR_NDP_PARAMS_MAX + 1] = {
+const struct nla_policy vendor_attr_policy[
+			QCA_WLAN_VENDOR_ATTR_NDP_PARAMS_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_NDP_SUBCMD] = {
 						.type = NLA_U32,
 						.len = sizeof(uint32_t)
@@ -83,10 +83,8 @@ vendor_attr_policy[QCA_WLAN_VENDOR_ATTR_NDP_PARAMS_MAX + 1] = {
 						.type = NLA_U32,
 						.len = sizeof(uint32_t)
 	},
-	[QCA_WLAN_VENDOR_ATTR_NDP_PEER_DISCOVERY_MAC_ADDR] = {
-						.type = NLA_UNSPEC,
-						.len = QDF_MAC_ADDR_SIZE
-	},
+	[QCA_WLAN_VENDOR_ATTR_NDP_PEER_DISCOVERY_MAC_ADDR] =
+						VENDOR_NLA_POLICY_MAC_ADDR,
 	[QCA_WLAN_VENDOR_ATTR_NDP_CONFIG_SECURITY] = {
 						.type = NLA_U16,
 						.len = sizeof(uint16_t)
@@ -156,7 +154,7 @@ vendor_attr_policy[QCA_WLAN_VENDOR_ATTR_NDP_PARAMS_MAX + 1] = {
 						.len = sizeof(uint32_t)
 	},
 	[QCA_WLAN_VENDOR_ATTR_NDP_IPV6_ADDR] = {
-						.type = NLA_UNSPEC,
+						.type = NLA_EXACT_LEN,
 						.len = QDF_IPV6_ADDR_SIZE
 	},
 	[QCA_WLAN_VENDOR_ATTR_NDP_TRANSPORT_PORT] = {

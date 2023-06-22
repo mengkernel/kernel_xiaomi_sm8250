@@ -29,8 +29,64 @@
 #include <wlan_cfg80211.h>
 #include <wlan_cfg80211_tdls.h>
 #include <qca_vendor.h>
+#include <wlan_cfg80211_spectral.h>
 
 struct hdd_context;
+
+/* QCA_NL80211_VENDOR_SUBCMD_ROAM policy */
+extern const struct nla_policy wlan_hdd_set_roam_param_policy[
+			QCA_WLAN_VENDOR_ATTR_ROAMING_PARAM_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_GET_WIFI_INFO policy */
+extern const struct nla_policy qca_wlan_vendor_get_wifi_info_policy[
+			QCA_WLAN_VENDOR_ATTR_WIFI_INFO_GET_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_SET_WIFI_CONFIGURATION policy */
+extern const struct nla_policy wlan_hdd_wifi_config_policy[
+			QCA_WLAN_VENDOR_ATTR_CONFIG_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_WIFI_LOGGER_START policy */
+extern const struct nla_policy qca_wlan_vendor_wifi_logger_start_policy[
+			QCA_WLAN_VENDOR_ATTR_WIFI_LOGGER_START_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_ND_OFFLOAD policy */
+extern const struct nla_policy ns_offload_set_policy[
+			QCA_WLAN_VENDOR_ATTR_ND_OFFLOAD_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_GET_PREFERRED_FREQ_LIST policy */
+extern const struct nla_policy get_preferred_freq_list_policy[
+			QCA_WLAN_VENDOR_ATTR_GET_PREFERRED_FREQ_LIST_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_SET_PROBABLE_OPER_CHANNEL policy */
+extern const struct nla_policy set_probable_oper_channel_policy[
+			QCA_WLAN_VENDOR_ATTR_PROBABLE_OPER_CHANNEL_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_NO_DFS_FLAG policy */
+extern const struct nla_policy wlan_hdd_set_no_dfs_flag_config_policy[
+			QCA_WLAN_VENDOR_ATTR_SET_NO_DFS_FLAG_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_GET_RING_DATA policy */
+extern const struct nla_policy qca_wlan_vendor_wifi_logger_get_ring_data_policy[
+			QCA_WLAN_VENDOR_ATTR_WIFI_LOGGER_GET_RING_DATA_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_OFFLOADED_PACKETS policy */
+extern const struct nla_policy offloaded_packet_policy[
+			QCA_WLAN_VENDOR_ATTR_OFFLOADED_PACKETS_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_SETBAND policy */
+extern const struct nla_policy setband_policy[QCA_WLAN_VENDOR_ATTR_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_ACS_POLICY policy */
+extern const struct nla_policy wlan_hdd_set_acs_dfs_config_policy[
+			QCA_WLAN_VENDOR_ATTR_ACS_DFS_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_STA_CONNECT_ROAM_POLICY policy */
+extern const struct nla_policy wlan_hdd_set_sta_roam_config_policy[
+			QCA_WLAN_VENDOR_ATTR_STA_CONNECT_ROAM_POLICY_MAX + 1];
+
+/* QCA_NL80211_VENDOR_SUBCMD_WISA  policy */
+extern const struct nla_policy wlan_hdd_wisa_cmd_policy[
+			QCA_WLAN_VENDOR_ATTR_WISA_MAX + 1];
 
 /* value for initial part of frames and number of bytes to be compared */
 #define GAS_INITIAL_REQ "\x04\x0a"
@@ -250,6 +306,22 @@ wlan_hdd_cfg80211_update_bss_db(struct hdd_adapter *adapter,
 #define CONNECTIVITY_CHECK_SET_TCP_ACK \
 	QCA_WLAN_VENDOR_CONNECTIVITY_CHECK_SET_TCP_ACK
 
+extern const struct nla_policy
+wlan_hdd_wifi_test_config_policy[
+	QCA_WLAN_VENDOR_ATTR_WIFI_TEST_CONFIG_MAX + 1];
+
+#define FEATURE_VENDOR_SUBCMD_WIFI_TEST_CONFIGURATION                    \
+{                                                                        \
+	.info.vendor_id = QCA_NL80211_VENDOR_ID,                         \
+	.info.subcmd =                                                   \
+		QCA_NL80211_VENDOR_SUBCMD_WIFI_TEST_CONFIGURATION,       \
+	.flags = WIPHY_VENDOR_CMD_NEED_WDEV |                            \
+		WIPHY_VENDOR_CMD_NEED_NETDEV |                           \
+		WIPHY_VENDOR_CMD_NEED_RUNNING,                           \
+	.doit = wlan_hdd_cfg80211_set_wifi_test_config,                  \
+	vendor_command_policy(wlan_hdd_wifi_test_config_policy,          \
+			      QCA_WLAN_VENDOR_ATTR_WIFI_TEST_CONFIG_MAX) \
+},
 
 int wlan_hdd_cfg80211_pmksa_candidate_notify(struct hdd_adapter *adapter,
 					struct csr_roam_info *roam_info,
@@ -269,6 +341,38 @@ QDF_STATUS
 wlan_hdd_cfg80211_roam_metrics_handover(struct hdd_adapter *adapter,
 					struct csr_roam_info *roam_info);
 #endif
+
+extern const struct nla_policy
+	qca_wlan_vendor_set_nud_stats_policy
+	[QCA_ATTR_NUD_STATS_SET_MAX + 1];
+
+#define FEATURE_VENDOR_SUBCMD_NUD_STATS_SET				    \
+{									    \
+		.info.vendor_id = QCA_NL80211_VENDOR_ID,		    \
+		.info.subcmd = QCA_NL80211_VENDOR_SUBCMD_NUD_STATS_SET,     \
+		.flags = WIPHY_VENDOR_CMD_NEED_WDEV |			    \
+			WIPHY_VENDOR_CMD_NEED_NETDEV |			    \
+			WIPHY_VENDOR_CMD_NEED_RUNNING,			    \
+		.doit = wlan_hdd_cfg80211_set_nud_stats,		    \
+		vendor_command_policy(qca_wlan_vendor_set_nud_stats_policy, \
+				      QCA_ATTR_NUD_STATS_SET_MAX)	    \
+},
+
+extern const struct nla_policy
+	qca_wlan_vendor_set_trace_level_policy
+	[QCA_WLAN_VENDOR_ATTR_SET_TRACE_LEVEL_MAX + 1];
+
+#define FEATURE_VENDOR_SUBCMD_SET_TRACE_LEVEL				\
+{									\
+	.info.vendor_id = QCA_NL80211_VENDOR_ID,			\
+	.info.subcmd = QCA_NL80211_VENDOR_SUBCMD_SET_TRACE_LEVEL,	\
+	.flags = WIPHY_VENDOR_CMD_NEED_WDEV |				\
+		 WIPHY_VENDOR_CMD_NEED_NETDEV |				\
+		 WIPHY_VENDOR_CMD_NEED_RUNNING,				\
+	.doit = wlan_hdd_cfg80211_set_trace_level,			\
+	vendor_command_policy(qca_wlan_vendor_set_trace_level_policy,	\
+			      QCA_WLAN_VENDOR_ATTR_SET_TRACE_LEVEL_MAX)	\
+},
 
 /**
  * hdd_cfg80211_wiphy_alloc() - Allocate wiphy
@@ -731,4 +835,33 @@ bool hdd_is_legacy_connection(struct hdd_adapter *adapter);
 int hdd_set_dynamic_antenna_mode(struct hdd_adapter *adapter,
 				 uint8_t num_rx_chains,
 				 uint8_t num_tx_chains);
+
+enum qca_wlan_802_11_mode
+hdd_convert_cfgdot11mode_to_80211mode(enum csr_cfgdot11mode mode);
+
+/**
+ * hdd_send_update_owe_info_event - Send update OWE info event
+ * @adapter: Pointer to adapter
+ * @sta_addr: MAC address of peer STA
+ * @owe_ie: OWE IE
+ * @owe_ie_len: Length of OWE IE
+ *
+ * Send update OWE info event to hostapd
+ *
+ * Return: none
+ */
+#if defined(CFG80211_EXTERNAL_DH_UPDATE_SUPPORT) || \
+(LINUX_VERSION_CODE > KERNEL_VERSION(5, 2, 0))
+void hdd_send_update_owe_info_event(struct hdd_adapter *adapter,
+				    uint8_t sta_addr[],
+				    uint8_t *owe_ie,
+				    uint32_t owe_ie_len);
+#else
+static inline void hdd_send_update_owe_info_event(struct hdd_adapter *adapter,
+						  uint8_t sta_addr[],
+						  uint8_t *owe_ie,
+						  uint32_t owe_ie_len)
+{
+}
+#endif
 #endif

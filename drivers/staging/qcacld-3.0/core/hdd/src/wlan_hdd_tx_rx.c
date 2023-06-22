@@ -1483,6 +1483,20 @@ static bool hdd_is_mcast_replay(struct sk_buff *skb)
 	return false;
 }
 
+/**
+ * When bus bandwidth is idle, if RX data is delivered with
+ * napi_gro_receive, to reduce RX delay related with GRO,
+ * check gro_result returned from napi_gro_receive to determine
+ * is extra GRO flush still necessary.
+ */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 4, 0))
+#define HDD_IS_EXTRA_GRO_FLUSH_NECESSARY(_gro_ret) \
+	((_gro_ret) != GRO_DROP)
+#else
+#define HDD_IS_EXTRA_GRO_FLUSH_NECESSARY(_gro_ret) \
+	((_gro_ret) != GRO_DROP && (_gro_ret) != GRO_NORMAL)
+#endif
+
 #ifdef RECEIVE_OFFLOAD
 /**
  * hdd_resolve_rx_ol_mode() - Resolve Rx offload method, LRO or GRO
@@ -1535,7 +1549,7 @@ static QDF_STATUS hdd_gro_rx_bh_disable(struct hdd_adapter *adapter,
 {
 	QDF_STATUS status = QDF_STATUS_SUCCESS;
 	struct hdd_context *hdd_ctx = adapter->hdd_ctx;
-	gro_result_t gro_res;
+	gro_result_t gro_ret;
 	uint32_t rx_aggregation;
 	uint8_t rx_ctx_id = QDF_NBUF_CB_RX_CTX_ID(skb);
 	int32_t gro_disallowed;
@@ -1546,14 +1560,14 @@ static QDF_STATUS hdd_gro_rx_bh_disable(struct hdd_adapter *adapter,
 	skb_set_hash(skb, QDF_NBUF_CB_RX_FLOW_ID(skb), PKT_HASH_TYPE_L4);
 
 	local_bh_disable();
-	gro_res = napi_gro_receive(napi_to_use, skb);
+	gro_ret = napi_gro_receive(napi_to_use, skb);
 
 	if (hdd_get_current_throughput_level(hdd_ctx) == PLD_BUS_WIDTH_IDLE ||
 	    !rx_aggregation || gro_disallowed) {
-		if (gro_res != GRO_DROP && gro_res != GRO_NORMAL) {
+		if (HDD_IS_EXTRA_GRO_FLUSH_NECESSARY(gro_ret)) {
 			adapter->hdd_stats.tx_rx_stats.
 					rx_gro_low_tput_flush++;
-			napi_gro_flush(napi_to_use, false);
+			dp_rx_napi_gro_flush(napi_to_use);
 		}
 		if (!rx_aggregation)
 			hdd_ctx->dp_agg_param.gro_force_flush[rx_ctx_id] = 1;
@@ -1562,7 +1576,7 @@ static QDF_STATUS hdd_gro_rx_bh_disable(struct hdd_adapter *adapter,
 	}
 	local_bh_enable();
 
-	if (gro_res == GRO_DROP)
+	if (gro_ret == GRO_DROP)
 		status = QDF_STATUS_E_GRO_DROP;
 
 	return status;
@@ -1708,7 +1722,7 @@ static void hdd_rxthread_napi_gro_flush(void *data)
 	 * As we are breaking context in Rxthread mode, there is rx_thread NAPI
 	 * corresponds each hif_napi.
 	 */
-	napi_gro_flush(&qca_napii->rx_thread_napi, false);
+	dp_rx_napi_gro_flush(&qca_napii->rx_thread_napi);
 	local_bh_enable();
 }
 

@@ -1125,7 +1125,7 @@ int oem_deactivate_service(void)
 #endif
 
 #ifdef FEATURE_OEM_DATA
-static const struct nla_policy
+const struct nla_policy
 oem_data_attr_policy[QCA_WLAN_VENDOR_ATTR_OEM_DATA_PARAMS_MAX + 1] = {
 	[QCA_WLAN_VENDOR_ATTR_OEM_DATA_CMD_DATA] = {
 						    .type = NLA_BINARY,

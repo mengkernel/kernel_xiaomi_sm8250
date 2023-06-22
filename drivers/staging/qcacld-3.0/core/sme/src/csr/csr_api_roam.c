@@ -12516,6 +12516,10 @@ csr_roam_chk_lnk_assoc_ind(struct mac_context *mac_ctx, tSirSmeRsp *msg_ptr)
 					roam_info, 0, eCSR_ROAM_INFRA_IND,
 					eCSR_ROAM_RESULT_INFRA_ASSOCIATION_IND);
 		if (!QDF_IS_STATUS_SUCCESS(status)) {
+			if (roam_info->owe_pending_assoc_ind) {
+				qdf_mem_free(roam_info->owe_pending_assoc_ind);
+				roam_info->owe_pending_assoc_ind = NULL;
+			}
 			/* Refused due to Mac filtering */
 			roam_info->status_code = eSIR_SME_ASSOC_REFUSED;
 		} else if (pAssocInd->rsnIE.length && WLAN_ELEMID_RSN ==
