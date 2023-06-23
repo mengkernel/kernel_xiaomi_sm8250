@@ -58,9 +58,6 @@ static unsigned long irq_timer = 0;
 uint8_t esd_check = false;
 uint8_t esd_retry = 0;
 #endif /* #if NVT_TOUCH_ESD_PROTECT */
-
-extern void touch_irq_boost(void);
-extern void lpm_disable_for_dev(bool on, char event_dev);
 extern int pen_charge_state_notifier_register_client(struct notifier_block *nb);
 extern int pen_charge_state_notifier_unregister_client(struct notifier_block *nb);
 #if NVT_TOUCH_EXT_PROC
@@ -1683,13 +1680,8 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 		pm_wakeup_event(&ts->input_dev->dev, 5000);
 	}
 #endif
-
-	touch_irq_boost();
 	pm_stay_awake(&ts->client->dev);
-	lpm_disable_for_dev(true, 0x1);
-
 	mutex_lock(&ts->lock);
-
 	if (ts->dev_pm_suspend) {
 		ret = wait_for_completion_timeout(&ts->dev_pm_suspend_completion, msecs_to_jiffies(500));
 		if (!ret) {
@@ -1759,7 +1751,6 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 		input_id = (uint8_t)(point_data[1] >> 3);
 		nvt_ts_wakeup_gesture_report(input_id, point_data);
 		mutex_unlock(&ts->lock);
-		lpm_disable_for_dev(false, 0x1);
 		return IRQ_HANDLED;
 	}
 #endif
@@ -1918,9 +1909,7 @@ static irqreturn_t nvt_ts_work_func(int irq, void *data)
 	} /* if (ts->pen_support) */
 
 XFER_ERROR:
-
 	mutex_unlock(&ts->lock);
-	lpm_disable_for_dev(false, 0x1);
 	pm_relax(&ts->client->dev);
 	return IRQ_HANDLED;
 }
