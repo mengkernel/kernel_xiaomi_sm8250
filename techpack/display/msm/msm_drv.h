@@ -719,8 +719,6 @@ struct msm_drm_private {
 
 	struct msm_idle idle;
 	ktime_t  complete_commit_time;
-
-	struct msm_idle idle;
 };
 
 /* get struct msm_kms * from drm_device * */
