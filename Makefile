@@ -708,11 +708,19 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-value)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
 KBUILD_CFLAGS   += -Os
+KBUILD_AFLAGS   += -Os
+KBUILD_LDFLAGS   += -Os
 else
 KBUILD_CFLAGS   += -O2
+KBUILD_AFLAGS   += -O2
+KBUILD_LDFLAGS   += -O2
 endif
 
 KBUILD_CFLAGS   += -mcpu=cortex-a77
+KBUILD_AFLAGS   += -mcpu=cortex-a77
+ifneq ($(LLVM),)
+KBUILD_LDFLAGS   += -mllvm -mcpu=cortex-a77
+endif
 
 # Tell gcc to never replace conditional load with a non-conditional one
 KBUILD_CFLAGS	+= $(call cc-option,--param=allow-store-data-races=0)
