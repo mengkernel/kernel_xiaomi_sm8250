@@ -8,9 +8,7 @@ env:
   GCC_IGNORE_WERROR: true
 jobs:
   build-gcc:
-    runs-on: buildjet-16vcpu-ubuntu-2204
-    container:
-      image: diazaji/debian:kernel
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: build
@@ -18,9 +16,7 @@ jobs:
         wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
         bash build.sh gcc stable opt
   build-clang:
-    runs-on: buildjet-16vcpu-ubuntu-2204
-    container:
-      image: diazaji/debian:kernel
+    runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
     - name: build
