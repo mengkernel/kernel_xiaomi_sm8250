@@ -16,7 +16,7 @@ jobs:
     - name: build
       run: |
         wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-        bash build.sh gcc stable
+        bash build.sh gcc stable opt
   build-clang:
     runs-on: buildjet-16vcpu-ubuntu-2204
     container:
@@ -26,4 +26,4 @@ jobs:
     - name: build
       run: |
         wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-        bash build.sh clang beta
+        bash build.sh clang beta opt
