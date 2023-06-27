@@ -1,0 +1,19 @@
+version: 2.1
+filters:
+  branches:
+    only: kucing-13-rebase
+jobs:
+  build:
+    docker:
+      - image: diazaji/debian:kernel
+    steps:
+      - checkout
+      - run:
+          name: "Compile Kernel"
+          command: |
+            wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/sweet/build.sh
+            bash build.sh gcc stable
+workflows:
+  run:
+    jobs:
+      - build
