@@ -1,0 +1,16 @@
+env:
+  TELEGRAM_TOKEN: ENCRYPTED[88bae596655325b0152f04d1863a00901be925c81da784d3c6634157bc7c5a6ac8257325a182ccf4e519fc586ccc20b6]
+  GCC_IGNORE_WERROR: 1
+  TZ: "Asia/Jakarta"
+  CIRRUS_CLONE_DEPTH: 1
+container:
+  image: diazaji/debian:kernel
+  cpu: 8
+  memory: 16G
+task:
+  name: Compile Kernel
+  timeout_in: 69m
+  only_if: $CIRRUS_BRANCH == 'kucing-13-rebase'
+  script:
+    - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
+    - bash build.sh gcc stable opt
