@@ -1,5 +1,5 @@
 env:
-  TELEGRAM_TOKEN: TELEGRAM_TOKEN: ENCRYPTED[54c630c36d90bd60d7386e670dc15122d44d20d5b34271fcab38e5de60f41cd16b2dfaf26c88a8015515a0198b371566]
+  TELEGRAM_TOKEN: ENCRYPTED[54c630c36d90bd60d7386e670dc15122d44d20d5b34271fcab38e5de60f41cd16b2dfaf26c88a8015515a0198b371566]
   GCC_IGNORE_WERROR: 1
   TZ: "Asia/Jakarta"
   CIRRUS_CLONE_DEPTH: 10
@@ -7,10 +7,17 @@ container:
   image: diazaji/debian:kernel
   cpu: 8
   memory: 16G
-task:
+# gcc_task:
+  # name: Compile Kernel
+  # timeout_in: 69m
+  # only_if: $CIRRUS_BRANCH == 'kucing-13-rebase'
+  # script:
+    # - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
+    # - bash build.sh gcc stable opt
+clang_task:
   name: Compile Kernel
   timeout_in: 69m
   only_if: $CIRRUS_BRANCH == 'kucing-13-rebase'
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-    - bash build.sh gcc stable opt
+    - bash build.sh clang beta opt dce
