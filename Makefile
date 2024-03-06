@@ -715,9 +715,11 @@ KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-function)
 KBUILD_CFLAGS	+= $(call cc-disable-warning, unused-variable)
 
 ifdef CONFIG_CC_OPTIMIZE_FOR_SIZE
-KBUILD_CFLAGS   += -Os
+KBUILD_CFLAGS	+= -Os
+KBUILD_LDFLAGS	+= -S
 else
-KBUILD_CFLAGS   += -O3
+KBUILD_CFLAGS	+= -O3
+KBUILD_LDFLAGS	+= -S
 endif
 
 ifdef CONFIG_CC_WERROR
