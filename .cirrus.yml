@@ -7,17 +7,17 @@ container:
   image: diazaji/debian:kernel
   cpu: 8
   memory: 16G
-# gcc_task:
-#   name: Compile Kernel [GCC]
-#   timeout_in: 60m
-#   only_if: $CIRRUS_BRANCH == 'kucing-2k24'
-#   script:
-#     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-#     - bash build.sh gcc beta
+gcc_task:
+  name: Compile Kernel [GCC]
+  timeout_in: 60m
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+  script:
+    - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
+    - bash build.sh gcc stable
 clang_task:
   name: Compile Kernel [Clang]
   timeout_in: 60m
   only_if: $CIRRUS_BRANCH == 'kucing-2k24'
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-    - bash build.sh clang stable aosp
+    - bash build.sh clang stable
