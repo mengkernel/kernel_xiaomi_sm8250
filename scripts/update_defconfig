@@ -82,6 +82,7 @@ if [ -n  "$*" ]; then
     ${KERNEL_CFG}/../${SOC}-perf_defconfig \
     ${KERNEL_CFG}/../debugfs.config \
     ${KERNEL_CFG}/sm8250-common.config \
+    ${KERNEL_CFG}/sm8250-custom.config \
     ${KERNEL_CFG}/"${DEVICE}".config);
 
   case "$ret" in
