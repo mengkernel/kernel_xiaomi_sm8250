@@ -20,7 +20,5 @@ clang_task:
   only_if: $CIRRUS_BRANCH == 'kucing-2k24'
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-    - bash build.sh clang stable
-    - bash build.sh clang beta
-    - bash build.sh gcc stable
-    - bash build.sh gcc beta
+    - bash build.sh clang stable lto opt dce
+    - bash build.sh gcc stable lto opt dce
