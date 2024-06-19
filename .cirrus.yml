@@ -15,9 +15,29 @@ clang_task:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
     - bash build.sh clang stable lto opt dce
 gen_task:
-  name: Compile Kernel (PGO_GEN)
+  name: Compile Kernel (GCC PGO_GEN)
   timeout_in: 120m
   only_if: $CIRRUS_BRANCH == 'kucing-2k24'
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
     - bash build.sh gcc stable lto opt dce pgo_gen
+use_task:
+  name: Compile Kernel (GCC PGO_USE)
+  timeout_in: 120m
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+  script:
+    - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
+    - wget -qO calcsum.cpp https://raw.githubusercontent.com/openeuler-mirror/A-FOT/master/GcovSummaryAddTool.cpp
+    - g++ -o calcsum calcsum.cpp
+    - mkdir -p out
+    - tar xf profiles.tar.gz -C out
+    - find out -name "*.gcda" > list.txt
+    - ./calcsum list.txt
+    - bash build.sh gcc stable lto opt dce pgo_use
+gcc_task:
+  name: Compile Kernel (GCC)
+  timeout_in: 120m
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+  script:
+    - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
+    - bash build.sh gcc stable lto opt dce
