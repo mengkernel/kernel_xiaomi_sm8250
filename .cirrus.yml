@@ -1,43 +1,38 @@
 env:
-  TELEGRAM_TOKEN: ENCRYPTED[54c630c36d90bd60d7386e670dc15122d44d20d5b34271fcab38e5de60f41cd16b2dfaf26c88a8015515a0198b371566]
+  TELEGRAM_TOKEN: ENCRYPTED[!fa7d4ba3ceee4cb4ebd397ce1b634a44098a7380cceedd5e933252264052ff1837babe005e75ae0e15e6735a8b4ad34e!]
   GCC_IGNORE_WERROR: 1
-  TZ: "Asia/Jakarta"
-  CIRRUS_CLONE_DEPTH: 10
+git_fetch_template: &GIT_FETCH_TEMPLATE
+  timeout_in: 120m
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+  clone_script: |
+    mkdir -p $CIRRUS_WORKING_DIR
+    cd $CIRRUS_WORKING_DIR
+    git init .
+    git remote add origin $CIRRUS_REPO_CLONE_URL
+    git fetch --depth=1 origin $CIRRUS_CHANGE_IN_REPO
+    git checkout $CIRRUS_CHANGE_IN_REPO -b $CIRRUS_BRANCH
 container:
   image: diazaji/debian:kernel
   cpu: 8
   memory: 16G
-clang_task:
-  name: Compile Kernel (Clang)
-  timeout_in: 120m
-  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+standard_task:
+  << : *GIT_FETCH_TEMPLATE
+  name: Compile Kernel (STD)
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-    - bash build.sh clang stable lto opt dce
-gen_task:
-  name: Compile Kernel (GCC PGO_GEN)
-  timeout_in: 120m
-  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
-  script:
-    - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-    - bash build.sh gcc stable lto opt dce pgo_gen
-use_task:
-  name: Compile Kernel (GCC PGO_USE)
-  timeout_in: 120m
-  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+    - bash build.sh clang stable opt dce
+    - rm -rf out && mkdir -p out && git checkout -f
+    - bash build.sh gcc stable opt dce
+pgo_task:
+  << : *GIT_FETCH_TEMPLATE
+  name: Compile Kernel (PGO)
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
     - wget -qO calcsum.cpp https://raw.githubusercontent.com/openeuler-mirror/A-FOT/master/GcovSummaryAddTool.cpp
     - g++ -o calcsum calcsum.cpp
-    - mkdir -p out
+    - bash build.sh gcc stable opt dce pgo_gen
+    - rm -rf out && mkdir -p out && git checkout -f
     - tar xf profiles.tar.gz -C out
     - find out -name "*.gcda" > list.txt
     - ./calcsum list.txt
-    - bash build.sh gcc stable lto opt dce pgo_use
-gcc_task:
-  name: Compile Kernel (GCC)
-  timeout_in: 120m
-  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
-  script:
-    - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
-    - bash build.sh gcc stable lto opt dce
+    - bash build.sh gcc stable opt dce pgo_use keep
