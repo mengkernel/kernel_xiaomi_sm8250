@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 4.19.312 Kernel Configuration
+# Linux/arm64 4.19.315 Kernel Configuration
 #
 
 #
@@ -525,7 +525,7 @@ CONFIG_ARCH_SUSPEND_POSSIBLE=y
 CONFIG_CPU_IDLE=y
 CONFIG_CPU_IDLE_MULTIPLE_DRIVERS=y
 # CONFIG_CPU_IDLE_GOV_LADDER is not set
-CONFIG_CPU_IDLE_GOV_MENU=y
+# CONFIG_CPU_IDLE_GOV_MENU is not set
 CONFIG_DT_IDLE_STATES=y
 
 #
@@ -673,8 +673,6 @@ CONFIG_ARCH_HAS_RELR=y
 #
 # GCOV-based kernel profiling
 #
-# CONFIG_PGO_GEN is not set
-# CONFIG_PGO_USE is not set
 CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
 CONFIG_PLUGIN_HOSTCC=""
 CONFIG_HAVE_GCC_PLUGINS=y
@@ -5329,6 +5327,12 @@ CONFIG_QCOM_KGSL_IOMMU=y
 # CONFIG_QCOM_KGSL_USE_SHMEM is not set
 # CONFIG_QCOM_KGSL_PROCESS_RECLAIM is not set
 # CONFIG_LEGACY_ENERGY_MODEL_DT is not set
+
+#
+# KernelSU
+#
+CONFIG_KSU=y
+# CONFIG_KSU_DEBUG is not set
 
 #
 # File systems
