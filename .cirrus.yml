@@ -3,7 +3,7 @@ env:
   GCC_IGNORE_WERROR: 1
 git_fetch_template: &GIT_FETCH_TEMPLATE
   timeout_in: 120m
-  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24-testing'
   clone_script: |
     mkdir -p $CIRRUS_WORKING_DIR
     cd $CIRRUS_WORKING_DIR
