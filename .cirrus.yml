@@ -3,7 +3,6 @@ env:
   GCC_IGNORE_WERROR: 1
 git_fetch_template: &GIT_FETCH_TEMPLATE
   timeout_in: 120m
-  only_if: $CIRRUS_BRANCH == 'kucing-2k24-testing'
   clone_script: |
     mkdir -p $CIRRUS_WORKING_DIR
     cd $CIRRUS_WORKING_DIR
@@ -11,12 +10,17 @@ git_fetch_template: &GIT_FETCH_TEMPLATE
     git remote add origin $CIRRUS_REPO_CLONE_URL
     git fetch --depth=1 origin $CIRRUS_CHANGE_IN_REPO
     git checkout $CIRRUS_CHANGE_IN_REPO -b $CIRRUS_BRANCH
+testing: &TESTING
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24-testing' || $CIRRUS_BRANCH == 'kucing-2k24'
+main: &MAIN
+  only_if: $CIRRUS_BRANCH == 'kucing-2k24'
 container:
   image: diazaji/debian:kernel
   cpu: 8
   memory: 16G
 standard_task:
   << : *GIT_FETCH_TEMPLATE
+  << : *TESTING
   name: Compile Kernel (STD)
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
@@ -25,6 +29,7 @@ standard_task:
     - bash build.sh gcc stable-20240819-2023-WIB opt dce
 pgo_task:
   << : *GIT_FETCH_TEMPLATE
+  << : *MAIN
   name: Compile Kernel (PGO)
   script:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
