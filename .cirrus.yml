@@ -22,7 +22,7 @@ standard_task:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
     - bash build.sh clang stable opt dce
     - rm -rf out && mkdir -p out && git checkout -f
-    - bash build.sh gcc stable-20240623-1856-WIB opt dce
+    - bash build.sh gcc stable-20240819-2023-WIB opt dce
 pgo_task:
   << : *GIT_FETCH_TEMPLATE
   name: Compile Kernel (PGO)
@@ -30,9 +30,9 @@ pgo_task:
     - wget -qO build.sh https://raw.githubusercontent.com/Diaz1401/build-script/alioth/build.sh
     - wget -qO calcsum.cpp https://raw.githubusercontent.com/openeuler-mirror/A-FOT/master/GcovSummaryAddTool.cpp
     - g++ -o calcsum calcsum.cpp
-    - bash build.sh gcc stable-20240626-0510-UTC opt dce pgo_gen
+    - bash build.sh gcc stable-20240615-1407-WIB opt dce pgo_gen
     - rm -rf out && mkdir -p out && git checkout -f
     - tar xf profiles.tar.gz -C out
     - find out -name "*.gcda" > list.txt
     - ./calcsum list.txt
-    - bash build.sh gcc stable-20240626-0510-UTC opt dce pgo_use keep
+    - bash build.sh gcc stable-20240615-1407-WIB opt dce pgo_use keep
