@@ -1,11 +1,8 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm64 4.19.315 Kernel Configuration
+# Linux/arm64 4.19.318 Kernel Configuration
 #
-
-#
-# Compiler: gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0
-#
+CONFIG_CC_VERSION_TEXT="gcc (Ubuntu 9.4.0-1ubuntu1~20.04.2) 9.4.0"
 CONFIG_CC_IS_GCC=y
 CONFIG_GCC_VERSION=90400
 CONFIG_CLANG_VERSION=0
@@ -928,7 +925,6 @@ CONFIG_IPV6_SUBTREES=y
 # CONFIG_IPV6_SEG6_LWTUNNEL is not set
 # CONFIG_IPV6_SEG6_HMAC is not set
 CONFIG_NETLABEL=y
-CONFIG_ANDROID_PARANOID_NETWORK=y
 CONFIG_NETWORK_SECMARK=y
 # CONFIG_NETWORK_PHY_TIMESTAMPING is not set
 CONFIG_NETFILTER=y
