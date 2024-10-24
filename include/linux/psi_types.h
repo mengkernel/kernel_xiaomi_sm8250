@@ -145,9 +145,6 @@ struct psi_trigger {
 	/* Task that created the trigger */
 	char comm[TASK_COMM_LEN];
 	struct timer_list wdog_timer;
-
-	/* Deferred event(s) from previous ratelimit window */
-	bool pending_event;
 };
 
 struct psi_group {
