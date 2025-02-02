@@ -411,9 +411,11 @@ And public attribution of xiaomi platforms(like L3A and so and)
 	qcom,chg-term-current-ma = <(-200)>;
 	qcom,step-charging-enable;
 	qcom,sw-jeita-enable;
-	qcom,chg-warm-th= <480>;
+	qcom,chg-warm-th= <440>;
 	qcom,chg-cool-th= <150>;
 	//qcom,suspend-input-on-debug-batt;
+	pinctrl-names = "default", "smb5_active", "smb5_suspend";
+	pinctrl-0 = <&vbus_disable_suspend>;
 	qcom,usbpd-phandle = <&pm8150b_pdphy>;
 	qcom,battery-data = <&psyche_batterydata>;
 	//mi,fcc-batt-unverify-ua = <2000000>;
@@ -486,8 +488,6 @@ And public attribution of xiaomi platforms(like L3A and so and)
 	status = "disabled";
 };
 
-
-/*Security : To extend TA memory*/
 &reserved_memory {
 	removed_mem: removed_region@80b00000 {
 		reg = <0x0 0x80b00000 0x0 0x5700000>;
@@ -495,7 +495,6 @@ And public attribution of xiaomi platforms(like L3A and so and)
 };
 
 &soc {
-	/*Security : To extend TA memory*/
 	qcom_seecom {
 		compatible = "qcom,qseecom";
 		reg = <0x82400000 0x3E00000>;
@@ -520,7 +519,7 @@ And public attribution of xiaomi platforms(like L3A and so and)
 		mi,qc3-bat-curr-max = <3600>;
 		mi,qc3-bus-volt-max = <12000>;
 		mi,qc3-bus-curr-max = <2100>;
-		mi,qc3-battery-warm-th = <480>;
+		mi,qc3-battery-warm-th = <440>;
 		mi,cp-sec-enable;
 		mi,support-qc3p5-without-smb;
 	};
@@ -537,7 +536,7 @@ And public attribution of xiaomi platforms(like L3A and so and)
 		mi,step-charge-high-vol-curr-max = <4400>;
 		mi,cell-vol-high-threshold-mv = <4510>;
 		mi,cell-vol-max-threshold-mv = <4540>;
-		mi,pd-battery-warm-th = <480>;
+		mi,pd-battery-warm-th = <440>;
 		mi,cp-sec-enable;
 		mi,pd-power-max = <67>; /*charge power max : 67W */
 	};

@@ -1,76 +1,100 @@
-kona_base_dtb := kona-v2.1.dtb
-
 ifeq ($(CONFIG_MACH_XIAOMI),y)
-
 ifeq ($(CONFIG_MACH_XIAOMI_SM8250),y)
-
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
 
 ifeq ($(CONFIG_MACH_XIAOMI_ALIOTH),y)
-dtbo-y += alioth-sm8250-overlay.dtbo
-alioth-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_ALIOTH) += alioth-sm8250-overlay.dtbo
+alioth-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_APOLLO),y)
-dtbo-y += apollo-sm8250-overlay.dtbo
-apollo-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_APOLLO) += apollo-sm8250-overlay.dtbo
+apollo-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_CAS),y)
-dtbo-y += cas-sm8250-overlay.dtbo
-cas-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_CAS) += cas-sm8250-overlay.dtbo
+cas-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_CMI),y)
-dtbo-y += cmi-sm8250-overlay.dtbo
-cmi-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_CMI) += cmi-sm8250-overlay.dtbo
+cmi-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_DAGU),y)
-dtbo-y += dagu-sm8250-overlay.dtbo
-dagu-sm8250-overlay.dtbo-base := $(kona_base_dtb)
-endif
-
-ifeq ($(CONFIG_MACH_XIAOMI_ENUMA),y)
-dtbo-y += enuma-sm8250-overlay.dtbo
-enuma-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_DAGU) += dagu-sm8250-overlay.dtbo
+dagu-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_ELISH),y)
-dtbo-y += elish-sm8250-overlay.dtbo
-elish-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_ELISH) += elish-sm8250-overlay.dtbo
+elish-sm8250-overlay.dtbo-base := kona-v2.1.dtb
+endif
+
+ifeq ($(CONFIG_MACH_XIAOMI_ENUMA),y)
+dtbo-$(CONFIG_MACH_XIAOMI_ENUMA) += enuma-sm8250-overlay.dtbo
+enuma-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_LMI),y)
-dtbo-y += lmi-sm8250-overlay.dtbo
-lmi-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_LMI) += lmi-sm8250-overlay.dtbo
+lmi-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_MUNCH),y)
-dtbo-y += munch-sm8250-overlay.dtbo
-munch-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_MUNCH) += munch-sm8250-overlay.dtbo
+munch-sm8250-overlay.dtbo-base := kona-v2.1.dtb
+endif
+
+ifeq ($(CONFIG_MACH_XIAOMI_PIPA),y)
+dtbo-$(CONFIG_MACH_XIAOMI_PIPA) += pipa-sm8250-overlay.dtbo
+pipa-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_PSYCHE),y)
-dtbo-y += psyche-sm8250-overlay.dtbo
-psyche-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_PSYCHE) += psyche-sm8250-overlay.dtbo
+psyche-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_THYME),y)
-dtbo-y += thyme-sm8250-overlay.dtbo
-thyme-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_THYME) += thyme-sm8250-overlay.dtbo
+thyme-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 ifeq ($(CONFIG_MACH_XIAOMI_UMI),y)
-dtbo-y += umi-sm8250-overlay.dtbo
-umi-sm8250-overlay.dtbo-base := $(kona_base_dtb)
+dtbo-$(CONFIG_MACH_XIAOMI_UMI) += umi-sm8250-overlay.dtbo
+umi-sm8250-overlay.dtbo-base := kona-v2.1.dtb
 endif
 
 endif # CONFIG_BUILD_ARM64_DT_OVERLAY
-
 endif # CONFIG_MACH_XIAOMI_SM8250
 
-else # CONFIG_MACH_XIAOMI
+ifeq ($(CONFIG_MACH_XIAOMI_SM7250),y)
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+
+ifeq ($(CONFIG_MACH_XIAOMI_MONET),y)
+dtbo-$(CONFIG_MACH_XIAOMI_MONET) += monet-sm7250-overlay.dtbo
+dtb-$(CONFIG_MACH_XIAOMI_MONET) += monet-sm7250.dtb
+monet-sm7250-overlay.dtbo-base := lito.dtb lito-v2.dtb
+endif
+
+ifeq ($(CONFIG_MACH_XIAOMI_PICASSO),y)
+dtbo-$(CONFIG_MACH_XIAOMI_PICASSO) += picasso-sm7250-overlay.dtbo
+dtb-$(CONFIG_MACH_XIAOMI_PICASSO) += picasso-sm7250.dtb
+picasso-sm7250-overlay.dtbo-base := lito.dtb lito-v2.dtb
+endif
+
+ifeq ($(CONFIG_MACH_XIAOMI_VANGOGH),y)
+dtbo-$(CONFIG_MACH_XIAOMI_VANGOGH) += vangogh-sm7250-overlay.dtbo
+dtb-$(CONFIG_MACH_XIAOMI_VANGOGH) += vangogh-sm7250.dtb
+vangogh-sm7250-overlay.dtbo-base := lito.dtb lito-v2.dtb
+endif
+
+endif # CONFIG_BUILD_ARM64_DT_OVERLAY
+endif # CONFIG_MACH_XIAOMI_SM7250
+
+else # !CONFIG_MACH_XIAOMI
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
         dtbo-$(CONFIG_ARCH_KONA) += \
@@ -79,7 +103,7 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
                 kona-cdp-lcd-tron-overlay.dtbo \
                 kona-mtp-overlay.dtbo \
                 kona-mtp-ws-overlay.dtbo \
-                kona-sa-mtp-overlay.dtbo \
+		kona-sa-mtp-overlay.dtbo \
                 kona-xr-overlay.dtbo \
                 kona-rumi-overlay.dtbo \
                 kona-qrd-overlay.dtbo \
@@ -89,20 +113,20 @@ ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
                 kona-xrsku4-overlay.dtbo \
                 kona-hdk-overlay.dtbo
 
-kona-cdp-overlay.dtbo-base := $(kona_base_dtb)
-kona-cdp-lcd-overlay.dtbo-base := $(kona_base_dtb)
-kona-cdp-lcd-tron-overlay.dtbo-base := $(kona_base_dtb)
-kona-mtp-overlay.dtbo-base := $(kona_base_dtb)
-kona-mtp-ws-overlay.dtbo-base := $(kona_base_dtb)
-kona-sa-mtp-overlay.dtbo-base := $(kona_base_dtb)
-kona-xr-overlay.dtbo-base := $(kona_base_dtb)
-kona-rumi-overlay.dtbo-base := $(kona_base_dtb)
-kona-qrd-overlay.dtbo-base := $(kona_base_dtb)
-kona-xrfusion-overlay.dtbo-base := $(kona_base_dtb)
-kona-xrfusion-ult-overlay.dtbo-base := $(kona_base_dtb)
-kona-arglass-overlay.dtbo-base := $(kona_base_dtb)
-kona-xrsku4-overlay.dtbo-base := $(kona_base_dtb)
-kona-hdk-overlay.dtbo-base := $(kona_base_dtb)
+kona-cdp-overlay.dtbo-base := kona-v2.1.dtb
+kona-cdp-lcd-overlay.dtbo-base := kona-v2.1.dtb
+kona-cdp-lcd-tron-overlay.dtbo-base := kona-v2.1.dtb
+kona-mtp-overlay.dtbo-base := kona-v2.1.dtb
+kona-mtp-ws-overlay.dtbo-base := kona-v2.1.dtb
+kona-sa-mtp-overlay.dtbo-base := kona-v2.1.dtb
+kona-xr-overlay.dtbo-base := kona-v2.1.dtb
+kona-rumi-overlay.dtbo-base := kona-v2.1.dtb
+kona-qrd-overlay.dtbo-base := kona-v2.1.dtb
+kona-xrfusion-overlay.dtbo-base := kona-v2.1.dtb
+kona-xrfusion-ult-overlay.dtbo-base := kona-v2.1.dtb
+kona-arglass-overlay.dtbo-base := kona-v2.1.dtb
+kona-xrsku4-overlay.dtbo-base := kona-v2.1.dtb
+kona-hdk-overlay.dtbo-base := kona-v2.1.dtb
 else
 dtb-$(CONFIG_ARCH_KONA) += kona-rumi.dtb \
         kona-mtp.dtb \
@@ -567,6 +591,7 @@ qm215-qrd-overlay.dtbo-base := qm215.dtb
 qcm2150-qrd-overlay.dtbo-base := qcm2150.dtb
 qm215-qrd-smb1360-overlay.dtbo-base := qm215.dtb
 else
+
 dtb-$(CONFIG_ARCH_SDM439) += sdm439-mtp.dtb \
 	sdm439-cdp.dtb \
 	sdm439-qrd.dtb \
@@ -584,7 +609,6 @@ dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
 	sda429-mtp.dtb \
 	sda429-cdp.dtb
 endif
-
 endif # CONFIG_MACH_XIAOMI
 
 always		:= $(dtb-y)

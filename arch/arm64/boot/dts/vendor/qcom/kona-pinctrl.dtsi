@@ -2407,7 +2407,7 @@
 			config {
 				pins = "gpio94";
 				bias-disable; /* No PULL */
-				drive-strength = <4>; /* 4 MA */
+				drive-strength = <8>; /* 8 MA */
 			};
 		};
 
@@ -2421,7 +2421,7 @@
 			config {
 				pins = "gpio94";
 				bias-pull-down; /* PULL DOWN */
-				drive-strength = <4>; /* 4 MA */
+				drive-strength = <8>; /* 8 MA */
 			};
 		};
 
