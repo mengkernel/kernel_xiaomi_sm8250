@@ -939,6 +939,14 @@ void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
 static inline void sched_cpufreq_governor_change(struct cpufreq_policy *policy,
 			struct cpufreq_governor *old_gov) { }
 #endif
+#ifndef arch_set_min_freq_scale
+static __always_inline
+void arch_set_min_freq_scale(const struct cpumask *cpus,
+			     unsigned long min_freq,
+			     unsigned long max_freq)
+{
+}
+#endif
 
 extern void arch_freq_prepare_all(void);
 extern unsigned int arch_freq_get_on_cpu(int cpu);

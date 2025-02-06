@@ -51,6 +51,9 @@ int pcibus_to_node(struct pci_bus *bus);
 /* Enable topology flag updates */
 #define arch_update_cpu_topology topology_update_cpu_topology
 
+#define arch_set_min_freq_scale topology_set_min_freq_scale
+#define arch_scale_min_freq_capacity topology_get_min_freq_scale
+
 #include <asm-generic/topology.h>
 
 #endif /* _ASM_ARM_TOPOLOGY_H */
