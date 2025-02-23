@@ -287,7 +287,6 @@ struct cam_cci_ctrl {
 		struct cam_cci_wait_sync_cfg cci_wait_sync_cfg;
 		struct cam_cci_gpio_cfg gpio_cfg;
 	} cfg;
-	bool force_low_priority;
 };
 
 struct cci_write_async {
