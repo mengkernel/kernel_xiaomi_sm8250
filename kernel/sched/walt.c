@@ -2351,21 +2351,6 @@ static void add_cluster(const struct cpumask *cpus, struct list_head *head)
 	num_sched_clusters++;
 }
 
-static void cleanup_clusters(struct list_head *head)
-{
-	struct sched_cluster *cluster, *tmp;
-	int i;
-
-	list_for_each_entry_safe(cluster, tmp, head, list) {
-		for_each_cpu(i, &cluster->cpus)
-			cpu_rq(i)->cluster = &init_cluster;
-
-		list_del(&cluster->list);
-		num_sched_clusters--;
-		kfree(cluster);
-	}
-}
-
 static int compute_max_possible_capacity(struct sched_cluster *cluster)
 {
 	int capacity = 1024;
@@ -2477,16 +2462,10 @@ void update_cluster_topology(void)
 
 	INIT_LIST_HEAD(&new_head);
 
-	for_each_cpu(i, &cpus) {
-		cluster_cpus = topology_possible_sibling_cpumask(i);
-		if (cpumask_empty(cluster_cpus)) {
-			WARN(1, "WALT: Invalid cpu topology!!");
-			cleanup_clusters(&new_head);
-			return;
-		}
-		cpumask_andnot(&cpus, &cpus, cluster_cpus);
-		add_cluster(cluster_cpus, &new_head);
-	}
+	// Create clusters based on config masks
+	add_cluster(cpu_lp_mask, &new_head);	// Little cluster
+	add_cluster(cpu_perf_mask, &new_head);	// Big cluster
+	add_cluster(cpu_prime_mask, &new_head);	// Prime cluster
 
 	assign_cluster_ids(&new_head);
 
