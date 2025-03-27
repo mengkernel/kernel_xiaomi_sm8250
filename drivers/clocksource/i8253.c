@@ -108,8 +108,11 @@ int __init clocksource_i8253_init(void)
 #endif
 
 #ifdef CONFIG_CLKEVT_I8253
-void clockevent_i8253_disable(void)
+static int pit_shutdown(struct clock_event_device *evt)
 {
+	if (!clockevent_state_oneshot(evt) && !clockevent_state_periodic(evt))
+		return 0;
+
 	raw_spin_lock(&i8253_lock);
 
 	outb_p(0x30, PIT_MODE);
@@ -120,14 +123,6 @@ void clockevent_i8253_disable(void)
 	}
 
 	raw_spin_unlock(&i8253_lock);
-}
-
-static int pit_shutdown(struct clock_event_device *evt)
-{
-	if (!clockevent_state_oneshot(evt) && !clockevent_state_periodic(evt))
-		return 0;
-
-	clockevent_i8253_disable();
 	return 0;
 }
 
