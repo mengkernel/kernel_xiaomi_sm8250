@@ -2145,11 +2145,6 @@ unsigned long arch_scale_min_freq_capacity(int cpu)
 #endif
 
 #ifdef CONFIG_SMP
-static inline unsigned long capacity_of(int cpu)
-{
-	return cpu_rq(cpu)->cpu_capacity;
-}
-
 static inline unsigned long capacity_orig_of(int cpu)
 {
 	return cpu_rq(cpu)->cpu_capacity_orig;
