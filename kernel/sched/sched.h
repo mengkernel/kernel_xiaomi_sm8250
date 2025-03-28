@@ -162,7 +162,6 @@ extern long calc_load_fold_active(struct rq *this_rq, long adjust);
 
 #ifdef CONFIG_SMP
 extern void cpu_load_update_active(struct rq *this_rq);
-extern void init_sched_groups_capacity(int cpu, struct sched_domain *sd);
 #else
 static inline void cpu_load_update_active(struct rq *this_rq) { }
 #endif
@@ -2899,8 +2898,7 @@ static inline bool asym_cap_sibling_group_has_capacity(int dst_cpu, int margin)
 	sib1 = cpumask_first(&asym_cap_sibling_cpus);
 	sib2 = cpumask_last(&asym_cap_sibling_cpus);
 
-	if (!cpu_active(sib1) || cpu_isolated(sib1) ||
-		!cpu_active(sib2) || cpu_isolated(sib2))
+	if (!cpu_active(sib1) || !cpu_active(sib2))
 		return false;
 
 	nr_running = cpu_rq(sib1)->cfs.h_nr_running +
@@ -3168,6 +3166,5 @@ struct sched_avg_stats {
 	int nr;
 	int nr_misfit;
 	int nr_max;
-	int nr_scaled;
 };
 extern void sched_get_nr_running_avg(struct sched_avg_stats *stats);

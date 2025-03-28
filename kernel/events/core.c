@@ -4124,11 +4124,6 @@ static int perf_event_read(struct perf_event *event, bool group)
 			preempt_enable();
 			return 0;
 		}
-		if (cpu_isolated(event_cpu) ||
-			(event->attr.exclude_idle &&
-				per_cpu(is_idle, event_cpu) && !readable) ||
-				per_cpu(is_hotplugging, event_cpu))
-			active_event_skip_read = true;
 	}
 	if (state == PERF_EVENT_STATE_ACTIVE &&
 		!active_event_skip_read) {

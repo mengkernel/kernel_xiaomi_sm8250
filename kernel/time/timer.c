@@ -974,7 +974,6 @@ static struct timer_base *lock_timer_base(struct timer_list *timer,
 			raw_spin_unlock_irqrestore(&base->lock, *flags);
 		}
 		cpu_relax();
-		ndelay(TIMER_LOCK_TIGHT_LOOP_DELAY_NS);
 	}
 }
 
@@ -1434,7 +1433,6 @@ int del_timer_sync(struct timer_list *timer)
 		if (unlikely(ret < 0)) {
 			del_timer_wait_running(timer);
 			cpu_relax();
-			ndelay(TIMER_LOCK_TIGHT_LOOP_DELAY_NS);
 		}
 	} while (ret < 0);
 
@@ -2097,8 +2095,7 @@ static void __migrate_timers(unsigned int cpu, bool remove_pinned)
 		 */
 		forward_timer_base(new_base);
 
-		if (!cpu_online(cpu))
-			BUG_ON(old_base->running_timer);
+		BUG_ON(old_base->running_timer);
 
 		for (i = 0; i < WHEEL_SIZE; i++)
 			migrate_timer_list(new_base, old_base->vectors + i,

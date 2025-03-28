@@ -78,12 +78,11 @@ static inline void hyp_core_ctl_print_status(char *msg)
 {
 	trace_hyp_core_ctl_status(the_hcd, msg);
 
-	pr_debug("%s: reserve=%*pbl reserved=%*pbl our_isolated=%*pbl online=%*pbl isolated=%*pbl thermal=%*pbl\n",
+	pr_debug("%s: reserve=%*pbl reserved=%*pbl our_isolated=%*pbl online=%*pbl thermal=%*pbl\n",
 		msg, cpumask_pr_args(&the_hcd->reserve_cpus),
 		cpumask_pr_args(&the_hcd->final_reserved_cpus),
 		cpumask_pr_args(&the_hcd->our_isolated_cpus),
 		cpumask_pr_args(cpu_online_mask),
-		cpumask_pr_args(cpu_isolated_mask),
 		cpumask_pr_args(cpu_cooling_get_max_level_cpumask()));
 }
 
@@ -696,10 +695,6 @@ static ssize_t status_show(struct device *dev, struct device_attribute *attr,
 	count += scnprintf(buf + count, PAGE_SIZE - count,
 			   "online_cpus=%*pbl\n",
 			   cpumask_pr_args(cpu_online_mask));
-
-	count += scnprintf(buf + count, PAGE_SIZE - count,
-			   "isolated_cpus=%*pbl\n",
-			   cpumask_pr_args(cpu_isolated_mask));
 
 	count += scnprintf(buf + count, PAGE_SIZE - count,
 		   "thermal_cpus=%*pbl\n",

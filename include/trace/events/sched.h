@@ -1243,7 +1243,6 @@ TRACE_EVENT(sched_cpu_util,
 		__entry->idle_state         = idle_get_state_idx(cpu_rq(cpu));
 		__entry->irqload            = sched_irqload(cpu);
 		__entry->online             = cpu_online(cpu);
-		__entry->isolated           = cpu_isolated(cpu);
 		__entry->reserved           = is_reserved(cpu);
 		__entry->high_irq_load      = sched_cpu_high_irqload(cpu);
 		__entry->nr_rtg_high_prio_tasks = walt_nr_rtg_high_prio(cpu);
@@ -1443,123 +1442,6 @@ TRACE_EVENT(sched_boost_cpu,
 		__entry->margin)
 );
 
-TRACE_EVENT(core_ctl_eval_need,
-
-	TP_PROTO(unsigned int cpu, unsigned int old_need,
-		unsigned int new_need, unsigned int updated),
-	TP_ARGS(cpu, old_need, new_need, updated),
-	TP_STRUCT__entry(
-		__field(u32, cpu)
-		__field(u32, old_need)
-		__field(u32, new_need)
-		__field(u32, updated)
-	),
-	TP_fast_assign(
-		__entry->cpu = cpu;
-		__entry->old_need = old_need;
-		__entry->new_need = new_need;
-		__entry->updated = updated;
-	),
-	TP_printk("cpu=%u, old_need=%u, new_need=%u, updated=%u", __entry->cpu,
-			__entry->old_need, __entry->new_need, __entry->updated)
-);
-
-TRACE_EVENT(core_ctl_set_busy,
-
-	TP_PROTO(unsigned int cpu, unsigned int busy,
-		unsigned int old_is_busy, unsigned int is_busy),
-	TP_ARGS(cpu, busy, old_is_busy, is_busy),
-	TP_STRUCT__entry(
-		__field(u32, cpu)
-		__field(u32, busy)
-		__field(u32, old_is_busy)
-		__field(u32, is_busy)
-		__field(bool, high_irqload)
-	),
-	TP_fast_assign(
-		__entry->cpu = cpu;
-		__entry->busy = busy;
-		__entry->old_is_busy = old_is_busy;
-		__entry->is_busy = is_busy;
-		__entry->high_irqload = sched_cpu_high_irqload(cpu);
-	),
-	TP_printk("cpu=%u, busy=%u, old_is_busy=%u, new_is_busy=%u high_irqload=%d",
-		__entry->cpu, __entry->busy, __entry->old_is_busy,
-		__entry->is_busy, __entry->high_irqload)
-);
-
-TRACE_EVENT(core_ctl_set_boost,
-
-	TP_PROTO(u32 refcount, s32 ret),
-	TP_ARGS(refcount, ret),
-	TP_STRUCT__entry(
-		__field(u32, refcount)
-		__field(s32, ret)
-	),
-	TP_fast_assign(
-		__entry->refcount = refcount;
-		__entry->ret = ret;
-	),
-	TP_printk("refcount=%u, ret=%d", __entry->refcount, __entry->ret)
-);
-
-TRACE_EVENT(core_ctl_update_nr_need,
-
-	TP_PROTO(int cpu, int nr_need, int prev_misfit_need,
-		int nrrun, int max_nr, int nr_prev_assist),
-
-	TP_ARGS(cpu, nr_need, prev_misfit_need, nrrun, max_nr, nr_prev_assist),
-
-	TP_STRUCT__entry(
-		__field(int, cpu)
-		__field(int, nr_need)
-		__field(int, prev_misfit_need)
-		__field(int, nrrun)
-		__field(int, max_nr)
-		__field(int, nr_prev_assist)
-	),
-
-	TP_fast_assign(
-		__entry->cpu = cpu;
-		__entry->nr_need = nr_need;
-		__entry->prev_misfit_need = prev_misfit_need;
-		__entry->nrrun = nrrun;
-		__entry->max_nr = max_nr;
-		__entry->nr_prev_assist = nr_prev_assist;
-	),
-
-	TP_printk("cpu=%d nr_need=%d prev_misfit_need=%d nrrun=%d max_nr=%d nr_prev_assist=%d",
-		__entry->cpu, __entry->nr_need, __entry->prev_misfit_need,
-		__entry->nrrun, __entry->max_nr, __entry->nr_prev_assist)
-);
-
-TRACE_EVENT(core_ctl_notif_data,
-
-	TP_PROTO(u32 nr_big, u32 ta_load, u32 *ta_util, u32 *cur_cap),
-
-	TP_ARGS(nr_big, ta_load, ta_util, cur_cap),
-
-	TP_STRUCT__entry(
-		__field(u32, nr_big)
-		__field(u32, ta_load)
-		__array(u32, ta_util, MAX_CLUSTERS)
-		__array(u32, cur_cap, MAX_CLUSTERS)
-	),
-
-	TP_fast_assign(
-		__entry->nr_big = nr_big;
-		__entry->ta_load = ta_load;
-		memcpy(__entry->ta_util, ta_util, MAX_CLUSTERS * sizeof(u32));
-		memcpy(__entry->cur_cap, cur_cap, MAX_CLUSTERS * sizeof(u32));
-	),
-
-	TP_printk("nr_big=%u ta_load=%u ta_util=(%u %u %u) cur_cap=(%u %u %u)",
-		  __entry->nr_big, __entry->ta_load,
-		  __entry->ta_util[0], __entry->ta_util[1],
-		  __entry->ta_util[2], __entry->cur_cap[0],
-		  __entry->cur_cap[1], __entry->cur_cap[2])
-);
-
 /*
  * Tracepoint for schedtune_tasks_update
  */
@@ -1709,16 +1591,15 @@ TRACE_EVENT(sched_capacity_update,
  */
 TRACE_EVENT(sched_get_nr_running_avg,
 
-	TP_PROTO(int cpu, int nr, int nr_misfit, int nr_max, int nr_scaled),
+	TP_PROTO(int cpu, int nr, int nr_misfit, int nr_max),
 
-	TP_ARGS(cpu, nr, nr_misfit, nr_max, nr_scaled),
+	TP_ARGS(cpu, nr, nr_misfit, nr_max),
 
 	TP_STRUCT__entry(
 		__field(int, cpu)
 		__field(int, nr)
 		__field(int, nr_misfit)
 		__field(int, nr_max)
-		__field( int, nr_scaled)
 	),
 
 	TP_fast_assign(
@@ -1726,48 +1607,10 @@ TRACE_EVENT(sched_get_nr_running_avg,
 		__entry->nr = nr;
 		__entry->nr_misfit = nr_misfit;
 		__entry->nr_max = nr_max;
-		__entry->nr_scaled = nr_scaled;
 	),
 
-	TP_printk("cpu=%d nr=%d nr_misfit=%d nr_max=%d nr_scaled=%d",
-		__entry->cpu, __entry->nr, __entry->nr_misfit, __entry->nr_max,
-		__entry->nr_scaled)
-);
-
-/*
- * sched_isolate - called when cores are isolated/unisolated
- *
- * @acutal_mask: mask of cores actually isolated/unisolated
- * @req_mask: mask of cores requested isolated/unisolated
- * @online_mask: cpu online mask
- * @time: amount of time in us it took to isolate/unisolate
- * @isolate: 1 if isolating, 0 if unisolating
- *
- */
-TRACE_EVENT(sched_isolate,
-
-	TP_PROTO(unsigned int requested_cpu, unsigned int isolated_cpus,
-		u64 start_time, unsigned char isolate),
-
-	TP_ARGS(requested_cpu, isolated_cpus, start_time, isolate),
-
-	TP_STRUCT__entry(
-		__field(u32, requested_cpu)
-		__field(u32, isolated_cpus)
-		__field(u32, time)
-		__field(unsigned char, isolate)
-	),
-
-	TP_fast_assign(
-		__entry->requested_cpu = requested_cpu;
-		__entry->isolated_cpus = isolated_cpus;
-		__entry->time = div64_u64(sched_clock() - start_time, 1000);
-		__entry->isolate = isolate;
-	),
-
-	TP_printk("iso cpu=%u cpus=0x%x time=%u us isolated=%d",
-		__entry->requested_cpu, __entry->isolated_cpus,
-		__entry->time, __entry->isolate)
+	TP_printk("cpu=%d nr=%d nr_misfit=%d nr_max=%d",
+		__entry->cpu, __entry->nr, __entry->nr_misfit, __entry->nr_max)
 );
 
 #include "walt.h"
