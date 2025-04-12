@@ -312,10 +312,22 @@ static ssize_t device_vote_store(struct device *dev,
 }
 static DEVICE_ATTR_RW(device_vote);
 
+static ssize_t perform_soc_reset_store(struct device *dev,
+				 struct device_attribute *attr,
+				 const char *buf,
+				 size_t count)
+{
+	struct mhi_device *mhi_dev = to_mhi_device(dev);
+	mhi_debugfs_trigger_soc_reset(mhi_dev->mhi_cntrl, 0);
+	return count;
+}
+static DEVICE_ATTR_WO(perform_soc_reset);
+
 static struct attribute *mhi_sysfs_attrs[] = {
 	&dev_attr_log_level.attr,
 	&dev_attr_bus_vote.attr,
 	&dev_attr_device_vote.attr,
+	&dev_attr_perform_soc_reset.attr,
 	NULL,
 };
 
