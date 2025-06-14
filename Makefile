@@ -365,7 +365,7 @@ HOST_LFS_CFLAGS := $(shell getconf LFS_CFLAGS 2>/dev/null)
 HOST_LFS_LDFLAGS := $(shell getconf LFS_LDFLAGS 2>/dev/null)
 HOST_LFS_LIBS := $(shell getconf LFS_LIBS 2>/dev/null)
 
-CCACHE		= $(shell which ccache)
+CCACHE	:= $(shell command -v ccache 2>/dev/null)
 
 ifneq ($(LLVM),)
 HOSTCC	= $(CCACHE) clang
